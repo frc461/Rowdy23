@@ -1,0 +1,29 @@
+{
+    "name":"JSON testing",
+    "tabs":[
+        {
+            "name":"P",
+            "startValue":0.0,
+            "x":0,
+            "y":0
+        },
+        {
+            "name":"I",
+            "startValue":0.0,
+            "x":1,
+            "y":0
+        },
+        {
+            "name":"D",
+            "startValue":0.0,
+            "x":2,
+            "y":0
+        },
+        {
+            "name":"FF",
+            "startValue":0.0,
+            "x":1,
+            "y":1
+        }
+    ]
+}

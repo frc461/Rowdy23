@@ -1,0 +1,161 @@
+{
+    "name":"tuning",
+    "tabs":[
+        {
+            "name":"Shooter Percent",
+            "startValue":0.0,
+            "x":0,
+            "y":0
+        },
+        {
+            "name":"Hood Velocity",
+            "startValue":0.0,
+            "x":1,
+            "y":0
+        },
+        {
+            "name":"midHopperLidar",
+            "startValue":false,
+            "x":6,
+            "y":2
+        },
+        {
+            "name":"intakeLidar",
+            "startValue":false,
+            "x":5,
+            "y":2
+        },
+        {
+            "name":"Hood Position",
+            "startValue":0.0,
+            "x":3,
+            "y":1
+        },
+        {
+            "name":"Shooter Velocity",
+            "startValue":0.0,
+            "x":4,
+            "y":1
+        },
+        {
+            "name":"lidar1",
+            "startValue":0.0,
+            "x":5,
+            "y":1
+        },
+        {
+            "name":"lidar2",
+            "startValue":0.0,
+            "x":6,
+            "y":1
+        },
+        {
+            "name":"lidar3",
+            "startValue":0.0,
+            "x":7,
+            "y":1
+        },
+        {
+            "name":"hopBeam",
+            "startValue":false,
+            "x":8,
+            "y":3
+        },
+        {
+            "name":"Omega A",
+            "startValue":1925.0,
+            "x":0,
+            "y":2
+        },
+        {
+            "name":"Omega B",
+            "startValue":2175.0,
+            "x":1,
+            "y":2
+        },
+        {
+            "name":"Omega C",
+            "startValue":2350.0,
+            "x":2,
+            "y":2
+        },
+        {
+            "name":"Hood Error",
+            "startValue":0.0,
+            "x":3,
+            "y":2
+        },
+        {
+            "name":"Shooter Error",
+            "startValue":0.0,
+            "x":4,
+            "y":2
+        },
+        {
+            "name":"shooterBeam",
+            "startValue":false,
+            "x":8,
+            "y":0
+        },
+        {
+            "name":"midBeam",
+            "startValue":false,
+            "x":8,
+            "y":1
+        },
+        {
+            "name":"backHopperLidar",
+            "startValue":false,
+            "x":7,
+            "y":2
+        },
+        {
+            "name":"Theta A",
+            "startValue":-12.0,
+            "x":0,
+            "y":3
+        },
+        {
+            "name":"Theta B",
+            "startValue":-16.0,
+            "x":1,
+            "y":3
+        },
+        {
+            "name":"Theta C",
+            "startValue":-17.25,
+            "x":2,
+            "y":3
+        },
+        {
+            "name":"Hood Setpoint",
+            "startValue":0.0,
+            "x":3,
+            "y":3
+        },
+        {
+            "name":"Shooter Setpoint",
+            "startValue":0.0,
+            "x":4,
+            "y":3
+        },
+        {
+            "name":"B1",
+            "startValue":false,
+            "x":6,
+            "y":3
+        },
+        {
+            "name":"B2",
+            "startValue":false,
+            "x":7,
+            "y":3
+        },
+        {
+            "name":"botBeam",
+            "startValue":false,
+            "x":8,
+            "y":2
+        }
+    ]
+}

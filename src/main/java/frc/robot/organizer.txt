@@ -1,0 +1,146 @@
+Swerve Code:
+
+    General:
+        Auto:
+            Paths:
+                -Chooser: ShuffleBoard / SmartDashboard
+                -Path: PathPlanner
+                -Timing: Branching ifs
+            Types:
+                -5 Ball
+                -3 Ball
+        Teleop:
+            -pick up cargo
+            -fire cargo
+            -Climb
+            -link everything with controllers
+
+
+
+    Shooter:
+        Limelight:
+            -Left-Right aiming
+            -Distance Aiming
+        Backup:
+            -Pretuned Setpoints
+
+
+    Intake:
+        -Analog control on operator Controller
+        -Digital control on driver
+
+    Climber:
+        -Upward soft limits
+        -Downward limit switch
+        
+
+    Motor IDs:
+        Drive Motors:
+        8 motors drive train
+            Drive:
+                1, 2, 3, 4
+            Steering:
+                11, 12, 13, 14
+
+        Climb Motors:
+            extension:
+                7, 17
+        Intake Motors:
+            Rake/hopper belts:
+                8
+            shooter feed:
+                9
+        Shooter Motors:
+            flywheel motors:
+                15, 5
+            rotation:
+                10
+    Pneumatics
+        Rev Pneumatics Hub - id 41
+        Climber Solenoid:
+            -Double
+            -ids 3, 2
+        Intake Solenoid:
+            -Double
+            -ids 0, 1
+
+    ShuffleBoard:
+
+        PID Tuning:
+            -to be taken off after tuning is finalized
+
+        Paths/Auto Modes:
+            -selected from ShuffleBoard / SmartDashboard
+        Cameras:
+
+    Controller Inputs:
+        Driver Controller:
+            Right Side:
+                X Axis: rotation
+                Y Axis: none
+                Click: Rev Shooter
+                Bumper: Constant speed intake
+                Trigger: Pretuned setpoint shooting
+            Left Side:
+                X Axis: Left Right Translation
+                Y Axis: Forward backward Translation
+                Click: Manual feed
+                Bumper: Limelight Left Right Aiming
+                Trigger: Limelight 3 point calibration aiming
+            Start Button: Toggle field relative
+            Back Button: re-zeros hood
+            Face Buttons:
+                A: toggle intake pneumatics
+                B: reset robot heading
+                X: reburn flash on shooter motors
+                Y: update PID
+            D-pad:
+                UP: fender low setpoint
+                LEFT: fender high setpoint
+                DOWN: tarmac high setpoint
+                RIGHT: Launchpad high setpoint
+        Operator Controller:
+            Right Side:
+                X Axis: none
+                Y Axis: Right Climber
+                Click: none
+                Bumper: none
+                Trigger: Analog intake
+            Left Side:
+                X Axis: none
+                Y Axis: Left Climber
+                Click: none
+                Bumper: Reset Softlimits
+                Trigger: Analog outtake
+            Start Button: none
+            Back Button: none
+            Face Buttons:
+                A Button: Intake Lidar override
+                B Button: Intake Pneumatics
+                X Button: Intake Current limit override
+                Y Button: Climber Pneumatics
+            D-pad: none
+
+            
+                
+
+            
+            
+
+
+Coding Practices:
+
+    Commenting: Dew it
+
+    White Space:
+        -indentation
+        -spaces around operators
+        -after commas
+
+    Number Casting:
+        -if using double
+            - number.0
+        
+        -if using integer
+            - number
+    
