@@ -18,12 +18,26 @@ public class Limelight {
             this.tableVal = tableVal;
         }
     };
-
+    private static double[] botPose = NetworkTableInstance.getDefault().getTable("limelight").getEntry("botpose").getDoubleArray(new double[6]);
     // public static double getZ(){
     //     return table.getEntry("").getDouble(1.0);
     // }
 
+    public static double getRoll(){
+        botPose = NetworkTableInstance.getDefault().getTable("limelight").getEntry("botpose").getDoubleArray(new double[6]);
+        return botPose[3];
+    }
+    public static double getYaw(){
+        botPose = NetworkTableInstance.getDefault().getTable("limelight").getEntry("botpose").getDoubleArray(new double[6]);
+        return botPose[4];
+    }
+    public static double getPitch(){
+        botPose = NetworkTableInstance.getDefault().getTable("limelight").getEntry("botpose").getDoubleArray(new double[6]);
+        return botPose[5];
+    }
+
     public static double getTY(){
+
         return table.getEntry("ty").getDouble(1.0);
     }
 

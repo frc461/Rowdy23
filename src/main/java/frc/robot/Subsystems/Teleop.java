@@ -160,10 +160,11 @@ public class Teleop {
 
         double speed = 0;
         double speedConst = 0.15;
-        while(driveController.getLeftBumperPressed()){
-            System.out.println(Limelight.getDistanceFeet());
+        if(driveController.getLeftBumperPressed()){
+           
             //Limelight.setLEDMode(LEDMode.ON);
-           while(Limelight.getTX() > 5){
+            
+           while(Limelight.getTX() > 3){
             speed = Math.abs(speedConst*Limelight.getTX());
             Subsystems.getDriveTrain().drive(0, -speed, 0, false);
            }
@@ -171,32 +172,35 @@ public class Teleop {
             speed = Math.abs(speedConst*Limelight.getTX());
             Subsystems.getDriveTrain().drive(0, speed, 0, false);
            }
-           
-            Subsystems.getDriveTrain().drive(0, 0, 0, false);
 
-            while(Limelight.getTX() > 5){
-                speed = Math.abs(speedConst*Limelight.getTX());
-                Subsystems.getDriveTrain().drive(0, 0, 1, false);
-               }
-               while(Limelight.getTX() < -3){
-                speed = Math.abs(speedConst*Limelight.getTX());
-                Subsystems.getDriveTrain().drive(0, 0, -1, false);
-               }
-               
-                Subsystems.getDriveTrain().drive(0, 0, 0, false);
-            
-            while(Limelight.getTX() > 5){
-                speed = Math.abs(speedConst*Limelight.getTX());
-                Subsystems.getDriveTrain().drive(0, -speed, 0, false);
-               }
-               while(Limelight.getTX() < -3){
-                speed = Math.abs(speedConst*Limelight.getTX());
-                Subsystems.getDriveTrain().drive(0, speed, 0, false);
-               }
-               
-                Subsystems.getDriveTrain().drive(0, 0, 0, false);
-            
+           //System.out.println("pitch: " + Limelight.getPitch() + " roll: " + Limelight.getRoll() + " yaw: " + Limelight.getYaw());
            
+        }
+        if(driveController.getRightBumperPressed()){
+            double offset = Limelight.getYaw();
+            System.out.println(offset);
+            double currGyro = drivetrain.pigeon.getYaw();
+
+            while(drivetrain.pigeon.getYaw()-0.5 > currGyro+offset){
+                drivetrain.drive(0, 0, 0.85, false);
+            }
+            while(drivetrain.pigeon.getYaw()+0.5 < currGyro+offset){
+                drivetrain.drive(0, 0, -0.85, false);
+            }
+
+            // try{
+                
+            //     while (Limelight.getYaw() > 1) {
+            //         Subsystems.getDriveTrain().drive(0, 0, -1, false);
+            //     }
+            //     while (Limelight.getYaw() < -1) {
+            //         Subsystems.getDriveTrain().drive(0, 0, 1, false);
+            //     }
+            // }
+            //drivetrain.pigeon.setYaw(Limelight.getYaw());
+            
+
+            
         }
         
 
