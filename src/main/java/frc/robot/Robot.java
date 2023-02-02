@@ -39,8 +39,12 @@ public class Robot extends TimedRobot {
      * for any
      * initialization code.
      */
+   
+
     @Override
     public void robotInit() {
+
+        
 
         lowerSpeed = new InstantCommand(() -> {
             Constants.MAX_SPEED = 0.0;

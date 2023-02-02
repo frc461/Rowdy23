@@ -1,5 +1,7 @@
 package frc.robot.Subsystems;
 
+import com.ctre.phoenix.sensors.Pigeon2;
+
 import edu.wpi.first.wpilibj.XboxController;
 import frc.robot.Subsystems.Limelight.LEDMode;
 
@@ -43,6 +45,7 @@ public class Teleop {
     /**
      * Loop that has all of our inputs to run the robot
      */
+    
     public void run(){
        
 
@@ -176,17 +179,22 @@ public class Teleop {
            //System.out.println("pitch: " + Limelight.getPitch() + " roll: " + Limelight.getRoll() + " yaw: " + Limelight.getYaw());
            
         }
+        
         if(driveController.getRightBumperPressed()){
-            double offset = Limelight.getYaw();
-            System.out.println(offset);
-            double currGyro = drivetrain.pigeon.getYaw();
+            //System.out.println(Limelight.getYaw());
+            
+            Subsystems.getDriveTrain().turnDegrees(Limelight.getYaw());
 
-            while(drivetrain.pigeon.getYaw()-0.5 > currGyro+offset){
-                drivetrain.drive(0, 0, 0.85, false);
-            }
-            while(drivetrain.pigeon.getYaw()+0.5 < currGyro+offset){
-                drivetrain.drive(0, 0, -0.85, false);
-            }
+            // double offset = Limelight.getYaw();
+            // System.out.println(offset);
+            // double currGyro = drivetrain.pigeon.getYaw();
+
+            // while(drivetrain.pigeon.getYaw()-0.5 > currGyro+offset){
+            //     drivetrain.drive(0, 0, 0.85, false);
+            // }
+            // while(drivetrain.pigeon.getYaw()+0.5 < currGyro+offset){
+            //     drivetrain.drive(0, 0, -0.85, false);
+            // }
 
             // try{
                 
@@ -200,7 +208,7 @@ public class Teleop {
             //drivetrain.pigeon.setYaw(Limelight.getYaw());
             
 
-            
+           
         }
         
 

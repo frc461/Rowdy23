@@ -378,6 +378,21 @@ public class DriveTrain {
         double tx = Limelight.getTY();
         return aimController.calculate(tx, 0.0);
     }
+    public void turnDegrees(Double inputAngle){
+        double curAng = pigeon.getYaw();
+        System.out.println(curAng);
+        
+        while(pigeon.getYaw() < curAng+inputAngle){
+            System.out.println(pigeon.getYaw());
+            drive(0, 0, -1, false);
+        }
+     
+        // while(pigeon.getYaw() > curAng+inputAngle){
+        //     System.out.println(pigeon.getYaw());
+        //     drive(0, 0, 1, false);
+        // }
+        
+    }
 
     /**
      * Sets wheels to be in an 'X' configuration to stop rotation
