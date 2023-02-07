@@ -379,14 +379,20 @@ public class DriveTrain {
         return aimController.calculate(tx, 0.0);
     }
     public void turnDegrees(Double inputAngle){
-        double curAng = pigeon.getYaw();
-        System.out.println(curAng);
+        double beginningAng = pigeon.getYaw() % 360; // sets beginning angle
+        double currAng = beginningAng; // sets current angle
+        System.out.println(currAng);
         
-        while(pigeon.getYaw() < curAng+inputAngle){
+        while(currAng < beginningAng + inputAngle){ // while the current angle is less than the goal angle
             System.out.println(pigeon.getYaw());
             drive(0, 0, -1, false);
+            currAng = pigeon.getYaw() % 360; // update the current angle so that it can still be accurately checked
         }
-     
+
+        // TODO
+        // add the case where the angle needs to change positively instead of negatively
+
+
         // while(pigeon.getYaw() > curAng+inputAngle){
         //     System.out.println(pigeon.getYaw());
         //     drive(0, 0, 1, false);
