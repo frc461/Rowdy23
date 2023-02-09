@@ -47,7 +47,10 @@ public class Teleop {
      */
     
     public void run(){
-       
+
+
+
+       //System.out.println(Subsystems.getDriveTrain().backLeftCANCoder.getAbsolutePosition());
 
         ////////////////////////// Drive ///////////////////////////
         double driveX = driveController.getLeftX();
@@ -181,9 +184,15 @@ public class Teleop {
         }
         
         if(driveController.getRightBumperPressed()){
+
+
+
+
+            Subsystems.getDriveTrain().resetModuleRotation();
+
             //System.out.println(Limelight.getYaw());
             
-            Subsystems.getDriveTrain().turnDegrees(Limelight.getYaw());
+            //Subsystems.getDriveTrain().turnDegrees(Limelight.getYaw());
 
             // double offset = Limelight.getYaw();
             // System.out.println(offset);

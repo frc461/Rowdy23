@@ -112,7 +112,8 @@ public class DriveTrain {
             backRightModule = new SwerveModule(this.backRightDrive, this.backRightRotation, this.backRightDriveEnc, this.backRightEncoder, Constants.BACK_RIGHT_FORWARD);
         }
         initSparks();
-        //resetModuleRotation();
+        
+       
 
         this.frontLeftDrive.burnFlash();
         this.frontLeftRotation.burnFlash();
@@ -134,7 +135,20 @@ public class DriveTrain {
      * @param rotation Angular speed
      * @param fieldRelative Whether it's in field relative control mode or not
      */
+
+public void printValues(){
+    System.out.println("backLeft " + backLeftCANCoder.getAbsolutePosition());
+    System.out.println("backRight "+backRightCANCoder.getAbsolutePosition());
+    System.out.println("frontLeft "+ frontLeftCANCoder.getAbsolutePosition());
+    System.out.println("frontRight "+frontRightCANCoder.getAbsolutePosition());
+}
+
+
     public void drive(double xSpeed, double ySpeed, double rotation, boolean fieldRelative){ 
+
+       
+
+
         SwerveModuleState[] swerveModuleStates = swerveKinematics.toSwerveModuleStates(
             fieldRelative
                 ? ChassisSpeeds.fromFieldRelativeSpeeds(ySpeed, -xSpeed, rotation, Rotation2d.fromDegrees(-this.pigeon.getYaw()))
@@ -279,9 +293,9 @@ public class DriveTrain {
     public void initSparks(){
         if(!Constants.TALON_BOT){
             //drive motors don't need offsets
-            initSpark(frontRightDrive, 0.0);
+            initSpark(frontRightDrive, 0.0, false);
             initSpark(frontLeftDrive, 0.0, false);
-            initSpark(backLeftDrive, 0.0, true);
+            initSpark(backLeftDrive, 0.0, false);
             initSpark(backRightDrive, 0.0, true);
             setPIDF(frontRightDrive, Constants.DRIVE_FRONT_RIGHT_P, Constants.DRIVE_FRONT_RIGHT_I, Constants.DRIVE_FRONT_RIGHT_D, Constants.DRIVE_FRONT_RIGHT_FF);
             setPIDF(frontLeftDrive, Constants.DRIVE_FRONT_LEFT_P, Constants.DRIVE_FRONT_LEFT_I, Constants.DRIVE_FRONT_LEFT_D, Constants.DRIVE_FRONT_LEFT_FF);
@@ -290,9 +304,9 @@ public class DriveTrain {
 
             //negating CANCoder reading to make the encoder read CCW negative so it matches the NEO
             initSpark(frontRightRotation, -(frontRightCANCoder.getAbsolutePosition() % 360.0 - frontRightModule.getOffset()), false);
-            initSpark(frontLeftRotation, -(frontLeftCANCoder.getAbsolutePosition() % 360.0 - frontLeftModule.getOffset()), false);
-            initSpark(backLeftRotation, -(backLeftCANCoder.getAbsolutePosition() % 360.0 - backLeftModule.getOffset()));
-            initSpark(backRightRotation, -(backRightCANCoder.getAbsolutePosition() % 360.0 - backRightModule.getOffset()));
+            initSpark(frontLeftRotation, (frontLeftCANCoder.getAbsolutePosition() % 360.0 - frontLeftModule.getOffset()), false);
+            initSpark(backLeftRotation, (backLeftCANCoder.getAbsolutePosition() % 360.0 - backLeftModule.getOffset()), true);
+            initSpark(backRightRotation, (backRightCANCoder.getAbsolutePosition() % 360.0 - backRightModule.getOffset()));
             setPIDF(frontRightRotation, Constants.STEER_FRONT_RIGHT_P, Constants.STEER_FRONT_RIGHT_I, Constants.STEER_FRONT_RIGHT_D, Constants.STEER_FRONT_RIGHT_FF);
             setPIDF(frontLeftRotation, Constants.STEER_FRONT_LEFT_P, Constants.STEER_FRONT_LEFT_I, Constants.STEER_FRONT_LEFT_D, Constants.STEER_FRONT_LEFT_FF);
             setPIDF(backLeftRotation, Constants.STEER_BACK_LEFT_P, Constants.STEER_BACK_LEFT_I, Constants.STEER_BACK_LEFT_D, Constants.STEER_BACK_LEFT_FF);
@@ -354,14 +368,23 @@ public class DriveTrain {
      * Resets the rotation of the module. Used in the event the NEO encoders accumulate error
      */
     public void resetModuleRotation(){
-        frontLeftModule.setOffset(0);
-        frontLeftModule.resetRotation();
-        frontRightModule.setOffset(0);
-        frontRightModule.resetRotation();
-        backLeftModule.setOffset(0);
-        backLeftModule.resetRotation();
-        backRightModule.setOffset(0);
-        backRightModule.resetRotation();
+        // frontLeftModule.setOffset(0);
+        // frontLeftModule.resetRotation();
+        frontLeftCANCoder.configMagnetOffset(0);
+
+        //frontRightModule.setOffset(0);
+        //frontRightModule.resetRotation();
+        frontRightCANCoder.configMagnetOffset(0);
+
+       // backLeftModule.setOffset(0);
+       // backLeftModule.resetRotation();
+        backLeftCANCoder.configMagnetOffset(0);
+
+       // backRightModule.setOffset(0);
+       // backRightModule.resetRotation();
+       
+        backRightCANCoder.configMagnetOffset(0);
+
     }
 
     /**

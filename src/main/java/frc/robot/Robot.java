@@ -106,6 +106,8 @@ public class Robot extends TimedRobot {
     @Override
     public void robotPeriodic() {
 
+        Subsystems.getDriveTrain().printValues();
+
         if(lowerSpeed.isScheduled()){
             lowerSpeed.execute();
             lowerSpeed.cancel();
