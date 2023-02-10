@@ -72,16 +72,27 @@ public class Constants {
     public static final double DRIVE_BACK_LEFT_D = 0.000;
     public static final double DRIVE_BACK_LEFT_FF = 0.001;
 
+    public static final double ELEVATOR_P = 0.003800000064074993;
+    public static final double ELEVATOR_I = 0.0;
+    public static final double ELEVATOR_D = 0.0;
+    public static final double ELEVATOR_FF = 0.0010000000474974513;
+
+
+    public static final double WRIST_P = 0.01;
+    public static final double WRIST_I = 0.0001;
+    public static final double WRIST_D = 0.00;
+    public static final double WRIST_FF = 0.0;
+
     public static final int FRONT_LEFT_INDEX = 0;
     public static final int FRONT_RIGHT_INDEX = 1;
     public static final int BACK_LEFT_INDEX = 2;
     public static final int BACK_RIGHT_INDEX = 3;
 
     //rotation offsets 
-    public static final int FRONT_LEFT_FORWARD = 40;
-    public static final int FRONT_RIGHT_FORWARD = 20;
-    public static final int BACK_LEFT_FORWARD = 120+360;
-    public static final int BACK_RIGHT_FORWARD = 87+180;
+    public static final int FRONT_LEFT_FORWARD = 311;
+    public static final int FRONT_RIGHT_FORWARD = 22;
+    public static final int BACK_LEFT_FORWARD = 300;
+    public static final int BACK_RIGHT_FORWARD = 177;
 
     
     public static final double TALON_WHEEL_RADIUS = 1.5;// inches
@@ -99,12 +110,14 @@ public class Constants {
     public static final double RAD_PER_ROT = 2 * Math.PI;
 
     public static final boolean TALON_BOT = false;
-    public static double MAX_SPEED = 8.8;   //Meters per second
+    public static double MAX_SPEED = 8.8;   //Meters per second :0
     public static final double MAX_ACC = 9;
     public static double MAX_ANGULAR_SPEED = 8 * Math.PI;   //Half rotation per second
     public static final double MAX_ANGULAR_ACC = 2.5 * Math.PI;
-    public static final double WHEEL_DIST = Constants.TALON_BOT ?  Units.feetToMeters(0.5) : Units.feetToMeters(1);
-    
+
+    public static final double SHORT_WHEEL_DIST = Units.inchesToMeters(22.75);
+    public static final double LONG_WHEEL_DIST = Units.inchesToMeters(19.375);
+
     public static final double TRIGGER_DEADZONE = 0.1;
     public static final double JSTICK_DEADZONE = 0.11;
 
@@ -131,6 +144,9 @@ public class Constants {
     public static final double GOAL_HEIGHT = 8.5;
 
     //Limelight calibration
+
+    //22.75
+    //19 + 3/8
 
     //place robot, and then measure from limelight for these values
     private static final double PHI_A = 4.48;

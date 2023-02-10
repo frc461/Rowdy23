@@ -81,6 +81,16 @@ public class Teleop {
             Subsystems.getDriveTrain().resetPigeonHeading();
         }
 
+        if(driveController.getPOV() != -1){
+            Subsystems.getDriveTrain().individualControl(driveController.getPOV());
+        }
+
+        if(opController.getLeftBumperPressed()){
+            Subsystems.getElevator().up();
+        }
+        if(opController.getRightBumperPressed()){
+            Subsystems.getElevator().down();
+        }
 
         // if(finishAuto){
             
@@ -137,6 +147,8 @@ public class Teleop {
         else if(driveController.getLeftTriggerAxis() < Constants.TRIGGER_DEADZONE){
             Limelight.setLEDMode(LEDMode.OFF);
         }
+
+        
 
         //     // 3 point shooter calibration code.
         //     s//hooter.setShooter(Limelight.getFlywheelSpeed(), Limelight.getHoodAngle(), -0.8);

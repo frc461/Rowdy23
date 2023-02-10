@@ -71,10 +71,10 @@ public class DriveTrain {
     private final SwerveModule backRightModule;
 
     //Translation 2d Objects
-    private final Translation2d frontRightLocation = new Translation2d(Constants.WHEEL_DIST, -Constants.WHEEL_DIST);
-    private final Translation2d frontLeftLocation = new Translation2d( Constants.WHEEL_DIST,  Constants.WHEEL_DIST);
-    private final Translation2d backLeftLocation = new Translation2d( -Constants.WHEEL_DIST,  Constants.WHEEL_DIST);
-    private final Translation2d backRightLocation = new Translation2d(-Constants.WHEEL_DIST, -Constants.WHEEL_DIST);
+    private final Translation2d frontRightLocation = new Translation2d(Constants.SHORT_WHEEL_DIST/2, -Constants.LONG_WHEEL_DIST/2);
+    private final Translation2d frontLeftLocation = new Translation2d( Constants.SHORT_WHEEL_DIST/2,  Constants.LONG_WHEEL_DIST/2);
+    private final Translation2d backLeftLocation = new Translation2d( -Constants.SHORT_WHEEL_DIST/2,  Constants.LONG_WHEEL_DIST/2);
+    private final Translation2d backRightLocation = new Translation2d(-Constants.SHORT_WHEEL_DIST/2, -Constants.LONG_WHEEL_DIST/2);
     
 
     private final SwerveDriveKinematics swerveKinematics = new SwerveDriveKinematics(backLeftLocation, backRightLocation, frontLeftLocation, frontRightLocation);
@@ -296,7 +296,7 @@ public void printValues(){
             initSpark(frontRightDrive, 0.0, false);
             initSpark(frontLeftDrive, 0.0, false);
             initSpark(backLeftDrive, 0.0, false);
-            initSpark(backRightDrive, 0.0, true);
+            initSpark(backRightDrive, 0.0, false);
             setPIDF(frontRightDrive, Constants.DRIVE_FRONT_RIGHT_P, Constants.DRIVE_FRONT_RIGHT_I, Constants.DRIVE_FRONT_RIGHT_D, Constants.DRIVE_FRONT_RIGHT_FF);
             setPIDF(frontLeftDrive, Constants.DRIVE_FRONT_LEFT_P, Constants.DRIVE_FRONT_LEFT_I, Constants.DRIVE_FRONT_LEFT_D, Constants.DRIVE_FRONT_LEFT_FF);
             setPIDF(backRightDrive, Constants.DRIVE_BACK_RIGHT_P, Constants.DRIVE_BACK_RIGHT_I, Constants.DRIVE_BACK_RIGHT_D, Constants.DRIVE_BACK_RIGHT_FF);
@@ -305,13 +305,15 @@ public void printValues(){
             //negating CANCoder reading to make the encoder read CCW negative so it matches the NEO
             initSpark(frontRightRotation, -(frontRightCANCoder.getAbsolutePosition() % 360.0 - frontRightModule.getOffset()), false);
             initSpark(frontLeftRotation, (frontLeftCANCoder.getAbsolutePosition() % 360.0 - frontLeftModule.getOffset()), false);
-            initSpark(backLeftRotation, (backLeftCANCoder.getAbsolutePosition() % 360.0 - backLeftModule.getOffset()), true);
-            initSpark(backRightRotation, (backRightCANCoder.getAbsolutePosition() % 360.0 - backRightModule.getOffset()));
+            initSpark(backLeftRotation, (backLeftCANCoder.getAbsolutePosition() % 360.0 - backLeftModule.getOffset()), false);
+            initSpark(backRightRotation, (backRightCANCoder.getAbsolutePosition() % 360.0 - backRightModule.getOffset()), false);
             setPIDF(frontRightRotation, Constants.STEER_FRONT_RIGHT_P, Constants.STEER_FRONT_RIGHT_I, Constants.STEER_FRONT_RIGHT_D, Constants.STEER_FRONT_RIGHT_FF);
             setPIDF(frontLeftRotation, Constants.STEER_FRONT_LEFT_P, Constants.STEER_FRONT_LEFT_I, Constants.STEER_FRONT_LEFT_D, Constants.STEER_FRONT_LEFT_FF);
             setPIDF(backLeftRotation, Constants.STEER_BACK_LEFT_P, Constants.STEER_BACK_LEFT_I, Constants.STEER_BACK_LEFT_D, Constants.STEER_BACK_LEFT_FF);
             setPIDF(backRightRotation, Constants.STEER_BACK_RIGHT_P, Constants.STEER_BACK_RIGHT_I, Constants.STEER_BACK_RIGHT_D, Constants.STEER_BACK_RIGHT_FF);
+
         }else{
+
             initSpark(frontRightDrive, 0.0);
             initSpark(frontLeftDrive, 0.0);
             initSpark(backLeftDrive, 0.0);
@@ -435,6 +437,43 @@ public void printValues(){
         };
 
         setSwerveModuleStates(xStates);
+    }
+
+    public void individualControl(int dir){
+        if(dir == 0){
+            SwerveModuleState[] curState = {
+                new SwerveModuleState(1.0, Rotation2d.fromDegrees(0)),
+                new SwerveModuleState(0.0, Rotation2d.fromDegrees(0)),
+                new SwerveModuleState(0.0, Rotation2d.fromDegrees(0)),
+                new SwerveModuleState(0.0, Rotation2d.fromDegrees(0))
+            };
+            setSwerveModuleStates(curState);
+        }
+        else if(dir == 90){
+            SwerveModuleState[] curState = {
+                new SwerveModuleState(0.0, Rotation2d.fromDegrees(0)),
+                new SwerveModuleState(1.0, Rotation2d.fromDegrees(0)),
+                new SwerveModuleState(0.0, Rotation2d.fromDegrees(0)),
+                new SwerveModuleState(0.0, Rotation2d.fromDegrees(0))
+            };
+            setSwerveModuleStates(curState);
+        } else if( dir == 180){
+            SwerveModuleState[] curState = {
+                new SwerveModuleState(0.0, Rotation2d.fromDegrees(0)),
+                new SwerveModuleState(0.0, Rotation2d.fromDegrees(0)),
+                new SwerveModuleState(1.0, Rotation2d.fromDegrees(0)),
+                new SwerveModuleState(0.0, Rotation2d.fromDegrees(0))
+            };
+            setSwerveModuleStates(curState);
+        } else if( dir == 180+90){
+            SwerveModuleState[] curState = {
+                new SwerveModuleState(0.0, Rotation2d.fromDegrees(0)),
+                new SwerveModuleState(0.0, Rotation2d.fromDegrees(0)),
+                new SwerveModuleState(0.0, Rotation2d.fromDegrees(0)),
+                new SwerveModuleState(1.0, Rotation2d.fromDegrees(0))
+            };
+            setSwerveModuleStates(curState);
+        }
     }
 
     public double getFLEncoder(){
