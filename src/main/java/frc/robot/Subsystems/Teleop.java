@@ -100,9 +100,14 @@ public class Teleop {
         
         if(opController.getLeftY() < -0.2 || opController.getLeftY() > 0.2) {
             Subsystems.getElevator().moveSlow((opController.getLeftY()));
-        }
-        else if(opController.getLeftY() > -0.2 || opController.getLeftY() < 0.2){
+        } else if (opController.getLeftY() > -0.2 || opController.getLeftY() < 0.2){
             Subsystems.getElevator().stop();
+        }
+        
+        if(opController.getRightY() < -0.2 || opController.getRightY() > 0.2) {
+            Subsystems.getIntake().turn(opController.getRightY());
+        } else if (opController.getRightY() > -0.2 || opController.getRightY() < 0.2) {
+            Subsystems.getIntake().stop();
         }
 
 

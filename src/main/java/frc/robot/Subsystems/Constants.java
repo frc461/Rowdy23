@@ -72,9 +72,9 @@ public class Constants {
     public static final double DRIVE_BACK_LEFT_D = 0.000;
     public static final double DRIVE_BACK_LEFT_FF = 0.001;
 
-    public static final double ELEVATOR_P = 0.003800000064074993;
+    public static final double ELEVATOR_P = 0.005800000064074993;
     public static final double ELEVATOR_I = 0.0;
-    public static final double ELEVATOR_D = 0.0;
+    public static final double ELEVATOR_D = 0.0001;
     public static final double ELEVATOR_FF = 0.0010000000474974513;
 
 
