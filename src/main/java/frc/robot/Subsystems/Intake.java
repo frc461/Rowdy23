@@ -4,22 +4,33 @@ import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+import com.revrobotics.CANSparkMaxPIDController;
 
 import edu.wpi.first.wpilibj.AddressableLED;
 import edu.wpi.first.wpilibj.AddressableLEDBuffer;
 //import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class Intake {
-
-   
     private CANSparkMax intake = new CANSparkMax(33, MotorType.kBrushed);
     private CANSparkMax wrist = new CANSparkMax(32, MotorType.kBrushed);
-
+    private PIDController wristPidController = new PIDController(Constants.WRIST_P, Constants.WRIST_I, Constants.WRIST_D); 
+    private AbsoluteEncoder wristEncoder = intake.getEncoder();
+    double position = 0;
 
     private AddressableLED led = new AddressableLED(0);
     private AddressableLEDBuffer ledData = new AddressableLEDBuffer(13);
+    
+    public void stop() {
+        wrist.set(wristPidController.calculate(wristEncoder.getPosition()));
+    }
+
+    public void turn(double a) {
+        position += a;
+        wrist.set(wristPidController.calculate(wristEncoder.getPosition(), position));
+    }
 
     public Intake(){
+        
         // intakeMotor.setSmartCurrentLimit(55);
         // shooterFeedMotor.setSmartCurrentLimit(45);
         // shooterFeedMotor.setOpenLoopRampRate(0.5);
