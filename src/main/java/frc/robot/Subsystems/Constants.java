@@ -89,10 +89,10 @@ public class Constants {
     public static final int BACK_RIGHT_INDEX = 3;
 
     //rotation offsets 
-    public static final int FRONT_LEFT_FORWARD = 43;
-    public static final int FRONT_RIGHT_FORWARD = 115;
-    public static final int BACK_LEFT_FORWARD = 30;
-    public static final int BACK_RIGHT_FORWARD = 267;
+    public static final int FRONT_LEFT_FORWARD = 0;
+    public static final int FRONT_RIGHT_FORWARD = 0;
+    public static final int BACK_LEFT_FORWARD = 0;
+    public static final int BACK_RIGHT_FORWARD = 0;
 
     
     public static final double TALON_WHEEL_RADIUS = 1.5;// inches

@@ -15,9 +15,6 @@ public class Subsystems {
         driveTrain = new DriveTrain();
         intake = new Intake();
         elevator = new Elevator();
-         //climber = new Climber();
-        //shooter = new Shooter();
-        //pneumatics = new Pneumatics();
     }
 
     /**

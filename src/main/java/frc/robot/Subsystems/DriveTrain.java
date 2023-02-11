@@ -142,10 +142,15 @@ public class DriveTrain {
      */
 
 public void printValues(){
-    System.out.println("backLeft " + backLeftCANCoder.getAbsolutePosition());
-    System.out.println("backRight "+backRightCANCoder.getAbsolutePosition());
-    System.out.println("frontLeft "+ frontLeftCANCoder.getAbsolutePosition());
-    System.out.println("frontRight "+frontRightCANCoder.getAbsolutePosition());
+    // System.out.println("backLeft " + backLeftCANCoder.getAbsolutePosition());
+    // System.out.println("backRight "+backRightCANCoder.getAbsolutePosition());
+    // System.out.println("frontLeft "+ frontLeftCANCoder.getAbsolutePosition());
+    // System.out.println("frontRight "+frontRightCANCoder.getAbsolutePosition());
+    SmartDashboard.putNumber("backleft", backLeftCANCoder.getAbsolutePosition());
+    SmartDashboard.putNumber("backright", backRightCANCoder.getAbsolutePosition());
+    SmartDashboard.putNumber("frontleft", frontLeftCANCoder.getAbsolutePosition());
+    SmartDashboard.putNumber("frontright", frontRightCANCoder.getAbsolutePosition());
+
 }
 
 
@@ -295,8 +300,12 @@ public void printValues(){
     /**
      * Initializes all the spark maxes
      */
+    
+
     public void initSparks(){
+
         if(!Constants.TALON_BOT){
+            resetModuleRotation();
             //drive motors don't need offsets
             initSpark(frontRightDrive, 0.0, false);
             initSpark(frontLeftDrive, 0.0, false);
@@ -329,6 +338,7 @@ public void printValues(){
             setPIDF(backRightDrive, Constants.TALON_BACK_RIGHT_P, Constants.TALON_BACK_RIGHT_I, Constants.TALON_BACK_RIGHT_D, Constants.TALON_BACK_RIGHT_FF);
             setPIDF(backLeftDrive, Constants.TALON_BACK_LEFT_P, Constants.TALON_BACK_LEFT_I, Constants.TALON_BACK_LEFT_D, Constants.TALON_BACK_LEFT_FF);    
         }
+        
     }
 
     /**
@@ -360,7 +370,7 @@ public void printValues(){
     }
 
     /**
-     * Initializes a single spark max
+     * Initializes a single spark max 
      */
     public void initSpark(CANSparkMax spark, double error, boolean inverted){
         spark.setIdleMode(IdleMode.kBrake);
@@ -377,20 +387,20 @@ public void printValues(){
     public void resetModuleRotation(){
         // frontLeftModule.setOffset(0);
         // frontLeftModule.resetRotation();
-        frontLeftCANCoder.configMagnetOffset(0);
+        frontLeftCANCoder.configMagnetOffset(120);
 
         //frontRightModule.setOffset(0);
         //frontRightModule.resetRotation();
-        frontRightCANCoder.configMagnetOffset(0);
+        frontRightCANCoder.configMagnetOffset(202);
 
        // backLeftModule.setOffset(0);
        // backLeftModule.resetRotation();
-        backLeftCANCoder.configMagnetOffset(0);
+        backLeftCANCoder.configMagnetOffset(120);
 
        // backRightModule.setOffset(0);
        // backRightModule.resetRotation();
        
-        backRightCANCoder.configMagnetOffset(0);
+        backRightCANCoder.configMagnetOffset(360);
 
     }
 

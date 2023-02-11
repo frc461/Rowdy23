@@ -1,5 +1,6 @@
 package frc.robot.Subsystems;
 
+import com.revrobotics.AbsoluteEncoder;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkMaxPIDController;
@@ -8,59 +9,68 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class Elevator {
-    private CANSparkMax elevator = new CANSparkMax(31, MotorType.kBrushed);
+    private CANSparkMax elevator = new CANSparkMax(31, MotorType.kBrushless);
     private SparkMaxPIDController m_pidController;
     private RelativeEncoder m_encoder;
-    public double kP, kI, kD, kIz, kFF, kMaxOutput, kMinOutput, maxRPM, maxVel, minVel, maxAcc, allowedErr;
-    public double setPoint, processVariable;
-
-    public void up(){
-        setPoint = 1;
-        m_pidController.setReference(setPoint, CANSparkMax.ControlType.kSmartMotion);
-        processVariable = m_encoder.getPosition();
-    }
-
-    public void mid() {
-        setPoint = 0.5;
-        m_pidController.setReference(setPoint, CANSparkMax.ControlType.kSmartMotion);
-        processVariable = m_encoder.getPosition();
-    }
-
-    public void down(){
-        setPoint = 0;
-        m_pidController.setReference(-1, CANSparkMax.ControlType.kVelocity);
-    }
+    private static final int elevatorMax = 1024;
     
-    public void elevatorInit(){
-        m_pidController = elevator.getPIDController();
-        m_encoder = elevator.getEncoder();
+    // public void up() {
+    //     //elevator.getPIDController().setReference(10, CANSparkMax.ControlType.kPosition);
+    //     if(m_encoder.getPosition() < 1000*4) {
+    //         elevator.getPIDController().setReference(-0.8, CANSparkMax.ControlType.kVelocity);
+    //     } else {
+    //         elevator.set(0);
+    //     }
 
-        // PID coefficients
-        // kP = 5e-5; 
-        // kI = 1e-6;
-        // kD = 0; 
-        kIz = 0; 
-        kFF = 0.000156; 
-        kMaxOutput = 1; 
-        kMinOutput = -1;
-        maxRPM = 5700;
+    // }
 
-        // Smart Motion Coefficients
-        maxVel = 2000; // rpm
-        maxAcc = 1500;      
+    // public void mid() {
+    //     if(m_encoder.getPosition() < 512*4) {
+    //         elevator.getPIDController().setReference(-30, CANSparkMax.ControlType.kVelocity);
+    //         //elevator.getPIDController().setReference(5, CANSparkMax.ControlType.kPosition);
+    //     } else if(m_encoder.getPosition() > 512*4){
+    //         elevator.getPIDController().setReference(30, CANSparkMax.ControlType.kVelocity);
+    //        // elevator. getPIDController().setReference(-5, CANSparkMax.ControlType.kPosition);
+    //     } else {
+    //         elevator.set(0);
+    //     }
+    // }
+
+    // public void down(){
+    //     if(m_encoder.getPosition() > 0) {
+    //         elevator.getPIDController().setReference(30, CANSparkMax.ControlType.kVelocity);
+    //     } else {
+    //         elevator.set(0);
+    //     }
+    //     //elevator.getPIDController().setReference(1, CANSparkMax.ControlType.kPosition);
+    // }
+    public void stop(){
+        elevator.set(0);
+    }
         
-        m_pidController.setP(Constants.ELEVATOR_P);
-        m_pidController.setI(Constants.ELEVATOR_I);
-        m_pidController.setD(Constants.ELEVATOR_D);
-        m_pidController.setIZone(kIz);
-        m_pidController.setFF(kFF);
-        m_pidController.setOutputRange(kMinOutput, kMaxOutput);
+    public void slowUp() {
+        //if(m_encoder.getPosition() < elevatorMax*4) {
+            //elevator.getPIDController().setReference(-15, CANSparkMax.ControlType.kVelocity);
+        //} else {
+            elevator.set(-0.8);
+        //}
+    }
 
-        int smartMotionSlot = 0;
-        m_pidController.setSmartMotionMaxVelocity(maxVel, smartMotionSlot);
-        m_pidController.setSmartMotionMinOutputVelocity(minVel, smartMotionSlot);
-        m_pidController.setSmartMotionMaxAccel(maxAcc, smartMotionSlot);
-        m_pidController.setSmartMotionAllowedClosedLoopError(allowedErr, smartMotionSlot);
+    public void slowDown() {
+        // if(m_encoder.getPosition() > 0) {
+        //     elevator.getPIDController().setReference(15, CANSparkMax.ControlType.kVelocity);
+        // } else {
+             elevator.set(0.2);
+        // }
+    }
+    public void elevatorInit(){
+        // m_pidController = elevator.getPIDController();
+        // m_encoder = elevator.getEncoder();
+        
+        // m_pidController.setP(Constants.ELEVATOR_P);
+        // m_pidController.setI(Constants.ELEVATOR_I);
+        // m_pidController.setD(Constants.ELEVATOR_D);
+        
 
     }
 
