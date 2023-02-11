@@ -2,10 +2,11 @@ package frc.robot.Subsystems;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
+import com.revrobotics.AbsoluteEncoder;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
-import com.revrobotics.CANSparkMaxPIDController;
 
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.AddressableLED;
 import edu.wpi.first.wpilibj.AddressableLEDBuffer;
 //import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -14,7 +15,7 @@ public class Intake {
     private CANSparkMax intake = new CANSparkMax(33, MotorType.kBrushed);
     private CANSparkMax wrist = new CANSparkMax(32, MotorType.kBrushed);
     private PIDController wristPidController = new PIDController(Constants.WRIST_P, Constants.WRIST_I, Constants.WRIST_D); 
-    private AbsoluteEncoder wristEncoder = intake.getEncoder();
+    private AbsoluteEncoder wristEncoder = intake.getAbsoluteEncoder(null);
     double position = 0;
 
     private AddressableLED led = new AddressableLED(0);
