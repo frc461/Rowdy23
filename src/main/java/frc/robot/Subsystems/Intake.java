@@ -36,6 +36,7 @@ public class Intake {
 
     public Intake(){
         
+        
         // intakeMotor.setSmartCurrentLimit(55);
         // shooterFeedMotor.setSmartCurrentLimit(45);
         // shooterFeedMotor.setOpenLoopRampRate(0.5);
