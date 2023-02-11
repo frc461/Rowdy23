@@ -15,6 +15,7 @@ public class Subsystems {
         driveTrain = new DriveTrain();
         intake = new Intake();
         elevator = new Elevator();
+        Subsystems.getElevator().elevatorInit();
     }
 
     /**

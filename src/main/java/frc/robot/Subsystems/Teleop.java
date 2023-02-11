@@ -98,19 +98,13 @@ public class Teleop {
         //     Subsystems.getElevator().down();
         // }
         
-        if(opController.getLeftY() < -0.8) {
-            Subsystems.getElevator().slowUp();
+        if(opController.getLeftY() < -0.2 || opController.getLeftY() > 0.2) {
+            Subsystems.getElevator().moveSlow((opController.getLeftY()));
         }
-        else if(opController.getLeftY() < -0.2 || opController.getLeftY() > 0.2){
+        else if(opController.getLeftY() > -0.2 || opController.getLeftY() < 0.2){
             Subsystems.getElevator().stop();
         }
 
-        if(opController.getLeftY() > 0.8) {
-            Subsystems.getElevator().slowDown();
-        }
-        else if(opController.getLeftY() < -0.2 || opController.getLeftY() > 0.2){
-            Subsystems.getElevator().stop();
-        }
 
         // if(finishAuto){
             
