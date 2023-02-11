@@ -63,16 +63,4 @@ public class Intake {
         led.setData(ledData);
         led.start();
     }
-
-    /**
-     * Run the intake and feed, using beam breaks to figure out when to stop
-     * @param triggerVal speed to run intake at
-     * @param inverted whether the feed motor is inverted
-     * @param override intake override to not use hopperbeam
-     * @param intakeOnly to run just the intake and not the feed
-     */
-    
-    
-
-
 }

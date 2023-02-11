@@ -85,10 +85,16 @@ public class Teleop {
             Subsystems.getDriveTrain().individualControl(driveController.getPOV());
         }
 
-        if(opController.getLeftBumperPressed()){
+    
+        if(opController.getPOV() == 0) {
             Subsystems.getElevator().up();
         }
-        if(opController.getRightBumperPressed()){
+
+        if (opController.getPOV() == 90) {
+            Subsystems.getElevator().mid();
+        }
+
+        if (opController.getPOV() == 180) {
             Subsystems.getElevator().down();
         }
 

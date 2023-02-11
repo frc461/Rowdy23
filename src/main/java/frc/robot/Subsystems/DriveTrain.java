@@ -71,10 +71,15 @@ public class DriveTrain {
     private final SwerveModule backRightModule;
 
     //Translation 2d Objects
-    private final Translation2d frontRightLocation = new Translation2d(Constants.SHORT_WHEEL_DIST/2, -Constants.LONG_WHEEL_DIST/2);
-    private final Translation2d frontLeftLocation = new Translation2d( Constants.SHORT_WHEEL_DIST/2,  Constants.LONG_WHEEL_DIST/2);
-    private final Translation2d backLeftLocation = new Translation2d( -Constants.SHORT_WHEEL_DIST/2,  Constants.LONG_WHEEL_DIST/2);
-    private final Translation2d backRightLocation = new Translation2d(-Constants.SHORT_WHEEL_DIST/2, -Constants.LONG_WHEEL_DIST/2);
+    private final Translation2d frontRightLocation = new Translation2d(Constants.WHEEL_DIST, -Constants.WHEEL_DIST);
+    private final Translation2d frontLeftLocation = new Translation2d( Constants.WHEEL_DIST,  Constants.WHEEL_DIST);
+    private final Translation2d backLeftLocation = new Translation2d( -Constants.WHEEL_DIST,  Constants.WHEEL_DIST);
+    private final Translation2d backRightLocation = new Translation2d(-Constants.WHEEL_DIST, -Constants.WHEEL_DIST);
+    
+    // private final Translation2d frontRightLocation = new Translation2d(Constants.SHORT_WHEEL_DIST/2, -Constants.LONG_WHEEL_DIST/2);
+    // private final Translation2d frontLeftLocation = new Translation2d( Constants.SHORT_WHEEL_DIST/2,  Constants.LONG_WHEEL_DIST/2);
+    // private final Translation2d backLeftLocation = new Translation2d( -Constants.SHORT_WHEEL_DIST/2,  Constants.LONG_WHEEL_DIST/2);
+    // private final Translation2d backRightLocation = new Translation2d(-Constants.SHORT_WHEEL_DIST/2, -Constants.LONG_WHEEL_DIST/2);
     
 
     private final SwerveDriveKinematics swerveKinematics = new SwerveDriveKinematics(backLeftLocation, backRightLocation, frontLeftLocation, frontRightLocation);

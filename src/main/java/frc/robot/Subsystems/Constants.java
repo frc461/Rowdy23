@@ -89,10 +89,10 @@ public class Constants {
     public static final int BACK_RIGHT_INDEX = 3;
 
     //rotation offsets 
-    public static final int FRONT_LEFT_FORWARD = 311;
-    public static final int FRONT_RIGHT_FORWARD = 22;
-    public static final int BACK_LEFT_FORWARD = 300;
-    public static final int BACK_RIGHT_FORWARD = 177;
+    public static final int FRONT_LEFT_FORWARD = 43;
+    public static final int FRONT_RIGHT_FORWARD = 115;
+    public static final int BACK_LEFT_FORWARD = 30;
+    public static final int BACK_RIGHT_FORWARD = 267;
 
     
     public static final double TALON_WHEEL_RADIUS = 1.5;// inches
@@ -117,6 +117,8 @@ public class Constants {
 
     public static final double SHORT_WHEEL_DIST = Units.inchesToMeters(22.75);
     public static final double LONG_WHEEL_DIST = Units.inchesToMeters(19.375);
+    public static final double WHEEL_DIST = Constants.TALON_BOT ?  Units.feetToMeters(0.5) : Units.feetToMeters(1);
+
 
     public static final double TRIGGER_DEADZONE = 0.1;
     public static final double JSTICK_DEADZONE = 0.11;
