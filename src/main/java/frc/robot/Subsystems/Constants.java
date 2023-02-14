@@ -78,9 +78,9 @@ public class Constants {
     public static final double ELEVATOR_FF = 0.0010000000474974513;
 
 
-    public static final double WRIST_P = 0.01;
-    public static final double WRIST_I = 0.0001;
-    public static final double WRIST_D = 0.00;
+    public static final double WRIST_P = 0.2;
+    public static final double WRIST_I = 0.000;
+    public static final double WRIST_D = 0.0001;
     public static final double WRIST_FF = 0.0;
 
     public static final int FRONT_LEFT_INDEX = 0;

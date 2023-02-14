@@ -102,12 +102,12 @@ public class DriveTrain {
         }
         this.pigeon.setYaw(0.0);
         
-        if(Constants.TALON_BOT){
-            frontRightModule = new SwerveModule(this.frontRightDrive, this.frontRightTalon, this.frontRightDriveEnc, 0.0);
-            frontLeftModule = new SwerveModule(this.frontLeftDrive, this.frontLeftTalon, this.frontLeftDriveEnc, 0.0);
-            backLeftModule = new SwerveModule(this.backLeftDrive, this.backLeftTalon, this.backLeftDriveEnc, 0.0);
-            backRightModule = new SwerveModule(this.backRightDrive, this.backRightTalon, this.backRightDriveEnc, 0.0);
-            this.initTalons();
+        if(false){
+            // frontRightModule = new SwerveModule(this.frontRightDrive, this.frontRightTalon, this.frontRightDriveEnc, 0.0);
+            // frontLeftModule = new SwerveModule(this.frontLeftDrive, this.frontLeftTalon, this.frontLeftDriveEnc, 0.0);
+            // backLeftModule = new SwerveModule(this.backLeftDrive, this.backLeftTalon, this.backLeftDriveEnc, 0.0);
+            // backRightModule = new SwerveModule(this.backRightDrive, this.backRightTalon, this.backRightDriveEnc, 0.0);
+            // this.initTalons();
         }else{
 
             putCANCodersToSmartDashboard();
@@ -117,6 +117,7 @@ public class DriveTrain {
             backRightModule = new SwerveModule(this.backRightDrive, this.backRightRotation, this.backRightDriveEnc, this.backRightEncoder, Constants.BACK_RIGHT_FORWARD);
         }
         initSparks();
+        resetModuleRotation();
         
        
 
@@ -385,22 +386,21 @@ public void printValues(){
      * Resets the rotation of the module. Used in the event the NEO encoders accumulate error
      */
     public void resetModuleRotation(){
-        // frontLeftModule.setOffset(0);
-        // frontLeftModule.resetRotation();
-        frontLeftCANCoder.configMagnetOffset(120);
+        frontLeftModule.resetRotation();
+        frontLeftModule.setOffset(0);
+        frontLeftCANCoder.configMagnetOffset(0);
 
-        //frontRightModule.setOffset(0);
-        //frontRightModule.resetRotation();
-        frontRightCANCoder.configMagnetOffset(202);
+        frontRightModule.resetRotation();
+        frontRightModule.setOffset(0);
+        frontRightCANCoder.configMagnetOffset(0);
 
-       // backLeftModule.setOffset(0);
-       // backLeftModule.resetRotation();
-        backLeftCANCoder.configMagnetOffset(120);
+        backLeftModule.resetRotation();
+        backLeftModule.setOffset(0);
+        backLeftCANCoder.configMagnetOffset(0);
 
-       // backRightModule.setOffset(0);
-       // backRightModule.resetRotation();
-       
-        backRightCANCoder.configMagnetOffset(360);
+        backRightModule.resetRotation();
+        backRightModule.setOffset(0);
+        backRightCANCoder.configMagnetOffset(0);
 
     }
 

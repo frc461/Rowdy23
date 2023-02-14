@@ -86,17 +86,17 @@ public class Teleop {
         }
 
     
-        // if(opController.getPOV() == 0) {
-        //     Subsystems.getElevator().up();
-        // }
+        if(opController.getPOV() == 0) {
+            Subsystems.getElevator().up();
+        }
 
-        // if (opController.getPOV() == 90) {
-        //     Subsystems.getElevator().mid();
-        // }
+        if (opController.getPOV() == 90) {
+            Subsystems.getElevator().mid();
+        }
 
-        // if (opController.getPOV() == 180) {
-        //     Subsystems.getElevator().down();
-        // }
+        if (opController.getPOV() == 180) {
+            Subsystems.getElevator().down();
+        }
         
         if(opController.getLeftY() < -0.2 || opController.getLeftY() > 0.2) {
             Subsystems.getElevator().moveSlow((opController.getLeftY()));
@@ -106,9 +106,10 @@ public class Teleop {
         
         if(opController.getRightY() < -0.2 || opController.getRightY() > 0.2) {
             Subsystems.getIntake().turn(opController.getRightY());
-        } else if (opController.getRightY() > -0.2 || opController.getRightY() < 0.2) {
+        } else {
             Subsystems.getIntake().stop();
         }
+
 
 
         // if(finishAuto){
