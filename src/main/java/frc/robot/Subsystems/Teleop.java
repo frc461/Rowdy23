@@ -30,7 +30,7 @@ public class Teleop {
     // private boolean intakeStopped = false;
     // private boolean shooterStopped = true;
     // private boolean fixingHood = false;
-     private boolean finishAuto = false;
+    private boolean finishAuto = false;
 
     // private boolean intakeOverride = false;
     private boolean translating = true;
@@ -48,43 +48,35 @@ public class Teleop {
     
     public void run(){
 
-
-
        //System.out.println(Subsystems.getDriveTrain().backLeftCANCoder.getAbsolutePosition());
 
         ////////////////////////// Drive ///////////////////////////
         double driveX = driveController.getLeftX();
         double driveY = driveController.getLeftY();
         
-        if(driveController.getXButtonPressed()){
+        if (driveController.getXButtonPressed()){
             drivetrain.setXConfig();
-        }
-        else if(driveController.getXButtonReleased()){
+        } else if (driveController.getXButtonReleased()){
             
         }
 
-        if(driveController.getYButtonPressed()){
-            if(Subsystems.getDriveTrain().checkLevel() == true){
+        if (driveController.getYButtonPressed()){
+            if (Subsystems.getDriveTrain().checkLevel() == true){
                 Subsystems.getIntake().showLights(0, 255, 0);
-            }
-            else{
+            } else {
                 Subsystems.getIntake().showLights(255, 255, 255);
             }
-           
         }
-              
         
-        if(driveController.getAButtonPressed()){
+        if (driveController.getAButtonPressed()){
             Subsystems.getDriveTrain().offsetPigeon();
         }
-        if(driveController.getBButtonPressed()){
+        if (driveController.getBButtonPressed()){
             Subsystems.getDriveTrain().resetPigeonHeading();
         }
-
-        if(driveController.getPOV() != -1){
+        if (driveController.getPOV() != -1){
             Subsystems.getDriveTrain().individualControl(driveController.getPOV());
         }
-
     
         if(opController.getPOV() == 0) {
             Subsystems.getElevator().up();
@@ -98,13 +90,13 @@ public class Teleop {
             Subsystems.getElevator().down();
         }
         
-        if(opController.getLeftY() < -0.2 || opController.getLeftY() > 0.2) {
-            Subsystems.getElevator().moveSlow((opController.getLeftY()));
+        if (opController.getLeftY() < -0.2 || opController.getLeftY() > 0.2) {
+            Subsystems.getElevator().moveSlow(opController.getLeftY());
         } else if (opController.getLeftY() > -0.2 || opController.getLeftY() < 0.2){
             Subsystems.getElevator().stop();
         }
         
-        if(opController.getRightY() < -0.2 || opController.getRightY() > 0.2) {
+        if (opController.getRightY() < -0.2 || opController.getRightY() > 0.2) {
             Subsystems.getIntake().turn(opController.getRightY());
         } else {
             Subsystems.getIntake().stop();
@@ -125,7 +117,7 @@ public class Teleop {
         //     Subsystems.getShooter().setShooter(Limelight.getFlywheelSpeed(), Limelight.getHoodAngle(), -0.8);
         //     Subsystems.getShooter().revShooter();
 
-        //     Subsystems.getDriveTrain().drive(0.0, 0.0, Subsystems.getDriveTrain().aimAtHub(), false);
+        //     drivetrain.drive(0.0, 0.0, Subsystems.getDriveTrain().aimAtHub(), false);
 
         //     // if(Limelight.getAimed()){
 
@@ -142,13 +134,6 @@ public class Teleop {
         //     // }
         //     return;
         // }
-        
-        if(Math.abs(driveX) <= 0.08){
-            driveX = 0;
-        }
-        if(Math.abs(driveY) <= 0.08){
-            driveY = 0;
-        }
 
         double hyp = Math.sqrt(Math.pow(driveX, 2) + Math.pow(driveY, 2));
         double angle = Math.atan2(driveY, driveX);
@@ -168,8 +153,6 @@ public class Teleop {
             Limelight.setLEDMode(LEDMode.OFF);
         }
 
-        
-
         //     // 3 point shooter calibration code.
         //     s//hooter.setShooter(Limelight.getFlywheelSpeed(), Limelight.getHoodAngle(), -0.8);
             
@@ -188,8 +171,10 @@ public class Teleop {
         //     }
         // }else if(!driveController.getLeftBumper()){
         //     Limelight.setLEDMode(LEDMode.OFF);
+
             rotX = -driveController.getRightX();
-            rotX = Teleop.deadzoneEquations(Constants.JSTICK_DEADZONE, rotX);
+            rotX = deadzoneEquations(Constants.JSTICK_DEADZONE, rotX);
+
         //     translating = true;
         // }else{
         //     rotX = -driveController.getRightX();
@@ -204,11 +189,11 @@ public class Teleop {
             
            while(Limelight.getTX() > 3){
             speed = Math.abs(speedConst*Limelight.getTX());
-            Subsystems.getDriveTrain().drive(0, -speed, 0, false);
+            drivetrain.drive(0, -speed, 0, false);
            }
            while(Limelight.getTX() < -3){
             speed = Math.abs(speedConst*Limelight.getTX());
-            Subsystems.getDriveTrain().drive(0, speed, 0, false);
+            drivetrain.drive(0, speed, 0, false);
            }
 
            //System.out.println("pitch: " + Limelight.getPitch() + " roll: " + Limelight.getRoll() + " yaw: " + Limelight.getYaw());
@@ -216,11 +201,6 @@ public class Teleop {
         }
         
         if(driveController.getRightBumperPressed()){
-
-
-
-
-          
 
             //System.out.println(Limelight.getYaw());
             
@@ -240,10 +220,10 @@ public class Teleop {
             // try{
                 
             //     while (Limelight.getYaw() > 1) {
-            //         Subsystems.getDriveTrain().drive(0, 0, -1, false);
+            //         drivetrain.drive(0, 0, -1, false);
             //     }
             //     while (Limelight.getYaw() < -1) {
-            //         Subsystems.getDriveTrain().drive(0, 0, 1, false);
+            //         drivetrain.drive(0, 0, 1, false);
             //     }
             // }
             //drivetrain.pigeon.setYaw(Limelight.getYaw());
@@ -258,13 +238,13 @@ public class Teleop {
         }
 
         ////////////////////// Field Relative Toggle /////////////////////////////
-        if(driveController.getStartButtonPressed() /*|| driveController.getAButtonPressed()*/){
+        if(driveController.getStartButtonPressed() /*|| driveController.getAButtonPressed()*/) {
             String fieldRelativeOnOrNot;
             fieldRelative = !fieldRelative;
-            if(fieldRelative){
+            if (fieldRelative){
                 fieldRelativeOnOrNot = "On";
                 intake.showLights(0, 0, 255);
-            }else{
+            } else {
                 fieldRelativeOnOrNot = "Off";
                 intake.showLights(255, 0, 0);
             }
@@ -272,23 +252,20 @@ public class Teleop {
 
         }
 
-       
-        
         ///////////////////////// Intake ////////////////////
 
-        
-        if(opController.getLeftBumper()){
+        if(opController.getLeftBumper()) {
             intake.runIntake461(false);
             intake.showLights(255, 0, 255); //255, 0, 255
-        } else if(opController.getLeftBumperReleased()) {
+        } else if (opController.getLeftBumperReleased()) {
             intake.stopIntake461();
             intake.stopLights();
         }
         
-        if(opController.getRightBumper()) {
+        if (opController.getRightBumper()) {
             intake.runIntake461(true);
             intake.showLights(255, 200, 0); //255, 255, 0
-        } else if(opController.getRightBumperReleased()) {
+        } else if (opController.getRightBumperReleased()) {
             intake.stopIntake461();
             intake.stopLights();
         }
@@ -384,8 +361,6 @@ public class Teleop {
         //     Subsystems.getShooter().stopShooter();
         // }
 
-        
-
         // if(driveController.getYButtonPressed()){
         //     Subsystems.getDriveTrain().resetAimPID();
         //     Subsystems.getShooter().resetPID();
@@ -405,7 +380,6 @@ public class Teleop {
         // if(fixingHood){
         //     fixingHood = shooter.fixHood();
         // }
-        
     }
 
     /**
@@ -416,16 +390,16 @@ public class Teleop {
      * @param hyp magnitude of input
      * @return
      */
-    private static double deadzoneEquations(double deadZoneRadius, double hyp){
-        if(hyp >= deadZoneRadius){
+    private static double deadzoneEquations(double deadZoneRadius, double hyp) {
+        if (hyp >= deadZoneRadius) {
             return (1/(1-deadZoneRadius)) * (hyp - deadZoneRadius);
-        }else if(hyp <= -deadZoneRadius){
+        } else if (hyp <= -deadZoneRadius) {
             return (1/(1-deadZoneRadius)) * (hyp + deadZoneRadius);
         }
         return 0;
     }
 
-    public void autod(){
+    public void autod() {
         finishAuto = true;
     }
 }
