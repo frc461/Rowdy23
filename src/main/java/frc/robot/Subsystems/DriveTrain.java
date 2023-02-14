@@ -88,28 +88,27 @@ public class DriveTrain {
 
     
 
-    public DriveTrain(){
+    public DriveTrain() {
         backLeftCANCoder.setPositionToAbsolute();
         frontRightCANCoder.setPositionToAbsolute();
         frontLeftCANCoder.setPositionToAbsolute();
         backRightCANCoder.setPositionToAbsolute();
 
        
-        if(Constants.TALON_BOT){
+        if (Constants.TALON_BOT) {
             pigeon = new PigeonIMU(35);
-        }else{
+        } else {
             pigeon = new Pigeon2(35);
         }
         this.pigeon.setYaw(0.0);
         
-        if(Constants.TALON_BOT){
+        if (Constants.TALON_BOT){
             frontRightModule = new SwerveModule(this.frontRightDrive, this.frontRightTalon, this.frontRightDriveEnc, 0.0);
             frontLeftModule = new SwerveModule(this.frontLeftDrive, this.frontLeftTalon, this.frontLeftDriveEnc, 0.0);
             backLeftModule = new SwerveModule(this.backLeftDrive, this.backLeftTalon, this.backLeftDriveEnc, 0.0);
             backRightModule = new SwerveModule(this.backRightDrive, this.backRightTalon, this.backRightDriveEnc, 0.0);
             this.initTalons();
-        }else{
-
+        } else {
             putCANCodersToSmartDashboard();
             frontRightModule = new SwerveModule(this.frontRightDrive, this.frontRightRotation, this.frontRightDriveEnc, this.frontRightEncoder, Constants.FRONT_RIGHT_FORWARD);
             frontLeftModule = new SwerveModule(this.frontLeftDrive, this.frontLeftRotation, this.frontLeftDriveEnc, this.frontLeftEncoder, Constants.FRONT_LEFT_FORWARD);
@@ -117,8 +116,6 @@ public class DriveTrain {
             backRightModule = new SwerveModule(this.backRightDrive, this.backRightRotation, this.backRightDriveEnc, this.backRightEncoder, Constants.BACK_RIGHT_FORWARD);
         }
         initSparks();
-        
-       
 
         this.frontLeftDrive.burnFlash();
         this.frontLeftRotation.burnFlash();
@@ -141,24 +138,23 @@ public class DriveTrain {
      * @param fieldRelative Whether it's in field relative control mode or not
      */
 
-public void printValues(){
-    // System.out.println("backLeft " + backLeftCANCoder.getAbsolutePosition());
-    // System.out.println("backRight "+backRightCANCoder.getAbsolutePosition());
-    // System.out.println("frontLeft "+ frontLeftCANCoder.getAbsolutePosition());
-    // System.out.println("frontRight "+frontRightCANCoder.getAbsolutePosition());
+public void printValues() {
     SmartDashboard.putNumber("backleft", backLeftCANCoder.getAbsolutePosition());
     SmartDashboard.putNumber("backright", backRightCANCoder.getAbsolutePosition());
     SmartDashboard.putNumber("frontleft", frontLeftCANCoder.getAbsolutePosition());
     SmartDashboard.putNumber("frontright", frontRightCANCoder.getAbsolutePosition());
-
+    // SmartDashboard.putNumber("backleft swerve m/s", backLeftModule.getState().speedMetersPerSecond);
+    // SmartDashboard.putNumber("backleft swerve rotation", backLeftModule.getState().angle.getDegrees());
+    // SmartDashboard.putNumber("backright swerve m/s", backRightModule.getState().speedMetersPerSecond);
+    // SmartDashboard.putNumber("backright swerve rotation", backRightModule.getState().angle.getDegrees());
+    // SmartDashboard.putNumber("frontleft swerve m/s", frontLeftModule.getState().speedMetersPerSecond);
+    // SmartDashboard.putNumber("frontleft swerve rotation", frontLeftModule.getState().angle.getDegrees());
+    // SmartDashboard.putNumber("frontright swerve m/s", frontRightModule.getState().speedMetersPerSecond);
+    // SmartDashboard.putNumber("frontright swerve rotation", frontRightModule.getState().angle.getDegrees());
 }
 
 
-    public void drive(double xSpeed, double ySpeed, double rotation, boolean fieldRelative){ 
-
-       
-
-
+    public void drive(double xSpeed, double ySpeed, double rotation, boolean fieldRelative) { 
         SwerveModuleState[] swerveModuleStates = swerveKinematics.toSwerveModuleStates(
             fieldRelative
                 ? ChassisSpeeds.fromFieldRelativeSpeeds(ySpeed, -xSpeed, rotation, Rotation2d.fromDegrees(-this.pigeon.getYaw()))
@@ -168,7 +164,7 @@ public void printValues(){
         setSwerveModuleStates(swerveModuleStates);
     }
     
-    public void putCANCodersToSmartDashboard(){
+    public void putCANCodersToSmartDashboard() {
         SmartDashboard.putNumber("bl", backLeftCANCoder.getAbsolutePosition());
         SmartDashboard.putNumber("fr", frontRightCANCoder.getAbsolutePosition());
         SmartDashboard.putNumber("fl", frontLeftCANCoder.getAbsolutePosition());
@@ -180,7 +176,7 @@ public void printValues(){
      * 
      * @return array of SwerveModuleState 0 is fl, 1 is fr, 2 is bl, 3 is br
      */
-    public SwerveModuleState[] getSwerveModuleStates(){
+    public SwerveModuleState[] getSwerveModuleStates() {
         SwerveModuleState[] states = new SwerveModuleState[4];
         states[0] = frontLeftModule.getState();
         states[1] = frontRightModule.getState();
@@ -194,13 +190,13 @@ public void printValues(){
      * 
      * @param states an array of the swerve module states. 0 for fl, 1 for fr, 2 for bl, 3 for br 
      */
-    public void setSwerveModuleStates(SwerveModuleState[] states){
-        if(Constants.TALON_BOT){
+    public void setSwerveModuleStates(SwerveModuleState[] states) {
+        if(Constants.TALON_BOT) {
             frontLeftModule.setTalonDesiredState(states[Constants.FRONT_LEFT_INDEX]);
             frontRightModule.setTalonDesiredState(states[Constants.FRONT_RIGHT_INDEX]);
             backLeftModule.setTalonDesiredState(states[Constants.BACK_LEFT_INDEX]);
             backRightModule.setTalonDesiredState(states[Constants.BACK_RIGHT_INDEX]);
-        }else{
+        } else {
             frontLeftModule.setDesiredState(states[0]);
             frontRightModule.setDesiredState(states[1]);
             backLeftModule.setDesiredState(states[2]);
@@ -211,29 +207,28 @@ public void printValues(){
     /**
      * updates the odometry
      */
-    public void updateOdometry(){
+    public void updateOdometry() {
         swerveOdometry.update(getPigeonHeading(), getSwerveModuleStates());
     }
 
     /**
      * Sets the current position and rotation of the odometry
      */
-    public void setOdometry(Pose2d currentPoint){
+    public void setOdometry(Pose2d currentPoint) {
         swerveOdometry.resetPosition(currentPoint, getPigeonHeading());
     }
 
     /**
      * Resets odometry to be the origin (x: 0, y: 0, rotation: 0)
      */
-    public void resetOdometry(){
+    public void resetOdometry() {
         this.setOdometry(new Pose2d(0.0, 0.0, getPigeonHeading()));
     }
-    public boolean checkLevel(){
-        if((Subsystems.getDriveTrain().pigeon.getPitch() > -5 && Subsystems.getDriveTrain().pigeon.getPitch() < 5) && (Subsystems.getDriveTrain().pigeon.getRoll() > -5 && Subsystems.getDriveTrain().pigeon.getRoll() < 5)) {
+    public boolean checkLevel() {
+        if ((Subsystems.getDriveTrain().pigeon.getPitch() > -5 && Subsystems.getDriveTrain().pigeon.getPitch() < 5) && (Subsystems.getDriveTrain().pigeon.getRoll() > -5 && Subsystems.getDriveTrain().pigeon.getRoll() < 5)) {
             System.out.println("balanced");
             return true;
-        }
-        else{
+        } else {
             System.out.println("NOT balanced");
             return false;
         }
@@ -243,7 +238,7 @@ public void printValues(){
      * Retrieves the current pose meters of the odometry
      * @return pose meters of the odometry
      */
-    public Pose2d getOdometryPoseMeters(){
+    public Pose2d getOdometryPoseMeters() {
         return swerveOdometry.getPoseMeters();
     }
 
@@ -251,17 +246,17 @@ public void printValues(){
      * Returns the heading from our pigeon
      * @return A Rotation2d object of our pigeon heading
      */
-    public Rotation2d getPigeonHeading(){
+    public Rotation2d getPigeonHeading() {
         return Rotation2d.fromDegrees(this.pigeon.getYaw());
     }
 
     /**
      * Resets the current yaw angle of the robot such that the way it is currently facing is the new forward direction
      */
-    public void resetPigeonHeading(){
+    public void resetPigeonHeading() {
         this.pigeon.setYaw(0.0);
     }
-    public void offsetPigeon(){
+    public void offsetPigeon() {
         this.pigeon.setYaw(this.pigeon.getYaw()+90);
     }
 
@@ -269,14 +264,14 @@ public void printValues(){
      * 
      * @param newHeading
      */
-    public void setHeading(Rotation2d newHeading){
+    public void setHeading(Rotation2d newHeading) {
         this.setOdometry(new Pose2d(getOdometryPoseMeters().getX(), getOdometryPoseMeters().getY(), newHeading));
     }
 
     /**
      * Runs each WPI_TalonSRX through the initTalon function
      */
-    public void initTalons(){
+    public void initTalons() {
         initTalon(frontLeftTalon, 0.0);
         initTalon(frontRightTalon, 0.0);
         initTalon(backLeftTalon, 0.0);
@@ -288,7 +283,7 @@ public void printValues(){
      * @param talon the motor being initated
      * @param offset the offset of the encoder
      */
-    public void initTalon(WPI_TalonSRX talon, double offset){
+    public void initTalon(WPI_TalonSRX talon, double offset) {
         talon.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Absolute, 0, 30);
         Timer.delay(0.3);
         //if the talons get offset, uncomment the lower line, hand set the modules to 0, 
@@ -302,9 +297,9 @@ public void printValues(){
      */
     
 
-    public void initSparks(){
+    public void initSparks() {
 
-        if(!Constants.TALON_BOT){
+        if(!Constants.TALON_BOT) {
             resetModuleRotation();
             //drive motors don't need offsets
             initSpark(frontRightDrive, 0.0, false);
@@ -326,7 +321,7 @@ public void printValues(){
             setPIDF(backLeftRotation, Constants.STEER_BACK_LEFT_P, Constants.STEER_BACK_LEFT_I, Constants.STEER_BACK_LEFT_D, Constants.STEER_BACK_LEFT_FF);
             setPIDF(backRightRotation, Constants.STEER_BACK_RIGHT_P, Constants.STEER_BACK_RIGHT_I, Constants.STEER_BACK_RIGHT_D, Constants.STEER_BACK_RIGHT_FF);
 
-        }else{
+        } else {
 
             initSpark(frontRightDrive, 0.0);
             initSpark(frontLeftDrive, 0.0);
@@ -349,7 +344,7 @@ public void printValues(){
      * @param d the d value in a PID controller
      * @param f the f (feed forward) value
      */
-    private void setPIDF(CANSparkMax spark, double p, double i, double d, double f){
+    private void setPIDF(CANSparkMax spark, double p, double i, double d, double f) {
         SparkMaxPIDController pidCon = spark.getPIDController();
 
         pidCon.setP(p);
@@ -361,7 +356,7 @@ public void printValues(){
     /**
      * Initializes a single spark max
      */
-    public void initSpark(CANSparkMax spark, double error){
+    public void initSpark(CANSparkMax spark, double error) {
         spark.setIdleMode(IdleMode.kBrake);
 
         error = error < 0.0 ? error + 360.0 : error;
@@ -372,7 +367,7 @@ public void printValues(){
     /**
      * Initializes a single spark max 
      */
-    public void initSpark(CANSparkMax spark, double error, boolean inverted){
+    public void initSpark(CANSparkMax spark, double error, boolean inverted) {
         spark.setIdleMode(IdleMode.kBrake);
         spark.setInverted(inverted);
 
@@ -384,7 +379,7 @@ public void printValues(){
     /**
      * Resets the rotation of the module. Used in the event the NEO encoders accumulate error
      */
-    public void resetModuleRotation(){
+    public void resetModuleRotation() {
         // frontLeftModule.setOffset(0);
         // frontLeftModule.resetRotation();
         frontLeftCANCoder.configMagnetOffset(120);
@@ -407,14 +402,14 @@ public void printValues(){
     /**
      * Used when tuning the PID on the limelight aiming
      */
-    public void resetAimPID(){
+    public void resetAimPID() {
         aimController.setPID(SmartDashboard.getNumber("Aim P", 1.0), SmartDashboard.getNumber("Aim I", 0.0), SmartDashboard.getNumber("Aim D", 0.0));
     }
     /**
      * Returns roational value to aim at hub
      * @return 
      */
-    public double aimAtHub(){
+    public double aimAtHub() {
         double tx = Limelight.getTY();
         return aimController.calculate(tx, 0.0);
     }
@@ -443,7 +438,7 @@ public void printValues(){
     /**
      * Sets wheels to be in an 'X' configuration to stop rotation
      */
-    public void setXConfig(){
+    public void setXConfig() {
         SwerveModuleState[] xStates = {
             new SwerveModuleState(0.01, Rotation2d.fromDegrees(135)),
             new SwerveModuleState(0.01, Rotation2d.fromDegrees(45)),
@@ -454,8 +449,8 @@ public void printValues(){
         setSwerveModuleStates(xStates);
     }
 
-    public void individualControl(int dir){
-        if(dir == 0){
+    public void individualControl(int dir) {
+        if (dir == 0) {
             SwerveModuleState[] curState = {
                 new SwerveModuleState(1.0, Rotation2d.fromDegrees(0)),
                 new SwerveModuleState(0.0, Rotation2d.fromDegrees(0)),
@@ -463,8 +458,7 @@ public void printValues(){
                 new SwerveModuleState(0.0, Rotation2d.fromDegrees(0))
             };
             setSwerveModuleStates(curState);
-        }
-        else if(dir == 90){
+        } else if (dir == 90) {
             SwerveModuleState[] curState = {
                 new SwerveModuleState(0.0, Rotation2d.fromDegrees(0)),
                 new SwerveModuleState(1.0, Rotation2d.fromDegrees(0)),
@@ -472,7 +466,7 @@ public void printValues(){
                 new SwerveModuleState(0.0, Rotation2d.fromDegrees(0))
             };
             setSwerveModuleStates(curState);
-        } else if( dir == 180){
+        } else if (dir == 180) {
             SwerveModuleState[] curState = {
                 new SwerveModuleState(0.0, Rotation2d.fromDegrees(0)),
                 new SwerveModuleState(0.0, Rotation2d.fromDegrees(0)),
@@ -480,7 +474,7 @@ public void printValues(){
                 new SwerveModuleState(0.0, Rotation2d.fromDegrees(0))
             };
             setSwerveModuleStates(curState);
-        } else if( dir == 180+90){
+        } else if (dir == 180 + 90) {
             SwerveModuleState[] curState = {
                 new SwerveModuleState(0.0, Rotation2d.fromDegrees(0)),
                 new SwerveModuleState(0.0, Rotation2d.fromDegrees(0)),
@@ -491,7 +485,7 @@ public void printValues(){
         }
     }
 
-    public double getFLEncoder(){
+    public double getFLEncoder() {
         return frontLeftDriveEnc.getPosition();
     }
 
