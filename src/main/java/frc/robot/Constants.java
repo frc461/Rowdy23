@@ -13,6 +13,17 @@ import frc.lib.util.SwerveModuleConstants;
 public final class Constants {
     public static final double stickDeadband = 0.1;
 
+    public static final double ELEVATOR_P = 0.005800000064074993;
+    public static final double ELEVATOR_I = 0.0;
+    public static final double ELEVATOR_D = 0.0001;
+    public static final double ELEVATOR_FF = 0.0010000000474974513;
+
+
+    public static final double WRIST_P = 0.2;
+    public static final double WRIST_I = 0.000;
+    public static final double WRIST_D = 0.0001;
+    public static final double WRIST_FF = 0.0;
+
     public static final class Swerve {
         public static final int pigeonID = 1;
         public static final boolean invertGyro = false; // Always ensure Gyro is CCW+ CW-
