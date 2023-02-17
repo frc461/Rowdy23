@@ -1,8 +1,10 @@
 package frc.robot.subsystems;
 
 public class Subsystems {
+    
     private static Intake intake;
     private static Elevator elevator;
+    
 
     /**
      * Subsystems class for the purpose of removing the dependancy to the Robot in every constructor 
@@ -11,6 +13,7 @@ public class Subsystems {
         intake = new Intake();
         elevator = new Elevator();
     }
+    
 
     /**
      * gets the drive train
@@ -29,6 +32,7 @@ public class Subsystems {
      * @return
      */
     public static Intake getIntake() {
+        initSubsystems();
         return intake;
     }
 }

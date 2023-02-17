@@ -64,18 +64,17 @@ public class SwerveModule {
     public void setDesiredState(SwerveModuleState desiredState, boolean isOpenLoop){
         /* This is a custom optimize function, since default WPILib optimize assumes continuous controller which CTRE and Rev onboard is not */
         desiredState = OnboardModuleState.optimize(desiredState, getState().angle);
-        //desiredState = CTREModuleState.optimize(desiredState, getState().angle); 
         setAngle(desiredState);
         setSpeed(desiredState, isOpenLoop);
     }
-    //TODO replace all references to talons with spark methods. -moses
+    
 
     private void setSpeed(SwerveModuleState desiredState, boolean isOpenLoop){
         if(isOpenLoop){
             double percentOutput = desiredState.speedMetersPerSecond / Constants.Swerve.maxSpeed;
             mDriveMotor.set(percentOutput);
-            // this one will work the same so we don't need to do anything else with it.
-            //old code for reference --> mDriveMotor.set(ControlMode.PercentOutput, percentOutput);
+           
+            
         }
         else {
             driveController.setReference(

@@ -1,8 +1,10 @@
 package frc.robot;
 
+import edu.wpi.first.networktables.Subscriber;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
@@ -32,10 +34,12 @@ public class RobotContainer {
 
     /* Subsystems */
     private final Swerve s_Swerve = new Swerve();
+    
 
 
     /** The container for the robot. Contains subsystems, OI devices, and commands. */
     public RobotContainer() {
+        
         s_Swerve.setDefaultCommand(
             new TeleopSwerve(
                 s_Swerve, 
@@ -48,6 +52,7 @@ public class RobotContainer {
 
         // Configure the button bindings
         configureButtonBindings();
+        printValues();
     }
 
     /**
@@ -59,6 +64,11 @@ public class RobotContainer {
     private void configureButtonBindings() {
         /* Driver Buttons */
         zeroGyro.onTrue(new InstantCommand(() -> s_Swerve.zeroGyro()));
+    }
+    
+    private void printValues(){
+        //SmartDashboard.putBoolean("cube beam broken?: ", frc.robot.subsystems.Subsystems.getIntake().cubeBeamBroken());
+        
     }
 
     /**

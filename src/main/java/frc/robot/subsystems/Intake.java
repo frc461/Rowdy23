@@ -6,6 +6,7 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.AddressableLED;
 import edu.wpi.first.wpilibj.AddressableLEDBuffer;
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
@@ -14,8 +15,11 @@ public class Intake {
     private CANSparkMax wrist = new CANSparkMax(32, MotorType.kBrushed);
     private PIDController wristPidController = new PIDController(Constants.WRIST_P, Constants.WRIST_I, Constants.WRIST_D); 
     //private AbsoluteEncoder wristEncoder = intake.getAbsoluteEncoder(SparkMaxAbsoluteEncoder.Type.kDutyCycle);
+
     private DutyCycleEncoder wristEncoder = new DutyCycleEncoder(2);
     double position = 0;
+    DigitalInput cubeBeam = new DigitalInput(0);
+    DigitalInput coneBeam = new DigitalInput(1);
 
     private AddressableLED led = new AddressableLED(0);
     private AddressableLEDBuffer ledData = new AddressableLEDBuffer(13);
@@ -102,5 +106,8 @@ public class Intake {
 
     public void printValues() {
         SmartDashboard.putNumber("wrist enc", wristEncoder.getAbsolutePosition());
+    }
+    public boolean cubeBeamBroken(){
+        return cubeBeam.get();
     }
 }
