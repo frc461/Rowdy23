@@ -77,7 +77,7 @@ public class SwerveModule {
 
             //the key difference between the talons' and the sparks' .set() method is the talons use .set for power (amps, ect) and the sparks use it for percent output (-1 to 1) 
 
-            mDriveMotor.set();
+            drivePid.setReference(velocity, ControlType.kVelocity);
             testMotor.set(ControlMode.Velocity, velocity, DemandType.ArbitraryFeedForward, feedforward.calculate(desiredState.speedMetersPerSecond));
         }
     }
@@ -112,7 +112,7 @@ public class SwerveModule {
         //TODO figure out the correct config for the sparks, you can't just use the ctre configs in ctreconfigs.java, it will have to be rewritten. same goes for the angle motor.
 
         mAngleMotor.restoreFactoryDefaults(); // fixed
-        mAngleMotor.configAllSettings(Robot.ctreConfigs.swerveAngleFXConfig); // fix pls
+        // mAngleMotor..configAllSettings(Robot.ctreConfigs.swerveAngleFXConfig); // fix pls
         mAngleMotor.setInverted(Constants.Swerve.angleMotorInvert); // this one is fine
         mAngleMotor.setIdleMode(IdleMode.kBrake); // this one is fine
         resetToAbsolute();
@@ -120,7 +120,7 @@ public class SwerveModule {
 
     private void configDriveMotor(){        
         mDriveMotor.restoreFactoryDefaults(); // fixed
-        mDriveMotor.configAllSettings(Robot.ctreConfigs.swerveDriveFXConfig); // fix pls
+        // mDriveMotor.configAllSettings(Robot.ctreConfigs.swerveDriveFXConfig); // fix pls
         mDriveMotor.setInverted(Constants.Swerve.driveMotorInvert); // this one is fine
         mDriveMotor.setIdleMode(IdleMode.kBrake); // this one is fine
         mDriveMotor.getEncoder().setPosition(0); // this should be fine...
