@@ -73,12 +73,12 @@ public class COTSFalconSwerveConstants {
         /** (150 / 7) : 1 */
         double angleGearRatio = ((150.0 / 7.0) / 1.0);
 
-        double angleKP = 0.3;
+        double angleKP = 0.05;
         double angleKI = 0.0;
         double angleKD = 0.0;
         double angleKF = 0.0;
 
-        boolean driveMotorInvert = false;
+        boolean driveMotorInvert = true;
         boolean angleMotorInvert = true;
         boolean canCoderInvert = false;
         return new COTSFalconSwerveConstants(wheelDiameter, angleGearRatio, driveGearRatio, angleKP, angleKI, angleKD, angleKF, driveMotorInvert, angleMotorInvert, canCoderInvert);
