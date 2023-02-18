@@ -48,7 +48,6 @@ public class RobotContainer {
     private final Swerve s_Swerve = new Swerve();
     private final Elevator elevator = new Elevator();
     private final Intake intake = new Intake();
-    private final Intake intake = new Intake();
 
 
     /** The container for the robot. Contains subsystems, OI devices, and commands. */
@@ -107,7 +106,8 @@ public class RobotContainer {
         SmartDashboard.putNumber("Wrist Target", intake.getTarget());
         SmartDashboard.putNumber("Wrist Power", intake.getPower());
         SmartDashboard.putBoolean("cube beam broken?: ", intake.cubeBeamBroken());
-
+    }
+    
     private void setIntake(){
         intake.setRotation(operator.getRawAxis(wristAxis));
     }
