@@ -13,18 +13,12 @@ public class Elevator {
     private PIDController pidController = new PIDController(Constants.ELEVATOR_P, Constants.ELEVATOR_I, Constants.ELEVATOR_D);
     private RelativeEncoder m_encoder = elevator.getEncoder();
     private static final int elevatorMax = 1024;
-    double position = 0; 
+    double position = 0;
     
-    public void up(){
-        elevator.set(pidController.calculate(m_encoder.getPosition(), 1000));
-    }
+    //goto a preset
 
-    public void mid() {
-        elevator.set(pidController.calculate(m_encoder.getPosition(), 0));
-    }
-
-    public void down(){
-        elevator.set(pidController.calculate(m_encoder.getPosition(), -400));
+    public void setElevatorPreset(double target){
+        elevator.set(pidController.calculate(m_encoder.getPosition(), target));
     }
 
     public void stop(){

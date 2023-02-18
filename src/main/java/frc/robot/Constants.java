@@ -18,6 +18,14 @@ public final class Constants {
     public static final double ELEVATOR_D = 0.0001;
     public static final double ELEVATOR_FF = 0.0010000000474974513;
 
+    public static final double elevatorStowPos = -100;
+
+    public static final double elevatorTop = -900;
+    public static final double elevatorMid = -900;
+    public static final double elevatorLow = -900;
+    public static final double elevatorBot = -900;
+
+    public static final double wristStowPos = 0.9;
 
     public static final double WRIST_P = 0.2;
     public static final double WRIST_I = 0.000;

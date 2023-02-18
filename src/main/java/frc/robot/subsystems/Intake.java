@@ -23,13 +23,17 @@ public class Intake {
 
     private AddressableLED led = new AddressableLED(0);
     private AddressableLEDBuffer ledData = new AddressableLEDBuffer(13);
+
+
+    
+
     
     public void stop() {
         
         wrist.set(wristPidController.calculate(wristEncoder.getAbsolutePosition(), position));
     }
 
-    public void turn(double a) {
+    public void setRotation(double a) {
         position+=a/50;
         // if(wristEncoder.getAbsolutePosition() > 0 && wristEncoder.getAbsolutePosition() < 0.9375){
         // }
