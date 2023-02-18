@@ -7,17 +7,22 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
-public class Elevator {
-    private CANSparkMax elevator = new CANSparkMax(31, MotorType.kBrushless);
-    //private SparkMaxPIDController m_pidController = elevator.getPIDController();
+public class Elevator extends SubsystemBase{
+    private CANSparkMax elevator;
     private PIDController pidController = new PIDController(Constants.ELEVATOR_P, Constants.ELEVATOR_I, Constants.ELEVATOR_D);
-    private RelativeEncoder m_encoder = elevator.getEncoder();
-    private static final int elevatorMax = 1024;
+    private RelativeEncoder m_encoder;
     double position = 0;
     double target = 0;
-    double power = 0;
     DigitalInput elevatorSwitch = new DigitalInput(3);
+
+    public Elevator() {
+        elevator = new CANSparkMax(31, MotorType.kBrushless);
+        m_encoder = elevator.getEncoder();
+        elevator.restoreFactoryDefaults();
+        elevator.setInverted(true);
+    }
     
     public RelativeEncoder getEncoder() {
         return m_encoder;
@@ -26,10 +31,6 @@ public class Elevator {
     public double getTarget() {
         return target;
     }
-
-    public double getPower() {
-        return power;
-    }
     
     //goto a preset
 
@@ -37,33 +38,18 @@ public class Elevator {
         elevator.set(pidController.calculate(m_encoder.getPosition(), target));
     }
 
-    public void stop(){
-        elevator.set(pidController.calculate(m_encoder.getPosition(), position));
-    }
-
-    public void moveSlow(double stickY) {
-        if(m_encoder.getPosition() < elevatorMax){
-            if (elevatorSwitch.get()) {
-                m_encoder.setPosition(0);
-                position = 0;
-                target = 0;
-            } else {
-                position += stickY*30;
-                power = pidController.calculate(m_encoder.getPosition(), position);
-                elevator.set(power);
-                target = position;
-            }
+    public void setHeight(double height) {
+        if (height < m_encoder.getPosition() && elevatorSwitchTriggered()) {
+            m_encoder.setPosition(0);
+            height = 0;
+        } else if (height > m_encoder.getPosition() && m_encoder.getPosition() > Constants.ELEVATOR_UPPER_LIMIT) {
+            height = Constants.ELEVATOR_UPPER_LIMIT;
         }
-        else{
-            stop();
-        }
+        elevator.set(pidController.calculate(m_encoder.getPosition(), height));
+        target = height;
     }
 
     public boolean elevatorSwitchTriggered() {
-        return elevatorSwitch.get();
+        return !elevatorSwitch.get();
     }
 }
-
-
-
-

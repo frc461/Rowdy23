@@ -13,24 +13,27 @@ import frc.lib.util.SwerveModuleConstants;
 public final class Constants {
     public static final double stickDeadband = 0.1;
 
-    public static final double ELEVATOR_P = 0.005800000064074993;
-    public static final double ELEVATOR_I = 0.0;
-    public static final double ELEVATOR_D = 0.0001;
+    public static final double ELEVATOR_P = 0.1800000064074993;
+    public static final double ELEVATOR_I = 0.01;
+    public static final double ELEVATOR_D = 0.01;
     public static final double ELEVATOR_FF = 0.0010000000474974513;
+    public static final double ELEVATOR_UPPER_LIMIT = 124;
 
-    public static final double elevatorStowPos = -100;
+    //public static final double elevatorStowPos = -100;
 
-    public static final double elevatorTop = -900;
-    public static final double elevatorMid = -900;
-    public static final double elevatorLow = -900;
-    public static final double elevatorBot = -900;
+    public static final double elevatorTop = 80;
+    public static final double elevatorMid = 40;
+    public static final double elevatorLow = 20;
+    public static final double elevatorBot = 0;
 
-    public static final double wristStowPos = 0.9;
+    //public static final double wristStowPos = 0.9;
 
-    public static final double WRIST_P = 0.2;
-    public static final double WRIST_I = 0.000;
-    public static final double WRIST_D = 0.0001;
+    public static final double WRIST_P = 1.44776;
+    public static final double WRIST_I = 0.8;
+    public static final double WRIST_D = 0.157769;
     public static final double WRIST_FF = 0.0;
+    public static final double WRIST_LOWER_LIMIT = 0.58;
+    public static final double WRIST_UPPER_LIMIT = 0.86;
 
     public static final class Swerve {
         public static final int pigeonID = 35;
