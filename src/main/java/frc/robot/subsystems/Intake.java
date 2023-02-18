@@ -15,17 +15,29 @@ public class Intake {
     private CANSparkMax wrist = new CANSparkMax(32, MotorType.kBrushed);
     private PIDController wristPidController = new PIDController(Constants.WRIST_P, Constants.WRIST_I, Constants.WRIST_D); 
     //private AbsoluteEncoder wristEncoder = intake.getAbsoluteEncoder(SparkMaxAbsoluteEncoder.Type.kDutyCycle);
-
     private DutyCycleEncoder wristEncoder = new DutyCycleEncoder(2);
     double position = 0;
+    double target = 0;
+    double power = 0;
     DigitalInput cubeBeam = new DigitalInput(0);
     DigitalInput coneBeam = new DigitalInput(1);
 
     private AddressableLED led = new AddressableLED(0);
     private AddressableLEDBuffer ledData = new AddressableLEDBuffer(13);
+
+    public DutyCycleEncoder getEncoder() {
+        return wristEncoder;
+    }
     
+    public double getTarget() {
+        return target;
+    }
+
+    public double getPower() {
+        return power;
+    }
+
     public void stop() {
-        
         wrist.set(wristPidController.calculate(wristEncoder.getAbsolutePosition(), position));
     }
 
@@ -47,12 +59,9 @@ public class Intake {
         else if(wristEncoder.getAbsolutePosition() > 0.5){
             targetPos = 0.5;
         }
-
-        
-        SmartDashboard.putNumber("wrist power", wristPidController.calculate(wristEncoder.getAbsolutePosition(), targetPos));
-        
-        wrist.set(wristPidController.calculate(wristEncoder.getAbsolutePosition(), targetPos));
-            SmartDashboard.putNumber("wrist target", targetPos);
+        power = wristPidController.calculate(wristEncoder.getAbsolutePosition(), targetPos);
+        wrist.set(power);
+        target = targetPos;
     }
 
     public Intake(){
@@ -73,17 +82,13 @@ public class Intake {
 
         if (!reversed) {
             intake.set(0.5);
-           
-
         } else {
             intake.set(-0.5);
         }
     }
 
     public void stopIntake461() {
-        
         intake.set(0);
-       
     }
 
     public void showLights(int r, int g, int b) {
@@ -107,7 +112,12 @@ public class Intake {
     public void printValues() {
         SmartDashboard.putNumber("wrist enc", wristEncoder.getAbsolutePosition());
     }
+
     public boolean cubeBeamBroken(){
         return cubeBeam.get();
+    }
+
+    public boolean coneBeamBroken() {
+        return coneBeam.get();
     }
 }

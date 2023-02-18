@@ -3,6 +3,7 @@ package frc.robot;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
@@ -35,6 +36,7 @@ public class RobotContainer {
     /* Subsystems */
     private final Swerve s_Swerve = new Swerve();
     private final Elevator elevator = new Elevator();
+    private final Intake intake = new Intake();
 
 
     /** The container for the robot. Contains subsystems, OI devices, and commands. */
@@ -72,8 +74,14 @@ public class RobotContainer {
     }
     
     private void printValues(){
-        //SmartDashboard.putBoolean("cube beam broken?: ", frc.robot.subsystems.Subsystems.getIntake().cubeBeamBroken());
-        
+        SmartDashboard.putNumber("Elevator Position", elevator.getEncoder().getPosition());
+        SmartDashboard.putNumber("Elevator Target", elevator.getTarget());
+        SmartDashboard.putNumber("Elevator Power", elevator.getPower());
+        SmartDashboard.putBoolean("elevator limit triggered?", elevator.elevatorSwitchTriggered());
+        SmartDashboard.putNumber("Wrist Position", intake.getEncoder().getAbsolutePosition());
+        SmartDashboard.putNumber("Wrist Target", intake.getTarget());
+        SmartDashboard.putNumber("Wrist Power", intake.getPower());
+        SmartDashboard.putBoolean("cube beam broken?: ", intake.cubeBeamBroken());
     }
 
     /**
