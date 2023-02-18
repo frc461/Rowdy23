@@ -15,8 +15,6 @@ public class Elevator {
     private static final int elevatorMax = 1024;
     double position = 0; 
     
-
-    
     public void up(){
         elevator.set(pidController.calculate(m_encoder.getPosition(), 1000));
     }
