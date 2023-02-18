@@ -10,8 +10,8 @@ public class Subsystems {
      * Subsystems class for the purpose of removing the dependancy to the Robot in every constructor 
      */ 
     public static void initSubsystems(){
-        intake = new Intake();
-        elevator = new Elevator();
+        //intake = new Intake();
+       // elevator = new Elevator();
     }
     
 

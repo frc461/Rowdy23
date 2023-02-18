@@ -105,7 +105,7 @@ public class RobotContainer {
         intake.setRotation(Constants.wristStowPos);
     }
 
-    
+
 
     /**
      * Use this to pass the autonomous command to the main {@link Robot} class.
