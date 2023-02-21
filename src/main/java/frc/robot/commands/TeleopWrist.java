@@ -3,24 +3,23 @@
 // the WPILib BSD license file in the root directory of this project.
 
 package frc.robot.commands;
-
 import java.util.function.DoubleSupplier;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants;
-import frc.robot.subsystems.Intake;
+import frc.robot.subsystems.Wrist;
 
 public class TeleopWrist extends CommandBase {
-  private Intake s_Intake;
+  private Wrist s_Wrist;
   private DoubleSupplier motionSup;
 
   /** Creates a new TeleopWrist. */
-  public TeleopWrist(Intake s_Intake, DoubleSupplier motionSup) {
+  public TeleopWrist(Wrist s_Wrist, DoubleSupplier motionSup) {
     // Use addRequirements() here to declare subsystem dependencies.
-    this.s_Intake = s_Intake;
+    this.s_Wrist = s_Wrist;
     this.motionSup = motionSup;
-    addRequirements(s_Intake);
+    addRequirements(s_Wrist);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -28,9 +27,10 @@ public class TeleopWrist extends CommandBase {
   public void execute() {
     double motionVal = MathUtil.applyDeadband(motionSup.getAsDouble(), Constants.stickDeadband);
     if (motionVal != 0) {
-      s_Intake.setRotation(s_Intake.getEncoder().getAbsolutePosition() + motionVal/4);
+      s_Wrist.setRotation(s_Wrist.getEncoder().getAbsolutePosition() + motionVal/4);
     } else {
-      s_Intake.setRotation(s_Intake.getTarget());
+      s_Wrist.setRotation(s_Wrist.getTarget());
     }
+
   }
 }
