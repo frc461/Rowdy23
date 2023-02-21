@@ -104,21 +104,9 @@ public class RobotContainer {
         intakeCone.onFalse(new InstantCommand(() -> s_Intake.stopIntake461()));
         intakeCone.whileFalse(Math.abs(outtakeCone) < Constants.stickDeadband ? new InstantCommand(() -> s_Intake.pulseIntake(false)) : new InstantCommand(() -> s_Intake.doNothing()));
 
-        if (outtakeCone >= 0.2) {
-            new InstantCommand(() -> s_Intake.runIntake461(false));
-        } else if(outtakeCone < 0.2) {
-            new InstantCommand(() -> s_Intake.stopIntake461());
-        }
-
         intakeCube.onTrue(new InstantCommand(() -> s_Intake.runIntake461(false)));
         intakeCube.onFalse(new InstantCommand(() -> s_Intake.stopIntake461()));
         intakeCube.whileFalse(Math.abs(outtakeCube) < Constants.stickDeadband ? new InstantCommand(() -> s_Intake.pulseIntake(true)) : new InstantCommand(() -> s_Intake.doNothing()));
-
-        if (outtakeCube >= 0.2) {
-            new InstantCommand(() -> s_Intake.runIntake461(true));
-        } else if (outtakeCube < 0.2) {
-            new InstantCommand(() -> s_Intake.stopIntake461());
-        }
 
         zeroGyro.onTrue(new InstantCommand(() -> s_Swerve.zeroGyro()));
     }
