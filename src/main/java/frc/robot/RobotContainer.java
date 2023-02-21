@@ -7,7 +7,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
-
+import edu.wpi.first.wpilibj2.command.button.POVButton;
 import frc.robot.autos.*;
 import frc.robot.commands.*;
 import frc.robot.subsystems.*;
@@ -19,6 +19,11 @@ import frc.robot.subsystems.*;
  * subsystems, commands, and button mappings) should be declared here.
  */
 public class RobotContainer {
+    /* Subsystems */
+    private final Swerve s_Swerve = new Swerve();
+    private final Elevator s_Elevator = new Elevator();
+    private final Intake s_Intake = new Intake();
+    private final Wrist s_Wrist = new Wrist();
     /* Controllers */
     private final Joystick driver = new Joystick(0);
     private final Joystick operator = new Joystick(1);
@@ -32,25 +37,25 @@ public class RobotContainer {
     private final int wristAxis = XboxController.Axis.kRightY.value;
     private final int elevatorAxis = XboxController.Axis.kLeftY.value;
 
-    private final JoystickButton e_preset_0 = new JoystickButton(operator, XboxController.Button.kY.value);
-    private final JoystickButton e_preset_1 = new JoystickButton(operator, XboxController.Button.kB.value);
-    private final JoystickButton e_preset_2 = new JoystickButton(operator, XboxController.Button.kA.value);
-    private final JoystickButton e_preset_3 = new JoystickButton(operator, XboxController.Button.kX.value);
+    private final JoystickButton w_preset_0 = new JoystickButton(operator, XboxController.Button.kY.value);
+    private final JoystickButton w_preset_1 = new JoystickButton(operator, XboxController.Button.kA.value);
+    
+
+    private final POVButton e_presButton_0 = new POVButton(operator, 0);
+    private final POVButton e_presButton_1 = new POVButton(operator, 90);
+    private final POVButton e_presButton_2 = new POVButton(operator, 180);
 
     private final JoystickButton intakeCone = new JoystickButton(operator, XboxController.Button.kLeftBumper.value);
-    private final boolean outtakeCone = operator.getRawAxis(XboxController.Axis.kLeftTrigger.value) >= 0.2 ? true : false;
+    private final double outtakeCone = operator.getRawAxis(XboxController.Axis.kLeftTrigger.value);
     private final JoystickButton intakeCube = new JoystickButton(operator, XboxController.Button.kRightBumper.value);
-    private final boolean outtakeCube = operator.getRawAxis(XboxController.Axis.kRightTrigger.value) >= 0.2 ? true : false;
+    private final double outtakeCube = operator.getRawAxis(XboxController.Axis.kRightTrigger.value);
+
 
 
     /* Driver Buttons */
     private final JoystickButton zeroGyro = new JoystickButton(driver, XboxController.Button.kY.value);
     private final JoystickButton robotCentric = new JoystickButton(driver, XboxController.Button.kLeftBumper.value);
 
-    /* Subsystems */
-    private final Swerve s_Swerve = new Swerve();
-    private final Elevator s_Elevator = new Elevator();
-    private final Intake s_Intake = new Intake();
 
 
     /** The container for the robot. Contains subsystems, OI devices, and commands. */
@@ -68,8 +73,11 @@ public class RobotContainer {
 
         s_Elevator.setDefaultCommand(new TeleopElevator(s_Elevator, () -> -operator.getRawAxis(elevatorAxis)));
 
-        s_Intake.setDefaultCommand(new TeleopWrist(s_Intake, () -> -operator.getRawAxis(wristAxis)));
+        s_Wrist.setDefaultCommand(new TeleopWrist(s_Wrist, () -> -operator.getRawAxis(wristAxis)));
 
+        s_Intake.setDefaultCommand(new TeleopIntake(s_Intake, () -> -outtakeCone, true));
+
+        s_Intake.setDefaultCommand(new TeleopIntake(s_Intake, () -> -outtakeCube, false));
         // Configure the button bindings
         configureButtonBindings();
     }
@@ -84,37 +92,44 @@ public class RobotContainer {
         /* Driver Buttons (and op buttons)*/
 
 
-        e_preset_0.onTrue(new InstantCommand(() -> s_Elevator.setHeight(Constants.elevatorTop)));     
-        e_preset_1.onTrue(new InstantCommand(() -> s_Elevator.setHeight(Constants.elevatorMid)));
-        e_preset_2.onTrue(new InstantCommand(() -> s_Elevator.setHeight(Constants.elevatorLow)));     
-        e_preset_3.onTrue(new InstantCommand(() -> s_Elevator.setHeight(Constants.elevatorBot)));
+        w_preset_0.onTrue(new InstantCommand(() -> s_Wrist.setRotation(Constants.WRIST_UPPER_LIMIT)));     
+        w_preset_1.onTrue(new InstantCommand(() -> s_Wrist.setRotation(Constants.WRIST_LOWER_LIMIT)));
+        
+        e_presButton_0.onTrue(new InstantCommand(() -> s_Elevator.setHeight(Constants.elevatorTop)));
+        e_presButton_1.onTrue(new InstantCommand(() -> s_Elevator.setHeight(Constants.elevatorMid)));
+        e_presButton_2.onTrue(new InstantCommand(() -> s_Elevator.setHeight(Constants.elevatorLow)));
+
 
         intakeCone.onTrue(new InstantCommand(() -> s_Intake.runIntake461(true)));
         intakeCone.onFalse(new InstantCommand(() -> s_Intake.stopIntake461()));
-        if (outtakeCone) {
+        intakeCone.whileFalse(Math.abs(outtakeCone) < Constants.stickDeadband ? new InstantCommand(() -> s_Intake.pulseIntake(false)) : new InstantCommand(() -> s_Intake.doNothing()));
+
+        if (outtakeCone >= 0.2) {
             new InstantCommand(() -> s_Intake.runIntake461(false));
-        } else if (!outtakeCone) {
+        } else if(outtakeCone < 0.2) {
             new InstantCommand(() -> s_Intake.stopIntake461());
         }
+
         intakeCube.onTrue(new InstantCommand(() -> s_Intake.runIntake461(false)));
         intakeCube.onFalse(new InstantCommand(() -> s_Intake.stopIntake461()));
+        intakeCube.whileFalse(Math.abs(outtakeCube) < Constants.stickDeadband ? new InstantCommand(() -> s_Intake.pulseIntake(true)) : new InstantCommand(() -> s_Intake.doNothing()));
 
-        if (outtakeCube) {
+        if (outtakeCube >= 0.2) {
             new InstantCommand(() -> s_Intake.runIntake461(true));
-        } else if (!outtakeCube) {
+        } else if (outtakeCube < 0.2) {
             new InstantCommand(() -> s_Intake.stopIntake461());
         }
-
 
         zeroGyro.onTrue(new InstantCommand(() -> s_Swerve.zeroGyro()));
     }
     
     public void printValues(){
+        SmartDashboard.putBoolean("Pov pressed", e_presButton_0.getAsBoolean());
         SmartDashboard.putNumber("Elevator Position", s_Elevator.getEncoder().getPosition());
         SmartDashboard.putNumber("Elevator Target", s_Elevator.getTarget());
         SmartDashboard.putBoolean("elevator limit triggered?", s_Elevator.elevatorSwitchTriggered());
-        SmartDashboard.putNumber("Wrist Position", s_Intake.getEncoder().getAbsolutePosition());
-        SmartDashboard.putNumber("Wrist Target", s_Intake.getTarget());
+        SmartDashboard.putNumber("Wrist Position", s_Wrist.getEncoder().getAbsolutePosition());
+        SmartDashboard.putNumber("Wrist Target", s_Wrist.getTarget());
         SmartDashboard.putBoolean("cube beam broken?: ", s_Intake.cubeBeamBroken());
         SmartDashboard.putBoolean("cone beam broken?", s_Intake.coneBeamBroken());
     }

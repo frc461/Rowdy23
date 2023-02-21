@@ -47,8 +47,8 @@ public class Intake extends SubsystemBase {
         } else if (rotation > wristEncoder.getAbsolutePosition() && wristEncoder.getAbsolutePosition() > Constants.WRIST_UPPER_LIMIT) {
             rotation = Constants.WRIST_UPPER_LIMIT;
         }
-        wrist.set(wristPidController.calculate(wristEncoder.getAbsolutePosition(), rotation));
         target = rotation;
+        wrist.set(wristPidController.calculate(wristEncoder.getAbsolutePosition(), target));
     }
 
     //run intake except its actually good
