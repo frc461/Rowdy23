@@ -1,4 +1,6 @@
 package frc.robot.subsystems;
+import java.sql.Time;
+
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import edu.wpi.first.wpilibj.AddressableLED;
@@ -14,42 +16,31 @@ public class Intake extends SubsystemBase {
 
     public Intake() {
         intake = new CANSparkMax(33, MotorType.kBrushed);
+        showLights(255, 0, 0);
     }
+
 
     private AddressableLED led = new AddressableLED(0);
     private AddressableLEDBuffer ledData = new AddressableLEDBuffer(13);
 
-    
-    //run intake except its actually good
-    public void runIntake461(boolean reversed) {
-        if (!reversed) {
-            intake.set(0.7);
-            showLights(255, 0, 255);
-        } else {
-            intake.set(-0.7);
-            showLights(255, 200, 0);
-        }
+
+    public boolean cubeBeamBroken(){
+        return cubeBeam.get();
     }
 
-    public void pulseIntake (boolean reversed) {
-        if (coneBeamBroken() || cubeBeamBroken()) {
-            if (!reversed) {
-                intake.set(0.1);
-                Timer.delay(1);
-            } else {
-                intake.set(-0.1);
-                Timer.delay(1);
-            }
-        } else if (!coneBeamBroken() && !cubeBeamBroken()) {
-            intake.set(0);
-        }
+    public boolean coneBeamBroken() {
+        return coneBeam.get();
     }
 
-    public void doNothing() {}
-
-    public void stopIntake461() {
-        intake.set(0);
+    public void runIntake(double speed, boolean joystick){
+        System.out.println(speed);
+       intake.set(speed);
     }
+
+    public void pulseIntake(double speed){
+        intake.set(speed);
+    }
+
 
     public void showLights(int r, int g, int b) {
         led.setLength(ledData.getLength());
@@ -69,12 +60,5 @@ public class Intake extends SubsystemBase {
         led.start();
     }
 
-
-    public boolean cubeBeamBroken(){
-        return cubeBeam.get();
-    }
-
-    public boolean coneBeamBroken() {
-        return coneBeam.get();
-    }
+   
 }

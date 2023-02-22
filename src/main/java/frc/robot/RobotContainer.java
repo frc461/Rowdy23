@@ -18,12 +18,16 @@ import frc.robot.subsystems.*;
  * periodic methods (other than the scheduler calls). Instead, the structure of the robot (including
  * subsystems, commands, and button mappings) should be declared here.
  */
+
 public class RobotContainer {
     /* Subsystems */
     private final Swerve s_Swerve = new Swerve();
     private final Elevator s_Elevator = new Elevator();
     private final Intake s_Intake = new Intake();
     private final Wrist s_Wrist = new Wrist();
+
+    public double intakeVec = 0;
+
     /* Controllers */
     private final Joystick driver = new Joystick(0);
     private final Joystick operator = new Joystick(1);
@@ -75,9 +79,7 @@ public class RobotContainer {
 
         s_Wrist.setDefaultCommand(new TeleopWrist(s_Wrist, () -> -operator.getRawAxis(wristAxis)));
 
-        s_Intake.setDefaultCommand(new TeleopIntake(s_Intake, () -> -outtakeCone, true));
-
-        s_Intake.setDefaultCommand(new TeleopIntake(s_Intake, () -> -outtakeCube, false));
+        s_Intake.setDefaultCommand(new TeleopIntake(s_Intake, () -> 0));
         // Configure the button bindings
         configureButtonBindings();
     }
@@ -99,15 +101,20 @@ public class RobotContainer {
         e_presButton_1.onTrue(new InstantCommand(() -> s_Elevator.setHeight(Constants.elevatorMid)));
         e_presButton_2.onTrue(new InstantCommand(() -> s_Elevator.setHeight(Constants.elevatorLow)));
 
+       // double intakeVector = 0;
+       
 
-        intakeCone.onTrue(new InstantCommand(() -> s_Intake.runIntake461(true)));
-        intakeCone.onFalse(new InstantCommand(() -> s_Intake.stopIntake461()));
-        intakeCone.whileFalse(Math.abs(outtakeCone) < Constants.stickDeadband ? new InstantCommand(() -> s_Intake.pulseIntake(false)) : new InstantCommand(() -> s_Intake.doNothing()));
+        intakeCone.whileTrue(new InstantCommand(() ->s_Intake.runIntake(10, true)));
+        intakeCube.whileTrue(new InstantCommand(() ->s_Intake.runIntake(-10, true)));
 
-        intakeCube.onTrue(new InstantCommand(() -> s_Intake.runIntake461(false)));
-        intakeCube.onFalse(new InstantCommand(() -> s_Intake.stopIntake461()));
-        intakeCube.whileFalse(Math.abs(outtakeCube) < Constants.stickDeadband ? new InstantCommand(() -> s_Intake.pulseIntake(true)) : new InstantCommand(() -> s_Intake.doNothing()));
+        intakeCone.and(intakeCube.whileFalse(new InstantCommand(() -> s_Intake.runIntake(0, true))));
+        intakeCube.and(intakeCone.whileFalse(new InstantCommand(() -> s_Intake.runIntake(0, true))));
 
+        
+
+        // intakeCone.whileFalse(new InstantCommand(() -> s_Intake.runIntake(0)));
+        // intakeCube.whileFalse(new InstantCommand(() -> s_Intake.runIntake(0)));
+        
         zeroGyro.onTrue(new InstantCommand(() -> s_Swerve.zeroGyro()));
     }
     
@@ -123,8 +130,8 @@ public class RobotContainer {
     }
 
     // private void stow(){
-    //     s_Elevator.setElevatorPreset(Constants.elevatorStowPos);
-    //     s_Intake.setRotation(Constants.wristStowPos);
+    //      s_Elevator.setElevatorPreset(Constants.elevatorStowPos);
+    //      s_Intake.setRotation(Constants.wristStowPos);
     // }
 
     /**

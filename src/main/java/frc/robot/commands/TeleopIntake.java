@@ -7,35 +7,49 @@ package frc.robot.commands;
 import java.util.function.DoubleSupplier;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.Constants;
 import frc.robot.subsystems.Intake;
 
 public class TeleopIntake extends CommandBase {
   private Intake s_Intake;
-  private DoubleSupplier motionSup;
-  private boolean outtakeCone;
+ // private DoubleSupplier vec;
   /** Creates a new TeleopRoller. */
-  public TeleopIntake(Intake s_Intake, DoubleSupplier motionSup, boolean outtakeCone) {
+  public TeleopIntake(Intake s_Intake, DoubleSupplier motionSup) {
     this.s_Intake = s_Intake;
-    this.motionSup = motionSup;
-    this.outtakeCone = outtakeCone;
     addRequirements(s_Intake); 
-  }
-
+  
   // Called when the command is initially scheduled.
- 
-  // Called every time the scheduler runs while the command is scheduled.
+
+
+}
+
+// Called every time the scheduler runs while the command is scheduled.
+
+
+  //TODO dont forget this override thiny
+
   @Override
   public void execute() {
-    if (Math.abs(motionSup.getAsDouble()) > Constants.stickDeadband) {
-      if (outtakeCone) {
-        s_Intake.runIntake461(false);
-      } else {
-        s_Intake.runIntake461(true);
-      }
-    } else {
-      s_Intake.stopIntake461();
-    }
+     
+    System.out.println(speed);
+
+  if(speed == 0 && s_Intake.coneBeamBroken() == true){
+    s_Intake.pulseIntake(-.1);
+    System.out.println("pulse1");
+  }
+  else if(speed == 0 && s_Intake.cubeBeamBroken() == true){
+    s_Intake.pulseIntake(.1);
+    System.out.println("pulse2");
+  }
+  else if(speed < 0){
+    s_Intake.runIntake(0, false);
+  }
+  else if(speed > 0){
+    s_Intake.runIntake(.5, false);
+  }
+  else{
+    s_Intake.runIntake(-.5, false);
+  }
+    
   }
 
 }
