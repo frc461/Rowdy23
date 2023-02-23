@@ -16,11 +16,11 @@ public class Wrist extends SubsystemBase{
     double target = 0;
 
     public Wrist() {
-        wrist = new CANSparkMax(32, MotorType.kBrushed);
+        wrist = new CANSparkMax(32, MotorType.kBrushless);
         wristEncoder = new DutyCycleEncoder(2);
         wrist.restoreFactoryDefaults();
         wrist.setInverted(false);
-        wrist.setSmartCurrentLimit(40);
+        wrist.setSmartCurrentLimit(30);
         wrist.set(wristPidController.calculate(wristEncoder.getAbsolutePosition(), Constants.WRIST_UPPER_LIMIT));
     }
 

@@ -21,6 +21,7 @@ public class Elevator extends SubsystemBase{
         elevator = new CANSparkMax(31, MotorType.kBrushless);
         m_encoder = elevator.getEncoder();
         elevator.restoreFactoryDefaults();
+        elevator.setSmartCurrentLimit(30);
         elevator.setInverted(true);
     }
     

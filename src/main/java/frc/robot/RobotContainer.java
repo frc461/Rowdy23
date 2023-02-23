@@ -49,13 +49,6 @@ public class RobotContainer {
     private final POVButton e_presButton_1 = new POVButton(operator, 90);
     private final POVButton e_presButton_2 = new POVButton(operator, 180);
 
-    private final JoystickButton intakeCone = new JoystickButton(operator, XboxController.Button.kLeftBumper.value);
-    private final double outtakeCone = operator.getRawAxis(XboxController.Axis.kLeftTrigger.value);
-    private final JoystickButton intakeCube = new JoystickButton(operator, XboxController.Button.kRightBumper.value);
-    private final double outtakeCube = operator.getRawAxis(XboxController.Axis.kRightTrigger.value);
-
-
-
     /* Driver Buttons */
     private final JoystickButton zeroGyro = new JoystickButton(driver, XboxController.Button.kY.value);
     private final JoystickButton robotCentric = new JoystickButton(driver, XboxController.Button.kLeftBumper.value);
@@ -79,7 +72,7 @@ public class RobotContainer {
 
         s_Wrist.setDefaultCommand(new TeleopWrist(s_Wrist, () -> -operator.getRawAxis(wristAxis)));
 
-        s_Intake.setDefaultCommand(new TeleopIntake(s_Intake, () -> 0));
+        s_Intake.setDefaultCommand(new TeleopIntake(s_Intake, operator));
         // Configure the button bindings
         configureButtonBindings();
     }
@@ -100,20 +93,6 @@ public class RobotContainer {
         e_presButton_0.onTrue(new InstantCommand(() -> s_Elevator.setHeight(Constants.elevatorTop)));
         e_presButton_1.onTrue(new InstantCommand(() -> s_Elevator.setHeight(Constants.elevatorMid)));
         e_presButton_2.onTrue(new InstantCommand(() -> s_Elevator.setHeight(Constants.elevatorLow)));
-
-       // double intakeVector = 0;
-       
-
-        intakeCone.whileTrue(new InstantCommand(() ->s_Intake.runIntake(10, true)));
-        intakeCube.whileTrue(new InstantCommand(() ->s_Intake.runIntake(-10, true)));
-
-        intakeCone.and(intakeCube.whileFalse(new InstantCommand(() -> s_Intake.runIntake(0, true))));
-        intakeCube.and(intakeCone.whileFalse(new InstantCommand(() -> s_Intake.runIntake(0, true))));
-
-        
-
-        // intakeCone.whileFalse(new InstantCommand(() -> s_Intake.runIntake(0)));
-        // intakeCube.whileFalse(new InstantCommand(() -> s_Intake.runIntake(0)));
         
         zeroGyro.onTrue(new InstantCommand(() -> s_Swerve.zeroGyro()));
     }
