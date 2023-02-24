@@ -19,12 +19,16 @@ public class Intake extends SubsystemBase {
         intake = new CANSparkMax(33, MotorType.kBrushed);
         intake.restoreFactoryDefaults();
         intake.setInverted(true);
-        showLights(255, 0, 0);
+        //showLights(255, 0, 0);
     }
 
 
-    private AddressableLED led = new AddressableLED(0);
+    private AddressableLED led = new AddressableLED(4);
+    //private AddressableLED led2 = new AddressableLED(5);
+
     private AddressableLEDBuffer ledData = new AddressableLEDBuffer(13);
+    //private AddressableLEDBuffer ledData2 = new AddressableLEDBuffer(13);
+
 
 
     public boolean cubeBeamBroken(){
@@ -37,9 +41,11 @@ public class Intake extends SubsystemBase {
 
     public void runIntake(Joystick joystick){
         if(joystick.getRawButton(XboxController.Button.kRightBumper.value)) {
+            showLights(255, 0, 255);
             intake.set(0.7);
         } else if (joystick.getRawButton(XboxController.Button.kLeftBumper.value)) {
             intake.set(-0.7);
+            showLights(255, 255, 0);
         } else if (joystick.getRawAxis(XboxController.Axis.kRightTrigger.value) > 0.2) {
             intake.set(-0.2);
         } else if (joystick.getRawAxis(XboxController.Axis.kRightTrigger.value) > 0.2) {
@@ -68,20 +74,32 @@ public class Intake extends SubsystemBase {
 
     public void showLights(int r, int g, int b) {
         led.setLength(ledData.getLength());
+        //led2.setLength(ledData.getLength());
         for (int i = 0; i < ledData.getLength(); i++) {
             ledData.setRGB(i, r, g, b);
+            //ledData2.setRGB(i, r, g, b);
         }
         led.setData(ledData);
+        //led2.setData(ledData);
+
         led.start();
+        //led2.start();
+
     }
 
     public void stopLights() {
         led.setLength(ledData.getLength());
+        //led2.setLength(ledData.getLength());
         for (int i = 0; i < ledData.getLength(); i++) {
             ledData.setRGB(i, 0, 0, 0);
+            //ledData2.setRGB(i, 0, 0, 0);
         }
         led.setData(ledData);
+        //led2.setData(ledData);
+
         led.start();
+        //led2.start();
+
     }
 
    
