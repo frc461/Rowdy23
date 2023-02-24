@@ -14,27 +14,27 @@ public final class Constants {
     public static final double stickDeadband = 0.1;
 
     
-    public static final double ELEVATOR_P = 0.0015;
+    public static final double ELEVATOR_P = 0.05;//0.015;
     public static final double ELEVATOR_I = 0.0;
-    public static final double ELEVATOR_D = 0.0001;
+    public static final double ELEVATOR_D = 0.002;//0.001;
     public static final double ELEVATOR_FF = 0.0010000000474974513;
     public static final double ELEVATOR_UPPER_LIMIT = 124;
 
     //public static final double elevatorStowPos = -100;
 
-    public static final double elevatorTop = 80;
-    public static final double elevatorMid = 40;
+    public static final double elevatorTop = 115;
+    public static final double elevatorMid = 59.8;
     public static final double elevatorLow = 20;
     public static final double elevatorBot = 0;
 
     //public static final double wristStowPos = 0.9;
 
-    public static final double WRIST_P = 0.7;
-    public static final double WRIST_I = 0.001;
-    public static final double WRIST_D = 0.07;
-    public static final double WRIST_FF = 0.0;
-    public static final double WRIST_LOWER_LIMIT = 0.58;
-    public static final double WRIST_MID_LIMIT = 0.63;
+    public static final double WRIST_P = 8.0;
+    public static final double WRIST_I = 0;
+    public static final double WRIST_D = 0.5;
+    public static final double WRIST_FF = 0.5;
+    public static final double WRIST_LOWER_LIMIT = 0.42;
+    public static final double WRIST_MID_LIMIT = 0.58;
     public static final double WRIST_UPPER_LIMIT = 0.86;
 
     public static final class Swerve {
