@@ -27,9 +27,9 @@ public class TeleopWrist extends CommandBase {
   public void execute() {
     double motionVal = MathUtil.applyDeadband(motionSup.getAsDouble(), Constants.stickDeadband);
     if (motionVal != 0) {
-      s_Wrist.setRotation(s_Wrist.getEncoder().getAbsolutePosition() + motionVal/2);
+      s_Wrist.moveWrist(motionVal);
     } else {
-      s_Wrist.setRotation(s_Wrist.getTarget());
+      s_Wrist.holdWrist();
     }
 
   }

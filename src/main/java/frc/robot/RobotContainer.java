@@ -24,7 +24,7 @@ public class RobotContainer {
     private final Swerve s_Swerve = new Swerve();
     private final Elevator s_Elevator = new Elevator();
     private final Intake s_Intake = new Intake();
-    private final Wrist s_Wrist = new Wrist();
+    private final Wrist s_Wrist = new Wrist(s_Elevator.getEncoder());
 
     public double intakeVec = 0;
 
@@ -43,6 +43,9 @@ public class RobotContainer {
 
     private final JoystickButton w_preset_0 = new JoystickButton(operator, XboxController.Button.kY.value);
     private final JoystickButton w_preset_1 = new JoystickButton(operator, XboxController.Button.kA.value);
+
+    private final JoystickButton operato_stowButton = new JoystickButton(operator, XboxController.Button.kX.value);
+    private final JoystickButton driver_stowButton = new JoystickButton(driver, XboxController.Button.kX.value);
     
 
     private final POVButton e_presButton_0 = new POVButton(operator, 0);
@@ -94,6 +97,12 @@ public class RobotContainer {
         e_presButton_0.onTrue(new InstantCommand(() -> s_Elevator.setHeight(Constants.elevatorTop)));
         e_presButton_1.onTrue(new InstantCommand(() -> s_Elevator.setHeight(Constants.elevatorMid)));
         e_presButton_2.onTrue(new InstantCommand(() -> s_Elevator.setHeight(Constants.elevatorLow)));
+
+        operato_stowButton.onTrue(new InstantCommand(() -> s_Elevator.setHeight(0)));
+        operato_stowButton.onTrue(new InstantCommand(() -> s_Wrist.setRotation(Constants.WRIST_UPPER_LIMIT)));
+
+        driver_stowButton.onTrue(new InstantCommand(() -> s_Elevator.setHeight(0)));
+        driver_stowButton.onTrue(new InstantCommand(() -> s_Wrist.setRotation(Constants.WRIST_UPPER_LIMIT)));
         
         zeroGyro.onTrue(new InstantCommand(() -> s_Swerve.zeroGyro()));
     }
@@ -103,13 +112,13 @@ public class RobotContainer {
         SmartDashboard.putNumber("Elevator Position", s_Elevator.getEncoder().getPosition());
         SmartDashboard.putNumber("Elevator Target", s_Elevator.getTarget());
         SmartDashboard.putBoolean("elevator limit triggered?", s_Elevator.elevatorSwitchTriggered());
-        SmartDashboard.putNumber("Wrist Position", s_Wrist.getEncoder().getAbsolutePosition());
+        SmartDashboard.putNumber("Wrist Position", s_Wrist.getEncoder().getPosition());
         SmartDashboard.putNumber("Wrist Target", s_Wrist.getTarget());
         SmartDashboard.putBoolean("cube beam broken?: ", s_Intake.cubeBeamBroken());
         SmartDashboard.putBoolean("cone beam broken?", s_Intake.coneBeamBroken());
     }
 
-    // private void stow(){
+    // private Command stow(){
     //      s_Elevator.setElevatorPreset(Constants.elevatorStowPos);
     //      s_Intake.setRotation(Constants.wristStowPos);
     // }

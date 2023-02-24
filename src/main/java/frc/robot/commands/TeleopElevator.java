@@ -21,11 +21,13 @@ public class TeleopElevator extends CommandBase {
     public void execute() {
         /* Get Values, Deadband*/
         double motionVal = MathUtil.applyDeadband(motionSup.getAsDouble(), Constants.stickDeadband);
+        //check for limit switch always
+        s_Elevator.checkLimitSwitches();
         /* Drive */
         if (motionVal != 0) {
-            s_Elevator.setHeight(s_Elevator.getEncoder().getPosition() + motionVal * 130);
+            s_Elevator.moveElevator(motionVal);
         } else {
-            s_Elevator.setHeight(s_Elevator.getTarget());
+            s_Elevator.holdHeight();
         }
     }
 

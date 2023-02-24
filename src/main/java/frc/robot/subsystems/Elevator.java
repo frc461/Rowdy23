@@ -23,6 +23,7 @@ public class Elevator extends SubsystemBase{
         elevator.restoreFactoryDefaults();
         elevator.setSmartCurrentLimit(30);
         elevator.setInverted(true);
+
     }
     
     public RelativeEncoder getEncoder() {
@@ -50,7 +51,43 @@ public class Elevator extends SubsystemBase{
         target = height;
     }
 
+    public void moveElevator(double movementVector)
+    {
+        if(movementVector < 0 && elevatorSwitchTriggered())
+        {
+            target = 0;
+            holdHeight();
+           return;
+        }
+        else if (movementVector > 0 && m_encoder.getPosition() > Constants.ELEVATOR_UPPER_LIMIT)
+        {
+            target = Constants.ELEVATOR_UPPER_LIMIT;
+            holdHeight();
+            return;
+        }
+        if(elevatorSwitchTriggered())
+        {
+            m_encoder.setPosition(0);
+        }
+        elevator.set(movementVector);
+        target = m_encoder.getPosition();
+    }
+
+    public void holdHeight()
+    {
+        elevator.set(pidController.calculate(m_encoder.getPosition(), target));
+    }
+
     public boolean elevatorSwitchTriggered() {
         return !elevatorSwitch.get();
+    }
+
+    public void checkLimitSwitches()
+    {
+        if(elevatorSwitchTriggered())
+        {
+            m_encoder.setPosition(0);
+        }
+
     }
 }

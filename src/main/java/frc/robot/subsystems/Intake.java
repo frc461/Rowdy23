@@ -13,6 +13,7 @@ public class Intake extends SubsystemBase {
     private CANSparkMax intake;
     DigitalInput cubeBeam = new DigitalInput(0);
     DigitalInput coneBeam = new DigitalInput(1);
+    private int counter = 0;
 
     public Intake() {
         intake = new CANSparkMax(33, MotorType.kBrushed);
@@ -35,7 +36,6 @@ public class Intake extends SubsystemBase {
     }
 
     public void runIntake(Joystick joystick){
-        //System.out.println(speed);
         if(joystick.getRawButton(XboxController.Button.kRightBumper.value)) {
             intake.set(0.7);
         } else if (joystick.getRawButton(XboxController.Button.kLeftBumper.value)) {
@@ -46,18 +46,23 @@ public class Intake extends SubsystemBase {
             intake.set(0.2);
         } else if(coneBeamBroken() == true && !joystick.getRawButton(XboxController.Button.kLeftBumper.value) && !joystick.getRawButton(XboxController.Button.kRightBumper.value)){
             pulseIntake(.1);
-            System.out.println("pulse1");
         } else if(cubeBeamBroken() == true && !joystick.getRawButton(XboxController.Button.kLeftBumper.value) && !joystick.getRawButton(XboxController.Button.kRightBumper.value)){
             pulseIntake(-.1);
-            System.out.println("pulse2");
         } else {
             intake.set(0);
         }
     }
 
     public void pulseIntake(double speed){
+        if(counter > 10000)
+        {
+            counter = 0;
+        }
+        if(counter++ <5000)
+        {
         intake.set(speed);
-        Timer.delay(1);
+        }
+        
     }
 
 
