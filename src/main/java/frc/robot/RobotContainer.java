@@ -3,6 +3,7 @@ package frc.robot;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.simulation.XboxControllerSim;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
@@ -26,6 +27,7 @@ public class RobotContainer {
     private final Intake s_Intake = new Intake();
     private final Wrist s_Wrist = new Wrist(s_Elevator.getEncoder());
 
+
     public double intakeVec = 0;
 
     /* Controllers */
@@ -44,8 +46,10 @@ public class RobotContainer {
     private final JoystickButton w_preset_0 = new JoystickButton(operator, XboxController.Button.kY.value);
     private final JoystickButton w_preset_1 = new JoystickButton(operator, XboxController.Button.kA.value);
 
+
     private final JoystickButton operato_stowButton = new JoystickButton(operator, XboxController.Button.kX.value);
     private final JoystickButton driver_stowButton = new JoystickButton(driver, XboxController.Button.kX.value);
+    private final JoystickButton driver_altstowbutton = new JoystickButton(driver, XboxController.Button.kRightBumper.value);
     
 
     private final POVButton e_presButton_0 = new POVButton(operator, 0);
@@ -103,6 +107,8 @@ public class RobotContainer {
 
         driver_stowButton.onTrue(new InstantCommand(() -> s_Elevator.setHeight(0)));
         driver_stowButton.onTrue(new InstantCommand(() -> s_Wrist.setRotation(Constants.WRIST_UPPER_LIMIT)));
+        driver_altstowbutton.onTrue(new InstantCommand(() -> s_Elevator.setHeight(0)));
+        driver_altstowbutton.onTrue(new InstantCommand(() -> s_Wrist.setRotation(Constants.WRIST_UPPER_LIMIT)));
         
         zeroGyro.onTrue(new InstantCommand(() -> s_Swerve.zeroGyro()));
     }

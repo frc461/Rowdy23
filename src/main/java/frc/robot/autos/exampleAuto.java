@@ -11,9 +11,11 @@ import java.util.List;
 import com.pathplanner.lib.PathConstraints;
 import com.pathplanner.lib.PathPlanner;
 import com.pathplanner.lib.PathPlannerTrajectory;
+import com.pathplanner.lib.PathPlannerTrajectory.EventMarker;
 import com.pathplanner.lib.PathPlannerTrajectory.PathPlannerState;
 import com.pathplanner.lib.auto.PIDConstants;
 import com.pathplanner.lib.auto.SwerveAutoBuilder;
+import com.pathplanner.lib.commands.FollowPathWithEvents;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.ProfiledPIDController;
@@ -47,47 +49,63 @@ public class exampleAuto extends SequentialCommandGroup {
 
 
 
+       
+                
 
-        TrajectoryConfig config =
-            new TrajectoryConfig(
-                    Constants.AutoConstants.kMaxSpeedMetersPerSecond,
-                    Constants.AutoConstants.kMaxAccelerationMetersPerSecondSquared)
-                .setKinematics(Constants.Swerve.swerveKinematics);
+        // An example trajectory to follow.  All units in meters.
+        // Trajectory exampleTrajectory =
+        //     TrajectoryGenerator.generateTrajectory(
+        //         // Start at the origin facing the +X direction
+        //         new Pose2d(0, 0, new Rotation2d(0)),
+        //         // Pass through these two interior waypoints, making an 's' curve path
+        //         List.of(new Translation2d(1, 1), new Translation2d(2, -1)),
+        //         // End 3 meters straight ahead of where we started, facing forward
+        //         new Pose2d(3, 0, new Rotation2d(0)),
+        //         config);
 
-        //An example trajectory to follow.  All units in meters.
-        Trajectory exampleTrajectory =
-            TrajectoryGenerator.generateTrajectory(
-                // Start at the origin facing the +X direction
-                new Pose2d(0, 0, new Rotation2d(0)),
-                // Pass through these two interior waypoints, making an 's' curve path
-                List.of(new Translation2d(1, 1), new Translation2d(2, -1)),
-                // End 3 meters straight ahead of where we started, facing forward
-                new Pose2d(3, 0, new Rotation2d(0)),
-                config);
+        PathConstraints config2 = new PathConstraints(Constants.AutoConstants.kMaxSpeedMetersPerSecond, Constants.AutoConstants.kMaxAccelerationMetersPerSecondSquared);
 
-        PathPlannerTrajectory autoTrajectory = PathPlanner.loadPath("dock", Constants.AutoConstants.kMaxSpeedMetersPerSecond, Constants.AutoConstants.kMaxAccelerationMetersPerSecondSquared);
-        
+        PathPlannerTrajectory autoTrajectory = PathPlanner.loadPath("dock", config2);
+
+
 
         var thetaController =
             new ProfiledPIDController(
                 Constants.AutoConstants.kPThetaController, 0, 0, Constants.AutoConstants.kThetaControllerConstraints);
         thetaController.enableContinuousInput(-Math.PI, Math.PI);
 
-        SwerveControllerCommand swerveControllerCommand =
+        s_Swerve.resetOdometry(autoTrajectory.getInitialPose());
+
+        HashMap<String, Command> eventMap = new HashMap<>();
+        eventMap.put("marker1", new PrintCommand("Passed marker 1"));
+
+        
+
+        // SwerveControllerCommand swerveControllerCommand =
+            
+
+        // addCommands(
+        //     new InstantCommand(() -> s_Swerve.resetOdometry(s_Swerve.getPose())),
+        //     swerveControllerCommand
+        // );
+
+        FollowPathWithEvents autoWithEvents = new FollowPathWithEvents(
             new SwerveControllerCommand(
-                exampleTrajectory,
+                autoTrajectory,
                 s_Swerve::getPose,
                 Constants.Swerve.swerveKinematics,
                 new PIDController(Constants.AutoConstants.kPXController, 0, 0),
                 new PIDController(Constants.AutoConstants.kPYController, 0, 0),
                 thetaController,
                 s_Swerve::setModuleStates,
-                s_Swerve);
+                s_Swerve),
+        autoTrajectory.getMarkers(),
+        eventMap);
+        addCommands(new PrintCommand("ahusdajs"));
 
-        addCommands(
-             new InstantCommand(() -> s_Swerve.resetOdometry(exampleTrajectory.getInitialPose())),
-            swerveControllerCommand
-        );
+        
+
+        
     }
     
 }

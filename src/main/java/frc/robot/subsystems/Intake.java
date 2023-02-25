@@ -23,10 +23,11 @@ public class Intake extends SubsystemBase {
     }
 
 
-    private AddressableLED led = new AddressableLED(4);
+    private AddressableLED led = new AddressableLED(5);
     //private AddressableLED led2 = new AddressableLED(5);
 
     private AddressableLEDBuffer ledData = new AddressableLEDBuffer(13);
+
     //private AddressableLEDBuffer ledData2 = new AddressableLEDBuffer(13);
 
 
@@ -48,7 +49,7 @@ public class Intake extends SubsystemBase {
             showLights(255, 255, 0);
         } else if (joystick.getRawAxis(XboxController.Axis.kRightTrigger.value) > 0.2) {
             intake.set(-0.2);
-        } else if (joystick.getRawAxis(XboxController.Axis.kRightTrigger.value) > 0.2) {
+        } else if (joystick.getRawAxis(XboxController.Axis.kLeftTrigger.value) > 0.2) {
             intake.set(0.2);
         } else if(coneBeamBroken() == true && !joystick.getRawButton(XboxController.Button.kLeftBumper.value) && !joystick.getRawButton(XboxController.Button.kRightBumper.value)){
             pulseIntake(.1);
@@ -56,6 +57,7 @@ public class Intake extends SubsystemBase {
             pulseIntake(-.1);
         } else {
             intake.set(0);
+            showLights(255, 0, 0);
         }
     }
 
