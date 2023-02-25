@@ -55,15 +55,15 @@ public class exampleAuto extends SequentialCommandGroup {
                 .setKinematics(Constants.Swerve.swerveKinematics);
 
         //An example trajectory to follow.  All units in meters.
-        Trajectory exampleTrajectory =
-            TrajectoryGenerator.generateTrajectory(
-                // Start at the origin facing the +X direction
-                new Pose2d(0, 0, new Rotation2d(0)),
-                // Pass through these two interior waypoints, making an 's' curve path
-                List.of(new Translation2d(1, 1), new Translation2d(2, -1)),
-                // End 3 meters straight ahead of where we started, facing forward
-                new Pose2d(3, 0, new Rotation2d(0)),
-                config);
+        // Trajectory exampleTrajectory =
+        //     TrajectoryGenerator.generateTrajectory(
+        //         // Start at the origin facing the +X direction
+        //         new Pose2d(0, 0, new Rotation2d(0)),
+        //         // Pass through these two interior waypoints, making an 's' curve path
+        //         List.of(new Translation2d(1, 1), new Translation2d(2, -1)),
+        //         // End 3 meters straight ahead of where we started, facing forward
+        //         new Pose2d(3, 0, new Rotation2d(0)),
+        //         config);
 
         PathPlannerTrajectory autoTrajectory = PathPlanner.loadPath("dock", Constants.AutoConstants.kMaxSpeedMetersPerSecond, Constants.AutoConstants.kMaxAccelerationMetersPerSecondSquared);
         
@@ -75,7 +75,7 @@ public class exampleAuto extends SequentialCommandGroup {
 
         SwerveControllerCommand swerveControllerCommand =
             new SwerveControllerCommand(
-                exampleTrajectory,
+                autoTrajectory,
                 s_Swerve::getPose,
                 Constants.Swerve.swerveKinematics,
                 new PIDController(Constants.AutoConstants.kPXController, 0, 0),
@@ -85,7 +85,7 @@ public class exampleAuto extends SequentialCommandGroup {
                 s_Swerve);
 
         addCommands(
-             new InstantCommand(() -> s_Swerve.resetOdometry(exampleTrajectory.getInitialPose())),
+             new InstantCommand(() -> s_Swerve.resetOdometry(autoTrajectory.getInitialPose())),
             swerveControllerCommand
         );
     }

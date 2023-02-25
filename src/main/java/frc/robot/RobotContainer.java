@@ -38,25 +38,29 @@ public class RobotContainer {
     private final int rotationAxis = XboxController.Axis.kRightX.value;
 
     //op controls
-    private final int wristAxis = XboxController.Axis.kRightY.value;
-    private final int elevatorAxis = XboxController.Axis.kLeftY.value;
+    private final int wristAxis = XboxController.Axis.kLeftY.value;
+    private final int elevatorAxis = XboxController.Axis.kRightY.value;
 
-    private final JoystickButton w_preset_0 = new JoystickButton(operator, XboxController.Button.kY.value);
-    private final JoystickButton w_preset_1 = new JoystickButton(operator, XboxController.Button.kA.value);
+    private final JoystickButton e_presButton_0 = new JoystickButton(operator, XboxController.Button.kY.value);
+    private final JoystickButton e_presButton_1 = new JoystickButton(operator, XboxController.Button.kX.value);
+    private final JoystickButton e_presButton_2 = new JoystickButton(operator, XboxController.Button.kA.value);
 
-    private final JoystickButton operato_stowButton = new JoystickButton(operator, XboxController.Button.kX.value);
-    private final JoystickButton driver_stowButton = new JoystickButton(driver, XboxController.Button.kX.value);
-    
 
-    private final POVButton e_presButton_0 = new POVButton(operator, 0);
-    private final POVButton e_presButton_1 = new POVButton(operator, 90);
-    private final POVButton e_presButton_2 = new POVButton(operator, 180);
+    private final POVButton w_preset_0 = new POVButton(operator, 0);
+    private final POVButton w_preset_1 = new POVButton(operator, 90);
+    private final POVButton w_preset_2 = new POVButton(operator, 180);
+    private final POVButton operator_stowButton = new POVButton(operator, 270);
+
 
     /* Driver Buttons */
     private final JoystickButton zeroGyro = new JoystickButton(driver, XboxController.Button.kY.value);
     private final JoystickButton robotCentric = new JoystickButton(driver, XboxController.Button.kLeftBumper.value);
+    private final JoystickButton driver_stowButton2 = new JoystickButton(driver, XboxController.Button.kRightBumper.value);
 
+    private final POVButton driver_stowButton = new POVButton(operator, 270);
 
+    
+    
 
     /** The container for the robot. Contains subsystems, OI devices, and commands. */
     public RobotContainer() {
@@ -92,19 +96,24 @@ public class RobotContainer {
 
 
         w_preset_0.onTrue(new InstantCommand(() -> s_Wrist.setRotation(Constants.WRIST_UPPER_LIMIT)));     
-        w_preset_1.onTrue(new InstantCommand(() -> s_Wrist.setRotation(Constants.WRIST_LOWER_LIMIT)));
+        w_preset_1.onTrue(new InstantCommand(() -> s_Wrist.setRotation(Constants.WRIST_MID_LIMIT)));
+        w_preset_2.onTrue(new InstantCommand(() -> s_Wrist.setRotation(Constants.WRIST_LOWER_LIMIT)));
         
         e_presButton_0.onTrue(new InstantCommand(() -> s_Elevator.setHeight(Constants.elevatorTop)));
         e_presButton_1.onTrue(new InstantCommand(() -> s_Elevator.setHeight(Constants.elevatorMid)));
         e_presButton_2.onTrue(new InstantCommand(() -> s_Elevator.setHeight(Constants.elevatorLow)));
 
-        operato_stowButton.onTrue(new InstantCommand(() -> s_Elevator.setHeight(0)));
-        operato_stowButton.onTrue(new InstantCommand(() -> s_Wrist.setRotation(Constants.WRIST_UPPER_LIMIT)));
+        operator_stowButton.onTrue(new InstantCommand(() -> s_Elevator.setHeight(0)));
+        operator_stowButton.onTrue(new InstantCommand(() -> s_Wrist.setRotation(Constants.WRIST_UPPER_LIMIT)));
 
         driver_stowButton.onTrue(new InstantCommand(() -> s_Elevator.setHeight(0)));
         driver_stowButton.onTrue(new InstantCommand(() -> s_Wrist.setRotation(Constants.WRIST_UPPER_LIMIT)));
+
+        driver_stowButton2.onTrue(new InstantCommand(() -> s_Elevator.setHeight(0)));
+        driver_stowButton2.onTrue(new InstantCommand(() -> s_Wrist.setRotation(Constants.WRIST_UPPER_LIMIT)));
         
         zeroGyro.onTrue(new InstantCommand(() -> s_Swerve.zeroGyro()));
+        
     }
     
     public void printValues(){
