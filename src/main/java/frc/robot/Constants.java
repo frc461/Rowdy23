@@ -34,7 +34,7 @@ public final class Constants {
     public static final double WRIST_D = 0.5;
     public static final double WRIST_FF = 0.5;
     public static final double WRIST_LOWER_LIMIT = 0.42;
-    public static final double WRIST_MID_LIMIT = 0.58;
+    public static final double WRIST_MID_LIMIT = 0.63;
     public static final double WRIST_UPPER_LIMIT = 0.86;
 
     public static final class Swerve {

@@ -5,7 +5,6 @@ import edu.wpi.first.wpilibj.AddressableLED;
 import edu.wpi.first.wpilibj.AddressableLEDBuffer;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.Joystick;
-import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
@@ -14,22 +13,20 @@ public class Intake extends SubsystemBase {
     DigitalInput cubeBeam = new DigitalInput(0);
     DigitalInput coneBeam = new DigitalInput(1);
     private int counter = 0;
-
-    public Intake() {
-        intake = new CANSparkMax(33, MotorType.kBrushed);
-        intake.restoreFactoryDefaults();
-        intake.setInverted(true);
-        //showLights(255, 0, 0);
-    }
-
-
-    private AddressableLED led = new AddressableLED(5);
+    private AddressableLED led = new AddressableLED(4);
     //private AddressableLED led2 = new AddressableLED(5);
 
     private AddressableLEDBuffer ledData = new AddressableLEDBuffer(13);
 
     //private AddressableLEDBuffer ledData2 = new AddressableLEDBuffer(13);
 
+    public Intake() {
+        intake = new CANSparkMax(33, MotorType.kBrushed);
+        intake.restoreFactoryDefaults();
+        intake.setInverted(true);
+        led.setLength(ledData.getLength());
+        showLights(255, 0, 0);
+    }
 
 
     public boolean cubeBeamBroken(){
@@ -75,7 +72,7 @@ public class Intake extends SubsystemBase {
 
 
     public void showLights(int r, int g, int b) {
-        led.setLength(ledData.getLength());
+        
         //led2.setLength(ledData.getLength());
         for (int i = 0; i < ledData.getLength(); i++) {
             ledData.setRGB(i, r, g, b);
@@ -90,7 +87,7 @@ public class Intake extends SubsystemBase {
     }
 
     public void stopLights() {
-        led.setLength(ledData.getLength());
+
         //led2.setLength(ledData.getLength());
         for (int i = 0; i < ledData.getLength(); i++) {
             ledData.setRGB(i, 0, 0, 0);
