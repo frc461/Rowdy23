@@ -26,14 +26,15 @@ import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.math.trajectory.TrajectoryConfig;
 import edu.wpi.first.math.trajectory.TrajectoryGenerator;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.PrintCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.Subsystem;
 import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
 
-public class exampleAuto extends SequentialCommandGroup {
-    public exampleAuto(Swerve s_Swerve){
+//public class exampleAuto extends FollowPathWithEvents  {
+   // public exampleAuto(Swerve s_Swerve){
 
 //      // This will load the file "Example Path.path" and generate it with a max velocity of 4 m/s and a max acceleration of 3 m/s^2
 // PathPlannerTrajectory examplePath = PathPlanner.loadPath("cycles", new PathConstrains(4, 3));
@@ -63,49 +64,39 @@ public class exampleAuto extends SequentialCommandGroup {
         //         new Pose2d(3, 0, new Rotation2d(0)),
         //         config);
 
-        PathConstraints config2 = new PathConstraints(Constants.AutoConstants.kMaxSpeedMetersPerSecond, Constants.AutoConstants.kMaxAccelerationMetersPerSecondSquared);
+        // PathConstraints config2 = new PathConstraints(Constants.AutoConstants.kMaxSpeedMetersPerSecond, Constants.AutoConstants.kMaxAccelerationMetersPerSecondSquared);
 
-        PathPlannerTrajectory autoTrajectory = PathPlanner.loadPath("dock", config2);
+        // PathPlannerTrajectory autoTrajectory = PathPlanner.loadPath("dock", config2);
 
 
 
-        var thetaController =
-            new ProfiledPIDController(
-                Constants.AutoConstants.kPThetaController, 0, 0, Constants.AutoConstants.kThetaControllerConstraints);
-        thetaController.enableContinuousInput(-Math.PI, Math.PI);
+        // var thetaController =
+        //     new ProfiledPIDController(
+        //         Constants.AutoConstants.kPThetaController, 0, 0, Constants.AutoConstants.kThetaControllerConstraints);
+        // thetaController.enableContinuousInput(-Math.PI, Math.PI);
 
-        s_Swerve.resetOdometry(autoTrajectory.getInitialPose());
+        // s_Swerve.resetOdometry(autoTrajectory.getInitialPose());
 
-        HashMap<String, Command> eventMap = new HashMap<>();
-        eventMap.put("marker1", new PrintCommand("Passed marker 1"));
+        // HashMap<String, Command> eventMap = new HashMap<>();
+        // eventMap.put("marker1", new PrintCommand("Passed marker 1"));
 
+        // SwerveControllerCommand swervecontrollercommand = new SwerveControllerCommand(
+        //         autoTrajectory,
+        //         s_Swerve::getPose,
+        //         Constants.Swerve.swerveKinematics,
+        //         new PIDController(Constants.AutoConstants.kPXController, 0, 0),
+        //         new PIDController(Constants.AutoConstants.kPYController, 0, 0),
+        //         thetaController,
+        //         s_Swerve::setModuleStates,
+        //         s_Swerve);
         
 
-        // SwerveControllerCommand swerveControllerCommand =
-            
+        // FollowPathWithEvents autoWithEvents = new FollowPathWithEvents(swervecontrollercommand, autoTrajectory.getMarkers(), eventMap);
+           
 
-        // addCommands(
-        //     new InstantCommand(() -> s_Swerve.resetOdometry(s_Swerve.getPose())),
-        //     swerveControllerCommand
-        // );
-
-        FollowPathWithEvents autoWithEvents = new FollowPathWithEvents(
-            new SwerveControllerCommand(
-                autoTrajectory,
-                s_Swerve::getPose,
-                Constants.Swerve.swerveKinematics,
-                new PIDController(Constants.AutoConstants.kPXController, 0, 0),
-                new PIDController(Constants.AutoConstants.kPYController, 0, 0),
-                thetaController,
-                s_Swerve::setModuleStates,
-                s_Swerve),
-        autoTrajectory.getMarkers(),
-        eventMap);
-        addCommands(new PrintCommand("ahusdajs"));
-
+        //  addCommands(new InstantCommand(() -> s_Swerve.resetOdometry(s_Swerve.getPose())));
         
 
         
-    }
-    
-}
+    //}
+//}

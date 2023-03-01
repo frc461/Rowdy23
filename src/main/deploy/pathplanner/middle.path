@@ -1,0 +1,76 @@
+{
+  "waypoints": [
+    {
+      "anchorPoint": {
+        "x": 1.7499115340111024,
+        "y": 3.5856187951692147
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 1.6813965251862129,
+        "y": 3.208786246632322
+      },
+      "holonomicAngle": 180.0,
+      "isReversal": false,
+      "velOverride": null,
+      "isLocked": false,
+      "isStopPoint": false,
+      "stopEvent": {
+        "names": [],
+        "executionBehavior": "parallel",
+        "waitBehavior": "none",
+        "waitTime": 0
+      }
+    },
+    {
+      "anchorPoint": {
+        "x": 1.6928156933236946,
+        "y": 3.2087862466323225
+      },
+      "prevControl": {
+        "x": 1.7096919969519673,
+        "y": 3.1953864020230665
+      },
+      "nextControl": {
+        "x": 1.6743518102420818,
+        "y": 3.2234466349274586
+      },
+      "holonomicAngle": 180.0,
+      "isReversal": false,
+      "velOverride": null,
+      "isLocked": false,
+      "isStopPoint": true,
+      "stopEvent": {
+        "names": [
+          "\"elevator intake thing\""
+        ],
+        "executionBehavior": "parallel",
+        "waitBehavior": "before",
+        "waitTime": 5.0
+      }
+    },
+    {
+      "anchorPoint": {
+        "x": 4.250709356119567,
+        "y": 3.037498724570099
+      },
+      "prevControl": {
+        "x": 4.273547692394531,
+        "y": 3.037498724570099
+      },
+      "nextControl": null,
+      "holonomicAngle": 178.21008939175394,
+      "isReversal": false,
+      "velOverride": null,
+      "isLocked": false,
+      "isStopPoint": false,
+      "stopEvent": {
+        "names": [],
+        "executionBehavior": "parallel",
+        "waitBehavior": "none",
+        "waitTime": 0
+      }
+    }
+  ],
+  "markers": []
+}

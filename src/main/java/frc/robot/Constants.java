@@ -35,7 +35,7 @@ public final class Constants {
     public static final double WRIST_FF = 0.5;
     public static final double WRIST_LOWER_LIMIT = 0.42;
     public static final double WRIST_MID_LIMIT = 0.63;
-    public static final double WRIST_UPPER_LIMIT = 0.86;
+    public static final double WRIST_UPPER_LIMIT = 0.9;
 
     public static final class Swerve {
         public static final int pigeonID = 35;
@@ -164,8 +164,8 @@ public final class Constants {
     }
 
     public static final class AutoConstants { //TODO: The below constants are used in the example auto, and must be tuned to specific robot
-        public static final double kMaxSpeedMetersPerSecond = 3;
-        public static final double kMaxAccelerationMetersPerSecondSquared = 3;
+        public static final double kMaxSpeedMetersPerSecond = 5;
+        public static final double kMaxAccelerationMetersPerSecondSquared = 5;
         public static final double kMaxAngularSpeedRadiansPerSecond = Math.PI;
         public static final double kMaxAngularSpeedRadiansPerSecondSquared = Math.PI;
     

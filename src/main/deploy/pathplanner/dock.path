@@ -10,7 +10,7 @@
         "x": 4.787410258581201,
         "y": 6.417572493264645
       },
-      "holonomicAngle": -90.0,
+      "holonomicAngle": 8.435359287882886,
       "isReversal": false,
       "velOverride": null,
       "isLocked": false,
@@ -24,15 +24,67 @@
     },
     {
       "anchorPoint": {
-        "x": 6.5231238154784,
-        "y": 6.428991661402127
+        "x": 4.93797212418781,
+        "y": 6.458061066005037
       },
       "prevControl": {
-        "x": 5.5231238154784,
-        "y": 6.428991661402127
+        "x": 3.939103986463376,
+        "y": 6.410495916589588
+      },
+      "nextControl": {
+        "x": 5.417577185962036,
+        "y": 6.4808994022799995
+      },
+      "holonomicAngle": 3.4682292589170287,
+      "isReversal": false,
+      "velOverride": null,
+      "isLocked": false,
+      "isStopPoint": true,
+      "stopEvent": {
+        "names": [
+          "elev"
+        ],
+        "executionBehavior": "sequential",
+        "waitBehavior": "before",
+        "waitTime": 5.0
+      }
+    },
+    {
+      "anchorPoint": {
+        "x": 6.327206190712149,
+        "y": 6.448674349339331
+      },
+      "prevControl": {
+        "x": 6.247272013749779,
+        "y": 6.505770190026739
+      },
+      "nextControl": {
+        "x": 6.42012778398021,
+        "y": 6.382301782719288
+      },
+      "holonomicAngle": 0,
+      "isReversal": false,
+      "velOverride": null,
+      "isLocked": false,
+      "isStopPoint": false,
+      "stopEvent": {
+        "names": [],
+        "executionBehavior": "parallel",
+        "waitBehavior": "none",
+        "waitTime": 0
+      }
+    },
+    {
+      "anchorPoint": {
+        "x": 8.739592373798331,
+        "y": 6.382967332679396
+      },
+      "prevControl": {
+        "x": 8.682496533110925,
+        "y": 6.428644005229323
       },
       "nextControl": null,
-      "holonomicAngle": -88.83086067209256,
+      "holonomicAngle": 0,
       "isReversal": false,
       "velOverride": null,
       "isLocked": false,
@@ -59,9 +111,15 @@
       ]
     },
     {
-      "position": 0.3709090909091206,
+      "position": 0.6909090909090749,
       "names": [
         "elevator"
+      ]
+    },
+    {
+      "position": 2.661818181818149,
+      "names": [
+        "intake"
       ]
     }
   ]

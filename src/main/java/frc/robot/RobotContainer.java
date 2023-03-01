@@ -1,12 +1,32 @@
 package frc.robot;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+
+import com.pathplanner.lib.PathConstraints;
+import com.pathplanner.lib.PathPlanner;
+import com.pathplanner.lib.PathPlannerTrajectory;
+import com.pathplanner.lib.PathPoint;
+import com.pathplanner.lib.commands.FollowPathWithEvents;
+
+import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.controller.ProfiledPIDController;
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.simulation.XboxControllerSim;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.PrintCommand;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
 import frc.robot.autos.*;
@@ -127,6 +147,7 @@ public class RobotContainer {
         SmartDashboard.putNumber("Wrist Target", s_Wrist.getTarget());
         SmartDashboard.putBoolean("cube beam broken?: ", s_Intake.cubeBeamBroken());
         SmartDashboard.putBoolean("cone beam broken?", s_Intake.coneBeamBroken());
+        SmartDashboard.putNumber("intake speed", s_Intake.getSpeed());
     }
 
     // private Command stow(){
@@ -141,6 +162,61 @@ public class RobotContainer {
      */
     public Command getAutonomousCommand() {
         // An ExampleCommand will run in autonomous
-        return new exampleAuto(s_Swerve);
+        //return new exampleAuto(s_Swerve);
+
+        PathConstraints config2 = new PathConstraints(Constants.AutoConstants.kMaxSpeedMetersPerSecond, Constants.AutoConstants.kMaxAccelerationMetersPerSecondSquared);
+        FollowPathWithEvents autoWithEvents = null;
+
+        //List<PathPoint> points;
+        // points = new ArrayList<PathPoint>();
+        // points.add( new PathPoint(new Translation2d(2.7, 0), Rotation2d.fromDegrees(0)));
+        if (Timer.getMatchTime() < 13 && Timer.getMatchTime()>10) {
+            InstantCommand intakeRun = new InstantCommand(() -> s_Intake.setSpeed(1));
+            intakeRun.schedule();
+            intakeRun.execute();
+        }
+        SequentialCommandGroup startAuto = new SequentialCommandGroup(new InstantCommand(() -> s_Elevator.setHeight(Constants.elevatorTop)), new WaitCommand(2),
+        new WaitCommand(3),  new InstantCommand(() -> s_Elevator.setHeight(0)));
+        startAuto.schedule();
+        startAuto.execute();
+        //startAuto.end(true);
+        if (s_Elevator.getEncoder().getPosition() == 0 && Timer.getMatchTime() < 10) {
+        PathPlannerTrajectory autoTrajectory = PathPlanner.loadPath("dockCharge", config2);
+        // for (int i = 0; i < autoTrajectory.getMarkers().size(); i++) {
+        //     autoTrajectory.getMarkers().get(i).positionMeters
+        //     autoTrajectory
+        //}
+
+
+        var thetaController =
+            new ProfiledPIDController(
+                Constants.AutoConstants.kPThetaController, 0, 0, Constants.AutoConstants.kThetaControllerConstraints);
+        thetaController.enableContinuousInput(-Math.PI, Math.PI);
+
+        s_Swerve.resetOdometry(autoTrajectory.getInitialPose());
+
+        HashMap<String, Command> eventMap = new HashMap<>();
+        // eventMap.put("elev", new InstantCommand(() -> s_Elevator.setHeight(Constants.elevatorTop)));
+        // eventMap.put("intakeOn", new InstantCommand(() -> s_Intake.setSpeed(0.4)));
+        // eventMap.put("waitInt", new InstantCommand(() -> s_Intake.waitIntake()));
+        // eventMap.put("stow", new InstantCommand(() -> s_Elevator.setHeight(0)));
+        
+
+        SwerveControllerCommand swervecontrollercommand = new SwerveControllerCommand(
+                autoTrajectory,
+                s_Swerve::getPose,
+                Constants.Swerve.swerveKinematics,
+                new PIDController(Constants.AutoConstants.kPXController, 0, 0),
+                new PIDController(Constants.AutoConstants.kPYController, 0, 0),
+                thetaController,
+                s_Swerve::setModuleStates,
+                s_Swerve);
+        
+
+        autoWithEvents = new FollowPathWithEvents(swervecontrollercommand, autoTrajectory.getMarkers(), eventMap);
+        }
+        return autoWithEvents;
+        
+           
     }
 }

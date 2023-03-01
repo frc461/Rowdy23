@@ -5,7 +5,9 @@ import edu.wpi.first.wpilibj.AddressableLED;
 import edu.wpi.first.wpilibj.AddressableLEDBuffer;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class Intake extends SubsystemBase {
@@ -38,7 +40,7 @@ public class Intake extends SubsystemBase {
     }
 
     public void runIntake(Joystick joystick){
-        if(joystick.getRawButton(XboxController.Button.kRightBumper.value)) {
+        if (joystick.getRawButton(XboxController.Button.kRightBumper.value)) {
             showLights(255, 0, 255);
             intake.set(0.7);
         } else if (joystick.getRawButton(XboxController.Button.kLeftBumper.value)) {
@@ -47,10 +49,10 @@ public class Intake extends SubsystemBase {
         } else if (joystick.getRawAxis(XboxController.Axis.kRightTrigger.value) > 0.2) {
             intake.set(-0.2);
         } else if (joystick.getRawAxis(XboxController.Axis.kLeftTrigger.value) > 0.2) {
-            intake.set(0.2);
-        } else if(coneBeamBroken() == true && !joystick.getRawButton(XboxController.Button.kLeftBumper.value) && !joystick.getRawButton(XboxController.Button.kRightBumper.value)){
+            intake.set(0.7);
+        } else if (coneBeamBroken() == true && !joystick.getRawButton(XboxController.Button.kLeftBumper.value) && !joystick.getRawButton(XboxController.Button.kRightBumper.value)){
             pulseIntake(.1);
-        } else if(cubeBeamBroken() == true && !joystick.getRawButton(XboxController.Button.kLeftBumper.value) && !joystick.getRawButton(XboxController.Button.kRightBumper.value)){
+        } else if (cubeBeamBroken() == true && !joystick.getRawButton(XboxController.Button.kLeftBumper.value) && !joystick.getRawButton(XboxController.Button.kRightBumper.value)){
             pulseIntake(-.1);
         } else {
             intake.set(0);
@@ -59,15 +61,17 @@ public class Intake extends SubsystemBase {
     }
 
     public void pulseIntake(double speed){
-        if(counter > 10000)
-        {
-            counter = 0;
-        }
-        if(counter++ <5000)
-        {
+        if(counter > 10000) { counter = 0; }
+        if(counter++ < 5000) { intake.set(speed); }
+    }
+
+    public void setSpeed(double speed) {
         intake.set(speed);
-        }
         
+    }
+
+    public double getSpeed() {
+        return intake.get();
     }
 
 
