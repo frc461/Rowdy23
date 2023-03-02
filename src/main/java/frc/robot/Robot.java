@@ -8,6 +8,7 @@ import com.pathplanner.lib.server.PathPlannerServer;
 
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
@@ -25,14 +26,29 @@ public class Robot extends TimedRobot {
 
   private RobotContainer m_robotContainer;
 
+  private static final String kDefaultAuto = "center";
+  private static final String kAudienceAuto = "audience";
+  private static final String kCenterAuto = "center";
+  private static final String kCenterAuto2 = "centerbonus";
+  private static final String kScoringAuto = "scoring";
+  private static final String kRndAuto = "rnd";
+
+  private final SendableChooser<String> m_chooser = new SendableChooser<>();
+
   /**
    * This function is run when the robot is first started up and should be used for any
    * initialization code.
    */
   @Override
   public void robotInit() {
-   SmartDashboard.putString("autoselector", "dock");
-
+   
+    m_chooser.setDefaultOption("No Auto Selected", kDefaultAuto);
+    m_chooser.addOption("Audience Side", kAudienceAuto);
+    m_chooser.addOption("Scoring Table Side", kScoringAuto);
+    m_chooser.addOption("Center Dock & Engage", kCenterAuto);
+    m_chooser.addOption("Center Dock, Engage & Mobility", kCenterAuto2);
+    m_chooser.addOption("R&D Testing", kRndAuto);
+    SmartDashboard.putData("Auto Choices", m_chooser);
 
     ctreConfigs = new CTREConfigs();
     // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
@@ -70,7 +86,7 @@ public class Robot extends TimedRobot {
   /** This autonomous runs the autonomous command selected by your {@link RobotContainer} class. */
   @Override
   public void autonomousInit() {
-    m_autonomousCommand = m_robotContainer.getAutonomousCommand();
+    m_autonomousCommand = m_robotContainer.getAutonomousCommand(m_chooser.getSelected());
 
     // schedule the autonomous command (example)
     if (m_autonomousCommand != null) {

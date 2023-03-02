@@ -55,7 +55,7 @@ public class RobotContainer {
     private final Intake s_Intake = new Intake();
     private final Wrist s_Wrist = new Wrist(s_Elevator.getEncoder());
 
-    private final String pPlan = "finalCC_DE";
+    private String pPlan = null;
     public double intakeVec = 0;
 
     /* Controllers */
@@ -169,17 +169,43 @@ public class RobotContainer {
      *
      * @return the command to run in autonomous
      */
-    public Command getAutonomousCommand() {
+    public Command getAutonomousCommand(String autoPicked) {
         // An ExampleCommand will run in autonomous
         //return new exampleAuto(s_Swerve);
+        
+        System.out.println(autoPicked);
 
         PathConstraints config2 = new PathConstraints(Constants.AutoConstants.kMaxSpeedMetersPerSecond, Constants.AutoConstants.kMaxAccelerationMetersPerSecondSquared);
         FollowPathWithEvents autoWithEvents = null;
+        
+        
+        String autoSelect = autoPicked.toLowerCase();
+        System.out.println(autoSelect);
+
+        if(autoSelect.equals("center")){
+          pPlan = "finalCC_DE";
+        }
+        else  if(autoSelect.equals("scoring")){
+          pPlan = "finalFR";
+        }
+        else if(autoSelect.equals("audience")){
+          pPlan = "finalFL";
+        }
+        else if(autoSelect.equals("rnd")){
+          pPlan = "rnd";
+        }
+        else if(autoSelect.equals("centerbonus")) {
+          pPlan = "finalCC_DEM";
+        }
+        else{
+          pPlan = "noAuto";
+        }
+        
 
         //List<PathPoint> points;
         // points = new ArrayList<PathPoint>();
         // points.add( new PathPoint(new Translation2d(2.7, 0), Rotation2d.fromDegrees(0)));
-            System.out.println("Starting command process" + Timer.getMatchTime());
+            //System.out.println("Starting command process" + Timer.getMatchTime());
             
             SequentialCommandGroup startAuto = new SequentialCommandGroup(
             
@@ -216,12 +242,7 @@ public class RobotContainer {
 
         s_Swerve.setModuleStates(xMode);
         
-        /* This timer will never get called because it only sees this once.
-         *  
-         * This needs to be incorporated into "AutoDriveCmd.java"
-         */
-
-        //if (Timer.getMatchTime() < 5) {    
+ 
             PathPlannerTrajectory autoTrajectory = PathPlanner.loadPath(pPlan, config2);
              for (int i = 0; i < autoTrajectory.getMarkers().size(); i++) {
             }
@@ -250,10 +271,12 @@ public class RobotContainer {
             
     
             autoWithEvents = new FollowPathWithEvents(swervecontrollercommand, autoTrajectory.getMarkers(), eventMap);
-           // }
-            
+          
+           s_Swerve.setModuleStates(xMode);   
+
             return autoWithEvents;
-            
+    
+             
         
            
     }
