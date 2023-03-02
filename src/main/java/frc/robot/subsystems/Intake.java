@@ -42,18 +42,18 @@ public class Intake extends SubsystemBase {
     public void runIntake(Joystick joystick){
         if (joystick.getRawButton(XboxController.Button.kRightBumper.value)) {
             showLights(255, 0, 255);
-            intake.set(0.7);
-        } else if (joystick.getRawButton(XboxController.Button.kLeftBumper.value)) {
             intake.set(-0.7);
+        } else if (joystick.getRawButton(XboxController.Button.kLeftBumper.value)) {
+            intake.set(0.7);
             showLights(255, 255, 0);
         } else if (joystick.getRawAxis(XboxController.Axis.kRightTrigger.value) > 0.2) {
-            intake.set(-0.2);
+            intake.set(0.2);
         } else if (joystick.getRawAxis(XboxController.Axis.kLeftTrigger.value) > 0.2) {
-            intake.set(0.7);
+            intake.set(-0.7);
         } else if (coneBeamBroken() == true && !joystick.getRawButton(XboxController.Button.kLeftBumper.value) && !joystick.getRawButton(XboxController.Button.kRightBumper.value)){
-            pulseIntake(.1);
-        } else if (cubeBeamBroken() == true && !joystick.getRawButton(XboxController.Button.kLeftBumper.value) && !joystick.getRawButton(XboxController.Button.kRightBumper.value)){
             pulseIntake(-.1);
+        } else if (cubeBeamBroken() == true && !joystick.getRawButton(XboxController.Button.kLeftBumper.value) && !joystick.getRawButton(XboxController.Button.kRightBumper.value)){
+            pulseIntake(.1);
         } else {
             intake.set(0);
             showLights(255, 0, 0);

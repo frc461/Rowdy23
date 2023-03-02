@@ -14,6 +14,8 @@ import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.kinematics.SwerveModulePosition;
+import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.Timer;
@@ -23,15 +25,21 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.PrintCommand;
+import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.StartEndCommand;
 import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
+import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
 import frc.robot.autos.*;
 import frc.robot.commands.*;
 import frc.robot.subsystems.*;
+
+import frc.robot.commands.AutoIntakeCmd;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -47,7 +55,7 @@ public class RobotContainer {
     private final Intake s_Intake = new Intake();
     private final Wrist s_Wrist = new Wrist(s_Elevator.getEncoder());
 
-
+    private final String pPlan = "finalCC_DE";
     public double intakeVec = 0;
 
     /* Controllers */
@@ -81,7 +89,8 @@ public class RobotContainer {
 
     private final POVButton driver_stowButton = new POVButton(operator, 270);
 
-    
+    /* Variables */
+    boolean driveStatus = false;
     
 
     /** The container for the robot. Contains subsystems, OI devices, and commands. */
@@ -170,53 +179,83 @@ public class RobotContainer {
         //List<PathPoint> points;
         // points = new ArrayList<PathPoint>();
         // points.add( new PathPoint(new Translation2d(2.7, 0), Rotation2d.fromDegrees(0)));
-        if (Timer.getMatchTime() < 13 && Timer.getMatchTime()>10) {
-            InstantCommand intakeRun = new InstantCommand(() -> s_Intake.setSpeed(1));
-            intakeRun.schedule();
-            intakeRun.execute();
-        }
-        SequentialCommandGroup startAuto = new SequentialCommandGroup(new InstantCommand(() -> s_Elevator.setHeight(Constants.elevatorTop)), new WaitCommand(2),
-        new WaitCommand(3),  new InstantCommand(() -> s_Elevator.setHeight(0)));
+            System.out.println("Starting command process" + Timer.getMatchTime());
+            
+            SequentialCommandGroup startAuto = new SequentialCommandGroup(
+            
+                // Set Elevator to top height
+                new InstantCommand(() -> s_Elevator.setHeight(Constants.elevatorTop)),
+
+                // Wait 1.25 seconds before next command
+                new WaitCommand(1.25),
+                
+                // Turn intake on to eject cube using AutoIntakeCmd
+                new AutoIntakeCmd(s_Intake, -1),
+
+                // Set Elevator to low height
+                new InstantCommand(() -> s_Elevator.setHeight(Constants.elevatorBot)),
+
+                // Wait 1.25 seconds before next command
+                new WaitCommand(1.25)
+
+                // Make the robot drive
+                //new AutoDriveCmd(s_Swerve, pPlan)
+
+                );
+        
         startAuto.schedule();
         startAuto.execute();
-        //startAuto.end(true);
-        if (s_Elevator.getEncoder().getPosition() == 0 && Timer.getMatchTime() < 10) {
-        PathPlannerTrajectory autoTrajectory = PathPlanner.loadPath("dockCharge", config2);
-        // for (int i = 0; i < autoTrajectory.getMarkers().size(); i++) {
-        //     autoTrajectory.getMarkers().get(i).positionMeters
-        //     autoTrajectory
-        //}
 
+     
+        SwerveModuleState[] xMode = {
+            new SwerveModuleState(0, Rotation2d.fromDegrees(45)),
+            new SwerveModuleState(0, Rotation2d.fromDegrees(45+90)),
+            new SwerveModuleState(0, Rotation2d.fromDegrees(45+90+90)),
+            new SwerveModuleState(0, Rotation2d.fromDegrees(45+90+90+90))
+        };
 
-        var thetaController =
-            new ProfiledPIDController(
-                Constants.AutoConstants.kPThetaController, 0, 0, Constants.AutoConstants.kThetaControllerConstraints);
-        thetaController.enableContinuousInput(-Math.PI, Math.PI);
-
-        s_Swerve.resetOdometry(autoTrajectory.getInitialPose());
-
-        HashMap<String, Command> eventMap = new HashMap<>();
-        // eventMap.put("elev", new InstantCommand(() -> s_Elevator.setHeight(Constants.elevatorTop)));
-        // eventMap.put("intakeOn", new InstantCommand(() -> s_Intake.setSpeed(0.4)));
-        // eventMap.put("waitInt", new InstantCommand(() -> s_Intake.waitIntake()));
-        // eventMap.put("stow", new InstantCommand(() -> s_Elevator.setHeight(0)));
+        s_Swerve.setModuleStates(xMode);
         
+        /* This timer will never get called because it only sees this once.
+         *  
+         * This needs to be incorporated into "AutoDriveCmd.java"
+         */
 
-        SwerveControllerCommand swervecontrollercommand = new SwerveControllerCommand(
-                autoTrajectory,
-                s_Swerve::getPose,
-                Constants.Swerve.swerveKinematics,
-                new PIDController(Constants.AutoConstants.kPXController, 0, 0),
-                new PIDController(Constants.AutoConstants.kPYController, 0, 0),
-                thetaController,
-                s_Swerve::setModuleStates,
-                s_Swerve);
-        
+        //if (Timer.getMatchTime() < 5) {    
+            PathPlannerTrajectory autoTrajectory = PathPlanner.loadPath(pPlan, config2);
+             for (int i = 0; i < autoTrajectory.getMarkers().size(); i++) {
+            }
+            
 
-        autoWithEvents = new FollowPathWithEvents(swervecontrollercommand, autoTrajectory.getMarkers(), eventMap);
-        }
-        return autoWithEvents;
+            System.out.println("While driving: " + Timer.getMatchTime());
+
+            var thetaController =
+                new ProfiledPIDController(
+                    Constants.AutoConstants.kPThetaController, 0, 0, Constants.AutoConstants.kThetaControllerConstraints);
+            thetaController.enableContinuousInput(-Math.PI, Math.PI);
+    
+            s_Swerve.resetOdometry(autoTrajectory.getInitialPose());
+    
+            HashMap<String, Command> eventMap = new HashMap<>();   
+    
+            SwerveControllerCommand swervecontrollercommand = new SwerveControllerCommand(
+                    autoTrajectory,
+                    s_Swerve::getPose,
+                    Constants.Swerve.swerveKinematics,
+                    new PIDController(Constants.AutoConstants.kPXController, 0, 0),
+                    new PIDController(Constants.AutoConstants.kPYController, 0, 0),
+                    thetaController,
+                    s_Swerve::setModuleStates,
+                    s_Swerve);
+            
+    
+            autoWithEvents = new FollowPathWithEvents(swervecontrollercommand, autoTrajectory.getMarkers(), eventMap);
+           // }
+            
+            return autoWithEvents;
+            
         
            
     }
+
 }
