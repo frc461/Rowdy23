@@ -102,7 +102,7 @@ public class RobotContainer {
                 s_Swerve, 
                 () -> -driver.getRawAxis(translationAxis), 
                 () -> -driver.getRawAxis(strafeAxis), 
-                () -> -driver.getRawAxis(rotationAxis), 
+                () -> driver.getRawAxis(rotationAxis), 
                 () -> robotCentric.getAsBoolean()
             )
         );
@@ -213,7 +213,7 @@ public class RobotContainer {
                 new InstantCommand(() -> s_Elevator.setHeight(Constants.elevatorTop)),
 
                 // Wait 1.25 seconds before next command
-                new WaitCommand(1.25),
+                new WaitCommand(1),
                 
                 // Turn intake on to eject cube using AutoIntakeCmd
                 new AutoIntakeCmd(s_Intake, -1),
@@ -255,9 +255,10 @@ public class RobotContainer {
                     Constants.AutoConstants.kPThetaController, 0, 0, Constants.AutoConstants.kThetaControllerConstraints);
             thetaController.enableContinuousInput(-Math.PI, Math.PI);
     
-            s_Swerve.resetOdometry(autoTrajectory.getInitialPose());
+            s_Swerve.resetOdometry(autoTrajectory.getInitialHolonomicPose());
     
-            HashMap<String, Command> eventMap = new HashMap<>();   
+            HashMap<String, Command> eventMap = new HashMap<>();
+            eventMap.put("xmode", new InstantCommand(()->s_Swerve.setModuleStates(xMode)));   
     
             SwerveControllerCommand swervecontrollercommand = new SwerveControllerCommand(
                     autoTrajectory,
