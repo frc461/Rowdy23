@@ -32,6 +32,7 @@ public class Robot extends TimedRobot {
   private static final String kCenterAuto2 = "centerbonus";
   private static final String kScoringAuto = "scoring";
   private static final String kRndAuto = "rnd";
+  private static final String kTestAuto = "test";
 
   private final SendableChooser<String> m_chooser = new SendableChooser<>();
 
@@ -48,6 +49,7 @@ public class Robot extends TimedRobot {
     m_chooser.addOption("Center Dock & Engage", kCenterAuto);
     m_chooser.addOption("Center Dock, Engage & Mobility", kCenterAuto2);
     m_chooser.addOption("R&D Testing", kRndAuto);
+    m_chooser.addOption("Test", kTestAuto);
     SmartDashboard.putData("Auto Choices", m_chooser);
 
     ctreConfigs = new CTREConfigs();

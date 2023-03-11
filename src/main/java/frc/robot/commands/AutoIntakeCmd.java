@@ -4,14 +4,8 @@
 
 package frc.robot.commands;
 
-import com.pathplanner.lib.PathPlannerTrajectory.StopEvent;
-
-import edu.wpi.first.wpilibj.SynchronousInterrupt.WaitResult;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.subsystems.Intake;
-
-import edu.wpi.first.wpilibj.Timer;
 
 public class AutoIntakeCmd extends CommandBase {
   /** Creates a new AutoIntakeCmd. */
