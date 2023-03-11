@@ -127,7 +127,9 @@ public class RobotContainer {
         
         e_presButton_0.onTrue(new InstantCommand(() -> s_Elevator.setHeight(Constants.elevatorTop)));
         e_presButton_1.onTrue(new InstantCommand(() -> s_Elevator.setHeight(Constants.elevatorMid)));
-        e_presButton_2.onTrue(new InstantCommand(() -> s_Elevator.setHeight(Constants.elevatorLow)));
+        e_presButton_2.onTrue(new InstantCommand(() -> s_Elevator.setHeight(3.14)));
+        e_presButton_2.onTrue(new InstantCommand(() -> s_Wrist.setRotation(.45)));
+
 
         operator_stowButton.onTrue(new InstantCommand(() -> s_Elevator.setHeight(0)));
         operator_stowButton.onTrue(new InstantCommand(() -> s_Wrist.setRotation(Constants.WRIST_UPPER_LIMIT)));
@@ -152,7 +154,9 @@ public class RobotContainer {
         SmartDashboard.putBoolean("cube beam broken?: ", s_Intake.cubeBeamBroken());
         SmartDashboard.putBoolean("cone beam broken?", s_Intake.coneBeamBroken());
         SmartDashboard.putNumber("intake speed", s_Intake.getSpeed());
-        SmartDashboard.putString("odometry", s_Swerve.getPose().toString());
+        SmartDashboard.putNumber("odometry x", s_Swerve.getPose().getX());
+        SmartDashboard.putNumber("odometry y", s_Swerve.getPose().getY());
+
     }
 
     /**
