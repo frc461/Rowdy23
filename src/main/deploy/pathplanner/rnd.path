@@ -2,13 +2,13 @@
   "waypoints": [
     {
       "anchorPoint": {
-        "x": 7.0,
-        "y": 2.797696193682985
+        "x": 1.7727498702860656,
+        "y": 4.4077989010678875
       },
       "prevControl": null,
       "nextControl": {
-        "x": 6.971839850002884,
-        "y": 2.797696193682985
+        "x": 1.7445897202889498,
+        "y": 4.4077989010678875
       },
       "holonomicAngle": 0.0,
       "isReversal": false,
@@ -16,7 +16,9 @@
       "isLocked": false,
       "isStopPoint": false,
       "stopEvent": {
-        "names": [],
+        "names": [
+          "start1"
+        ],
         "executionBehavior": "sequential",
         "waitBehavior": "none",
         "waitTime": 0
@@ -24,15 +26,42 @@
     },
     {
       "anchorPoint": {
-        "x": 8.0,
-        "y": 2.8
+        "x": 6.5231238154784,
+        "y": 4.78463144960478
       },
       "prevControl": {
-        "x": 8.120410354484367,
-        "y": 2.8
+        "x": 6.643534169962767,
+        "y": 4.78463144960478
+      },
+      "nextControl": {
+        "x": 6.4027134609940335,
+        "y": 4.78463144960478
+      },
+      "holonomicAngle": -11.976132444203289,
+      "isReversal": false,
+      "velOverride": null,
+      "isLocked": false,
+      "isStopPoint": false,
+      "stopEvent": {
+        "names": [
+          "end1"
+        ],
+        "executionBehavior": "sequential",
+        "waitBehavior": "none",
+        "waitTime": 0
+      }
+    },
+    {
+      "anchorPoint": {
+        "x": 1.7841690384235467,
+        "y": 4.921661467254559
+      },
+      "prevControl": {
+        "x": 2.4319522857052207,
+        "y": 4.561957670923889
       },
       "nextControl": null,
-      "holonomicAngle": 0,
+      "holonomicAngle": -180.0,
       "isReversal": false,
       "velOverride": null,
       "isLocked": false,
@@ -45,5 +74,21 @@
       }
     }
   ],
-  "markers": []
+  "maxVelocity": 2.0,
+  "maxAcceleration": 1.0,
+  "isReversed": null,
+  "markers": [
+    {
+      "position": 0.5,
+      "names": [
+        "mid"
+      ]
+    },
+    {
+      "position": 0.014545454545451648,
+      "names": [
+        "start1"
+      ]
+    }
+  ]
 }

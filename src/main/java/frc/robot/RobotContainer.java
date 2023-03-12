@@ -1,6 +1,9 @@
 package frc.robot;
 
 import java.util.HashMap;
+import java.util.List;
+import java.util.function.Consumer;
+
 import com.pathplanner.lib.PathConstraints;
 import com.pathplanner.lib.PathPlanner;
 import com.pathplanner.lib.PathPlannerTrajectory;
@@ -19,7 +22,11 @@ import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.math.trajectory.Trajectory;
+import edu.wpi.first.math.trajectory.TrajectoryConfig;
+import edu.wpi.first.math.trajectory.TrajectoryGenerator;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.Timer;
@@ -171,9 +178,6 @@ public class RobotContainer {
         
         System.out.println(autoPicked);
 
-
-        PathConstraints config = new PathConstraints(Constants.AutoConstants.kMaxSpeedMetersPerSecond, Constants.AutoConstants.kMaxAccelerationMetersPerSecondSquared);
-        
         String autoSelect = autoPicked.toLowerCase();
         System.out.println(autoSelect);
 
@@ -198,66 +202,36 @@ public class RobotContainer {
         else{
           pPlan = "noAuto";
         }
-        
+
+        // TODO: Lower speeds and accelertaion
+        PathConstraints config = new PathConstraints(Constants.AutoConstants.kMaxSpeedMetersPerSecond, Constants.AutoConstants.kMaxAccelerationMetersPerSecondSquared);
+
         // This will load the path selected in Smart Dashboard and generate it with a max velocity configured in "Constants.java"
         PathPlannerTrajectory rowdyPath = PathPlanner.loadPath(pPlan, config);
-
-        // This will sample the state of the path at 1.2 seconds
-        //PathPlannerState rowdyState = (PathPlannerState) rowdyPath.sample(1.2);
-
-        // This will print out the velocity at the sampled time
-        //System.out.println("I am going " + rowdyState.velocityMetersPerSecond + " meters per second");
-        
-        
-        var thetaController =
-        new ProfiledPIDController(
-            Constants.AutoConstants.kPThetaController, 0, 0, Constants.AutoConstants.kThetaControllerConstraints);
-            thetaController.enableContinuousInput(-Math.PI, Math.PI);
-        
         
         // Print out messages when markers are passed. This can be enhanced in the future by running auto commands, like s_Elevator.setHeight
         HashMap<String, Command> eventMap = new HashMap<>();
-        //eventMap.put("start", new PrintCommand("Before: " + rowdyPath.getInitialHolonomicPose()));
-        //eventMap.put("start2", new InstantCommand(() -> s_Swerve.resetOdometry(rowdyPath.getInitialHolonomicPose())));
-        //eventMap.put("start2", new PrintCommand(rowdyPath.getInitialHolonomicPose().toString()));
+        eventMap.put("start1", new PrintCommand(s_Swerve.getPose().toString()));
+        eventMap.put("mid", new PrintCommand(s_Swerve.getPose().toString()));
+        eventMap.put("end1", new PrintCommand(s_Swerve.getPose().toString()));
         
-        // eventMap.put("marker1", new PrintCommand("Passed marker 1"));
-        // eventMap.put("marker2", new PrintCommand("Passed marker 2"));
-        
-        // If this doesn't work, try SwerveAutoBuilder see: https://github.com/mjansen4857/pathplanner/wiki/PathPlannerLib:-Java-Usage#autobuilder
-        SwerveControllerCommand swervecontrollercommand = new SwerveControllerCommand(
-            rowdyPath,
-            s_Swerve::getPose,
-            Constants.Swerve.swerveKinematics,
-            new PIDController(Constants.AutoConstants.kPXController, 0, 0),
-            new PIDController(Constants.AutoConstants.kPYController, 0, 0),
-            thetaController,
-            s_Swerve::setModuleStates,
-            s_Swerve);
-
-        // SwerveAutoBuilder swervecontrollercommand = new SwerveAutoBuilder(
-        //   s_Swerve::getPose,
-        //   s_Swerve::resetOdometry,
-        //   Constants.Swerve.swerveKinematics,
-        //   new PIDConstants(5, 0, 0),
-        //   new PIDConstants(5, 0, 0),
-        //   s_Swerve::setModuleStates,
-        //   eventMap,
-        //   true,
-        //   s_Swerve
-        // );
-
-        // Setup a path to follow that has events
-        //FollowPathWithEvents autoWithEvents = new FollowPathWithEvents(swervecontrollercommand, rowdyPath.getMarkers(), eventMap);
-      
-        //Command fullAuto = swervecontrollercommand.fullAuto(rowdyPath);
-
-        SequentialCommandGroup fullAuto = new SequentialCommandGroup(
-          new InstantCommand(() -> s_Swerve.resetOdometry(rowdyPath.getInitialHolonomicPose())),
-          swervecontrollercommand
+        // This commands the path of the robot
+        // TODO: TUNE PID Constants
+        SwerveAutoBuilder swervecontrollercommand = new SwerveAutoBuilder(
+          s_Swerve::getPose,
+          s_Swerve::resetOdometry,
+          Constants.Swerve.swerveKinematics,
+          new PIDConstants(1.5, 0.015, 0),
+          new PIDConstants(1.5, 0.015, 0),
+          s_Swerve::setModuleStates,
+          eventMap,
+          true,
+          s_Swerve
         );
 
-        // new InstantCommand(() -> s_Swerve.resetOdometry(s_Swerve.getPose()));
+        Command fullAuto = swervecontrollercommand.fullAuto(rowdyPath);
+
+        new InstantCommand(() -> s_Swerve.resetOdometry(s_Swerve.getPose()));
 
         /*
          * 
