@@ -2,15 +2,15 @@
   "waypoints": [
     {
       "anchorPoint": {
-        "x": 1.7727498702860656,
-        "y": 4.4077989010678875
+        "x": 5.0,
+        "y": 1.0
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.7445897202889498,
-        "y": 4.4077989010678875
+        "x": 4.971839850002884,
+        "y": 1.0
       },
-      "holonomicAngle": 0.0,
+      "holonomicAngle": -90.0,
       "isReversal": false,
       "velOverride": null,
       "isLocked": false,
@@ -20,48 +20,21 @@
           "start1"
         ],
         "executionBehavior": "sequential",
-        "waitBehavior": "none",
-        "waitTime": 0
+        "waitBehavior": "before",
+        "waitTime": 1.0
       }
     },
     {
       "anchorPoint": {
-        "x": 6.5231238154784,
-        "y": 4.78463144960478
+        "x": 5.0,
+        "y": 7.0
       },
       "prevControl": {
-        "x": 6.643534169962767,
-        "y": 4.78463144960478
-      },
-      "nextControl": {
-        "x": 6.4027134609940335,
-        "y": 4.78463144960478
-      },
-      "holonomicAngle": -11.976132444203289,
-      "isReversal": false,
-      "velOverride": null,
-      "isLocked": false,
-      "isStopPoint": false,
-      "stopEvent": {
-        "names": [
-          "end1"
-        ],
-        "executionBehavior": "sequential",
-        "waitBehavior": "none",
-        "waitTime": 0
-      }
-    },
-    {
-      "anchorPoint": {
-        "x": 1.7841690384235467,
-        "y": 4.921661467254559
-      },
-      "prevControl": {
-        "x": 2.4319522857052207,
-        "y": 4.561957670923889
+        "x": 5.036110580298864,
+        "y": 7.0
       },
       "nextControl": null,
-      "holonomicAngle": -180.0,
+      "holonomicAngle": 90.0,
       "isReversal": false,
       "velOverride": null,
       "isLocked": false,
@@ -74,21 +47,8 @@
       }
     }
   ],
-  "maxVelocity": 2.0,
-  "maxAcceleration": 1.0,
+  "maxVelocity": 3.0,
+  "maxAcceleration": 2.0,
   "isReversed": null,
-  "markers": [
-    {
-      "position": 0.5,
-      "names": [
-        "mid"
-      ]
-    },
-    {
-      "position": 0.014545454545451648,
-      "names": [
-        "start1"
-      ]
-    }
-  ]
+  "markers": []
 }

@@ -161,8 +161,6 @@ public class RobotContainer {
         SmartDashboard.putBoolean("cube beam broken?: ", s_Intake.cubeBeamBroken());
         SmartDashboard.putBoolean("cone beam broken?", s_Intake.coneBeamBroken());
         SmartDashboard.putNumber("intake speed", s_Intake.getSpeed());
-        SmartDashboard.putNumber("odometry x", s_Swerve.getPose().getX());
-        SmartDashboard.putNumber("odometry y", s_Swerve.getPose().getY());
 
     }
 
@@ -175,11 +173,8 @@ public class RobotContainer {
     public Command getAutonomousCommand(String autoPicked) {
         // An ExampleCommand will run in autonomous
         //return new exampleAuto(s_Swerve);
-        
-        System.out.println(autoPicked);
 
         String autoSelect = autoPicked.toLowerCase();
-        System.out.println(autoSelect);
 
         if(autoSelect.equals("center")){
           pPlan = "finalCC_DE";
@@ -203,7 +198,7 @@ public class RobotContainer {
           pPlan = "noAuto";
         }
 
-        // TODO: Lower speeds and accelertaion
+        // TODO: Tune speeds and accelertaion
         PathConstraints config = new PathConstraints(Constants.AutoConstants.kMaxSpeedMetersPerSecond, Constants.AutoConstants.kMaxAccelerationMetersPerSecondSquared);
 
         // This will load the path selected in Smart Dashboard and generate it with a max velocity configured in "Constants.java"
@@ -211,9 +206,9 @@ public class RobotContainer {
         
         // Print out messages when markers are passed. This can be enhanced in the future by running auto commands, like s_Elevator.setHeight
         HashMap<String, Command> eventMap = new HashMap<>();
-        eventMap.put("start1", new PrintCommand(s_Swerve.getPose().toString()));
-        eventMap.put("mid", new PrintCommand(s_Swerve.getPose().toString()));
-        eventMap.put("end1", new PrintCommand(s_Swerve.getPose().toString()));
+        eventMap.put("start1", new PrintCommand("at start"));
+        eventMap.put("mid", new PrintCommand("halfway done"));
+        eventMap.put("end1", new PrintCommand("at end"));
         
         // This commands the path of the robot
         // TODO: TUNE PID Constants
@@ -222,7 +217,7 @@ public class RobotContainer {
           s_Swerve::resetOdometry,
           Constants.Swerve.swerveKinematics,
           new PIDConstants(1.5, 0.015, 0),
-          new PIDConstants(1.5, 0.015, 0),
+          new PIDConstants(0.1, 0.015, 0),
           s_Swerve::setModuleStates,
           eventMap,
           true,
