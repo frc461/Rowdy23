@@ -191,8 +191,14 @@ public class RobotContainer {
         else if(autoSelect.equals("centerbonus")) {
           pPlan = "finalCC_DEM";
         }
-        else if (autoSelect.equals("test")) {
-          pPlan = "Troubleshooting9.3.2023";
+        else if (autoSelect.equals("1 cycle")) {
+          pPlan = "1 cycle";
+        }
+        else if (autoSelect.equals("2 cycles")) {
+          pPlan = "2cycles";
+        }
+        else if (autoSelect.equals("overAndDock")) {
+          pPlan = "overAndDock";
         }
         else{
           pPlan = "noAuto";
@@ -216,7 +222,7 @@ public class RobotContainer {
           s_Swerve::getPose,
           s_Swerve::resetOdometry,
           Constants.Swerve.swerveKinematics,
-          new PIDConstants(1.5, 0.015, 0),
+          new PIDConstants(1.5, 0.015, 0.01),
           new PIDConstants(0.1, 0.015, 0),
           s_Swerve::setModuleStates,
           eventMap,
