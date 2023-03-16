@@ -26,17 +26,9 @@ public class Robot extends TimedRobot {
 
   private RobotContainer m_robotContainer;
 
-  private static final String kDefaultAuto = "center";
+  private static final String kDefaultAuto = "no auto";
   private static final String kAudienceAuto = "audience";
   private static final String kCenterAuto = "center";
-  private static final String kCenterAuto2 = "centerbonus";
-  private static final String kScoringAuto = "scoring";
-  private static final String kRndAuto = "rnd";
-  private static final String kTestAuto = "test";
-  private static final String kOneCycleAuto = "1 cycle";
-  private static final String kTwoCyclesAuto = "2 cycles";
-  private static final String kOverDockAuto = "overAndDock";
-  private static final String kDockBalance = "dockBalance";
 
   private final SendableChooser<String> m_chooser = new SendableChooser<>();
 
@@ -48,16 +40,9 @@ public class Robot extends TimedRobot {
   public void robotInit() {
    
     m_chooser.setDefaultOption("No Auto Selected", kDefaultAuto);
+    m_chooser.addOption("CenterAuto", kCenterAuto);
     m_chooser.addOption("Audience Side", kAudienceAuto);
-    m_chooser.addOption("Scoring Table Side", kScoringAuto);
-    m_chooser.addOption("Center Dock & Engage", kCenterAuto);
-    m_chooser.addOption("Center Dock, Engage & Mobility", kCenterAuto2);
-    m_chooser.addOption("R&D Testing", kRndAuto);
-    m_chooser.addOption("Test", kTestAuto);
-    m_chooser.addOption("1 cycle", kOneCycleAuto);
-    m_chooser.addOption("2 cycles", kTwoCyclesAuto);
-    m_chooser.addOption("Over and Dock", kOverDockAuto);
-    m_chooser.addOption("Dock & Balance", kDockBalance);
+    
 
     SmartDashboard.putData("Auto Choices", m_chooser);
 

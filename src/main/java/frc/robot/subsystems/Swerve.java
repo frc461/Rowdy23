@@ -141,11 +141,32 @@ public class Swerve extends SubsystemBase {
                
         }
     }
+
+public void setXMode(){
+
+    SwerveModuleState[] xMode = {
+        new SwerveModuleState(0.01, Rotation2d.fromDegrees(45)),
+        new SwerveModuleState(0.01, Rotation2d.fromDegrees(45+90)),
+        new SwerveModuleState(0.01, Rotation2d.fromDegrees(45+90+90)),
+        new SwerveModuleState(0.01, Rotation2d.fromDegrees(45+90+90+90))
+    };
+    
+    
+
+    setModuleStates(xMode);
+}
+
 public void autoBalance(){
     double target = 0;
-    double count = 0;
-    while(count < 3001){
-        count++;
+
+    Timer timer = new Timer();
+    timer.reset();
+    timer.start();
+
+    Timer Balancetimer = new Timer();
+    Balancetimer.reset();
+
+    while(timer.get() > 15){
         System.out.println("gyro: "+gyro.getPitch());
         System.out.println("target: "+target);
         PIDController balanceController = new PIDController(.033,0.01 ,0.00000000000001); 
@@ -164,6 +185,8 @@ public void autoBalance(){
         System.out.println(-target);
 
         drive(new Translation2d(-1*target, 0), 0, false, true);
+        
+
     }
     System.out.println("stopped balancing");
 }

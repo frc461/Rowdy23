@@ -4,6 +4,8 @@
 
 package frc.robot.commands;
 
+import edu.wpi.first.wpilibj.Timer;
+
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Intake;
 
@@ -12,11 +14,13 @@ public class AutoIntakeCmd extends CommandBase {
 
   private Intake s_Intake;
   private final double speed;
+  private int intakeSetting;
 
-  public AutoIntakeCmd(Intake s_Intake, double speed) {
+  public AutoIntakeCmd(Intake s_Intake, double speed, int intakeSetting) {
     // Use addRequirements() here to declare subsystem dependencies.
     this.s_Intake = s_Intake;
     this.speed = speed;
+    this.intakeSetting = intakeSetting;
     addRequirements(s_Intake);
   }
 
@@ -27,22 +31,21 @@ public class AutoIntakeCmd extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    // if (s_Intake.cubeBeamBroken() == true) {
-    //   s_Intake.setSpeed(speed);
-    //   System.out.println("Speed on");
-    // }
-    // else {
-    //   s_Intake.setSpeed(0);
-    //   System.out.println("Speed off");
-      
-    // }
-    int counter = 0;
-    while(counter < 100) {
-      counter++;
-      s_Intake.setSpeed(speed);
-      System.out.println(counter);
+    Timer timer = new Timer();
+    timer.reset();
+    timer.start();
+    
+    if (intakeSetting == 0) {
+      while(timer.get() < .25) {
+        s_Intake.setSpeed(speed);
+      }
+      s_Intake.setSpeed(0);  
     }
-    s_Intake.setSpeed(0);
+    else if (intakeSetting == 1) {
+      while (timer.get() < 1) {
+        // s_Intake.setSpeed(speed);
+      }
+    }
   }
 
   // Called once the command ends or is interrupted.
