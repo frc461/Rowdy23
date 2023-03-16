@@ -8,16 +8,22 @@ import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 
+import java.lang.annotation.Target;
+
 import javax.xml.validation.SchemaFactory;
 
 import com.ctre.phoenix.sensors.Pigeon2;
 
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.PIDCommand;
+import edu.wpi.first.wpilibj2.command.PIDSubsystem;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class Swerve extends SubsystemBase {
@@ -68,6 +74,7 @@ public class Swerve extends SubsystemBase {
             mod.setDesiredState(swerveModuleStates[mod.moduleNumber], isOpenLoop);
         }
     }    
+
 
     /* Used by SwerveControllerCommand in Auto */
     public void setModuleStates(SwerveModuleState[] desiredStates) {
@@ -134,5 +141,31 @@ public class Swerve extends SubsystemBase {
                
         }
     }
+public void autoBalance(){
+    double target = 0;
+    double count = 0;
+    while(count < 3001){
+        count++;
+        System.out.println("gyro: "+gyro.getPitch());
+        System.out.println("target: "+target);
+        PIDController balanceController = new PIDController(.033,0.01 ,0.00000000000001); 
+        
+        //PIDCommand autoSwerve = new PIDCommand(balanceController, gyro.getPitch(), 1.5 ()-> drive(null, target, false, false)
+        //);
+
+        // if(gyro.getPitch() < 6 && gyro.getPitch() > -2){
+        //     balanceController.setP(.05);
+        //     balanceController.setI(.5);
+        //     balanceController.setD(.5);
+        // }
+
+        target = balanceController.calculate(gyro.getPitch(), Constants.gyroOffset);
+        balanceController.setTolerance(2.5);
+        System.out.println(-target);
+
+        drive(new Translation2d(-1*target, 0), 0, false, true);        
+    }
+    System.out.println("stopped balancing");
+}
     
 }

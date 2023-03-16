@@ -36,6 +36,7 @@ public class Robot extends TimedRobot {
   private static final String kOneCycleAuto = "1 cycle";
   private static final String kTwoCyclesAuto = "2 cycles";
   private static final String kOverDockAuto = "overAndDock";
+  private static final String kDockBalance = "dockBalance";
 
   private final SendableChooser<String> m_chooser = new SendableChooser<>();
 
@@ -56,6 +57,7 @@ public class Robot extends TimedRobot {
     m_chooser.addOption("1 cycle", kOneCycleAuto);
     m_chooser.addOption("2 cycles", kTwoCyclesAuto);
     m_chooser.addOption("Over and Dock", kOverDockAuto);
+    m_chooser.addOption("Dock & Balance", kDockBalance);
 
     SmartDashboard.putData("Auto Choices", m_chooser);
 

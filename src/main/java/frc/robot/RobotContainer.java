@@ -73,6 +73,8 @@ public class RobotContainer {
     private final int wristAxis = XboxController.Axis.kLeftY.value;
     private final int elevatorAxis = XboxController.Axis.kRightY.value;
 
+
+
     private final JoystickButton e_presButton_0 = new JoystickButton(operator, XboxController.Button.kY.value);
     private final JoystickButton e_presButton_1 = new JoystickButton(operator, XboxController.Button.kX.value);
     private final JoystickButton e_presButton_2 = new JoystickButton(operator, XboxController.Button.kA.value);
@@ -162,6 +164,11 @@ public class RobotContainer {
         SmartDashboard.putBoolean("cone beam broken?", s_Intake.coneBeamBroken());
         SmartDashboard.putNumber("intake speed", s_Intake.getSpeed());
 
+        SmartDashboard.putNumber("yaw", s_Swerve.gyro.getYaw());
+        SmartDashboard.putNumber("pitch", s_Swerve.gyro.getPitch());
+        SmartDashboard.putNumber("roll", s_Swerve.gyro.getRoll());
+
+
     }
 
     /**
@@ -171,6 +178,10 @@ public class RobotContainer {
      */
 
     public Command getAutonomousCommand(String autoPicked) {
+
+      Constants.gyroOffset = s_Swerve.gyro.getPitch();
+
+
         // An ExampleCommand will run in autonomous
         //return new exampleAuto(s_Swerve);
 
@@ -197,8 +208,8 @@ public class RobotContainer {
         else if (autoSelect.equals("2 cycles")) {
           pPlan = "2cycles";
         }
-        else if (autoSelect.equals("overAndDock")) {
-          pPlan = "overAndDock";
+        else if (autoSelect.equals("dockBalance")) {
+          pPlan = "no path";
         }
         else{
           pPlan = "noAuto";
@@ -214,7 +225,7 @@ public class RobotContainer {
         HashMap<String, Command> eventMap = new HashMap<>();
         eventMap.put("start1", new PrintCommand("at start"));
         eventMap.put("mid", new PrintCommand("halfway done"));
-        eventMap.put("end1", new PrintCommand("at end"));
+        eventMap.put("end1", new InstantCommand(()-> s_Swerve.autoBalance()));
         
         // This commands the path of the robot
         // TODO: TUNE PID Constants
@@ -223,7 +234,7 @@ public class RobotContainer {
           s_Swerve::resetOdometry,
           Constants.Swerve.swerveKinematics,
           new PIDConstants(1.5, 0.015, 0.01),
-          new PIDConstants(0.1, 0.015, 0),
+          new PIDConstants(0.15, 0.3, 0.0002),
           s_Swerve::setModuleStates,
           eventMap,
           true,
@@ -232,7 +243,13 @@ public class RobotContainer {
 
         Command fullAuto = swervecontrollercommand.fullAuto(rowdyPath);
 
-        new InstantCommand(() -> s_Swerve.resetOdometry(s_Swerve.getPose()));
+          new InstantCommand(() -> s_Swerve.resetOdometry(s_Swerve.getPose()));
+          new PrintCommand("balancing...");
+          
+        // );
+  
+      
+       
 
         /*
          * 

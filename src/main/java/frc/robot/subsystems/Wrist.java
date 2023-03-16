@@ -94,9 +94,9 @@ public class Wrist extends SubsystemBase{
 
     private double calculateBottomLimit(){
         double adjustment = 0;
-        //if(elevatorEncoder.getPosition() < 29){
-            //adjustment = 0.16 * (1 - (elevatorEncoder.getPosition()/29));
-        //}
+        if(elevatorEncoder.getPosition() < 17){
+            adjustment = 0.1 * (1 - (elevatorEncoder.getPosition()/17));
+        }
 
         return adjustment;
     }

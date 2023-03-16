@@ -13,6 +13,8 @@ import frc.lib.util.SwerveModuleConstants;
 public final class Constants {
     public static final double stickDeadband = 0.1;
 
+    public static double gyroOffset = 0;
+
     
     public static final double ELEVATOR_P = 0.05;//0.015;
     public static final double ELEVATOR_I = 0.0;
@@ -35,7 +37,7 @@ public final class Constants {
     public static final double WRIST_FF = 0.5;
     public static final double WRIST_LOWER_LIMIT = 0.42;
     public static final double WRIST_MID_LIMIT = 0.63;
-    public static final double WRIST_UPPER_LIMIT = 0.9;
+    public static final double WRIST_UPPER_LIMIT = 0.86;
 
     public static final class Swerve {
         public static final int pigeonID = 35;
