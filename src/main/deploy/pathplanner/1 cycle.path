@@ -27,22 +27,22 @@
     },
     {
       "anchorPoint": {
-        "x": 4.5,
+        "x": 5.0,
         "y": 4.5
       },
       "prevControl": {
-        "x": 4.486210713772186,
+        "x": 4.986210713772186,
         "y": 4.5
       },
       "nextControl": {
-        "x": 4.5083582778301645,
+        "x": 5.0083582778301645,
         "y": 4.5
       },
       "holonomicAngle": 0,
       "isReversal": false,
       "velOverride": null,
       "isLocked": false,
-      "isStopPoint": false,
+      "isStopPoint": true,
       "stopEvent": {
         "names": [],
         "executionBehavior": "parallel",
@@ -67,7 +67,7 @@
       "isReversal": false,
       "velOverride": 0.25,
       "isLocked": false,
-      "isStopPoint": false,
+      "isStopPoint": true,
       "stopEvent": {
         "names": [],
         "executionBehavior": "parallel",
@@ -102,22 +102,22 @@
     },
     {
       "anchorPoint": {
-        "x": 5.0,
+        "x": 5.25,
         "y": 4.5
       },
       "prevControl": {
-        "x": 4.991987148290048,
+        "x": 5.241987148290048,
         "y": 4.5
       },
       "nextControl": {
-        "x": 5.0052625200767,
+        "x": 5.2552625200767,
         "y": 4.5
       },
       "holonomicAngle": 0,
       "isReversal": false,
       "velOverride": null,
       "isLocked": false,
-      "isStopPoint": false,
+      "isStopPoint": true,
       "stopEvent": {
         "names": [],
         "executionBehavior": "parallel",
@@ -127,22 +127,22 @@
     },
     {
       "anchorPoint": {
-        "x": 2.0,
+        "x": 5.25,
         "y": 5.0
       },
       "prevControl": {
-        "x": 1.9009915453409083,
+        "x": 5.23858031801595,
         "y": 5.0
       },
       "nextControl": {
-        "x": 2.047280539159618,
+        "x": 5.255819192393575,
         "y": 5.0
       },
       "holonomicAngle": 0,
       "isReversal": false,
       "velOverride": 0.25,
       "isLocked": false,
-      "isStopPoint": false,
+      "isStopPoint": true,
       "stopEvent": {
         "names": [],
         "executionBehavior": "parallel",

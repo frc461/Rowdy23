@@ -24,7 +24,7 @@ public final class Constants {
 
     //public static final double elevatorStowPos = -100;
 
-    public static final double elevatorTop = 115;
+    public static final double elevatorTop = 122;
     public static final double elevatorMid = 59.8;
     public static final double elevatorLow = 20;
     public static final double elevatorBot = 0;

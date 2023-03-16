@@ -27,16 +27,22 @@ public class AutoIntakeCmd extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if (s_Intake.cubeBeamBroken() == true) {
-      s_Intake.setSpeed(speed);
-      System.out.println("Speed on");
-    }
-    else {
-      s_Intake.setSpeed(0);
-      System.out.println("Speed off");
+    // if (s_Intake.cubeBeamBroken() == true) {
+    //   s_Intake.setSpeed(speed);
+    //   System.out.println("Speed on");
+    // }
+    // else {
+    //   s_Intake.setSpeed(0);
+    //   System.out.println("Speed off");
       
+    // }
+    int counter = 0;
+    while(counter < 100) {
+      counter++;
+      s_Intake.setSpeed(speed);
+      System.out.println(counter);
     }
-    
+    s_Intake.setSpeed(0);
   }
 
   // Called once the command ends or is interrupted.

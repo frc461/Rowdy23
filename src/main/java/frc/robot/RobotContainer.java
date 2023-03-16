@@ -1,43 +1,19 @@
 package frc.robot;
 
+import java.time.Instant;
 import java.util.HashMap;
 import java.util.List;
-import java.util.function.Consumer;
-
 import com.pathplanner.lib.PathConstraints;
 import com.pathplanner.lib.PathPlanner;
 import com.pathplanner.lib.PathPlannerTrajectory;
-import com.pathplanner.lib.commands.FollowPathWithEvents;
 
-import com.pathplanner.lib.PathConstraints;
-import com.pathplanner.lib.PathPlanner;
-import com.pathplanner.lib.PathPlannerTrajectory;
-import com.pathplanner.lib.PathPlannerTrajectory.EventMarker;
-import com.pathplanner.lib.PathPlannerTrajectory.PathPlannerState;
+import edu.wpi.first.wpilibj2.command.*;
 import com.pathplanner.lib.auto.PIDConstants;
 import com.pathplanner.lib.auto.SwerveAutoBuilder;
-import com.pathplanner.lib.commands.FollowPathWithEvents;
-
-import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.math.controller.ProfiledPIDController;
-import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.geometry.Translation2d;
-import edu.wpi.first.math.kinematics.SwerveModuleState;
-import edu.wpi.first.math.trajectory.Trajectory;
-import edu.wpi.first.math.trajectory.TrajectoryConfig;
-import edu.wpi.first.math.trajectory.TrajectoryGenerator;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
-import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.InstantCommand;
-import edu.wpi.first.wpilibj2.command.PrintCommand;
-import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
-import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
 import frc.robot.commands.*;
@@ -59,6 +35,8 @@ public class RobotContainer {
 
     private String pPlan = null;
     public double intakeVec = 0;
+
+    public CommandBase autoCode = Commands.sequence(new PrintCommand("no auto selected"));
 
     /* Controllers */
     private final Joystick driver = new Joystick(0);
@@ -136,8 +114,8 @@ public class RobotContainer {
         
         e_presButton_0.onTrue(new InstantCommand(() -> s_Elevator.setHeight(Constants.elevatorTop)));
         e_presButton_1.onTrue(new InstantCommand(() -> s_Elevator.setHeight(Constants.elevatorMid)));
-        e_presButton_2.onTrue(new InstantCommand(() -> s_Elevator.setHeight(3.14)));
-        e_presButton_2.onTrue(new InstantCommand(() -> s_Wrist.setRotation(.45)));
+        e_presButton_2.onTrue(new InstantCommand(() -> s_Elevator.setHeight(6.52)));
+        e_presButton_2.onTrue(new InstantCommand(() -> s_Wrist.setRotation(.485)));
 
 
         operator_stowButton.onTrue(new InstantCommand(() -> s_Elevator.setHeight(0)));
@@ -181,10 +159,7 @@ public class RobotContainer {
 
       Constants.gyroOffset = s_Swerve.gyro.getPitch();
 
-
-        // An ExampleCommand will run in autonomous
-        //return new exampleAuto(s_Swerve);
-
+        // Code that defines which autonomous to run from the selection in Shuffle Board
         String autoSelect = autoPicked.toLowerCase();
 
         if(autoSelect.equals("center")){
@@ -211,76 +186,98 @@ public class RobotContainer {
         else if (autoSelect.equals("dockBalance")) {
           pPlan = "no path";
         }
-        else{
+        else {
           pPlan = "noAuto";
         }
 
-        // TODO: Tune speeds and accelertaion
-        PathConstraints config = new PathConstraints(Constants.AutoConstants.kMaxSpeedMetersPerSecond, Constants.AutoConstants.kMaxAccelerationMetersPerSecondSquared);
+        // This will load the path selected in Smart Dashboard and generate it with a max acceleration and velocity as defined for each section of path
+        List<PathPlannerTrajectory> rowdyPath = PathPlanner.loadPathGroup(pPlan, 
+        new PathConstraints(1.5,2),   // Speed and acceleration for first path
+        new PathConstraints(1, 0.5)   // Speed and acceleration for second path
+        );
 
-        // This will load the path selected in Smart Dashboard and generate it with a max velocity configured in "Constants.java"
-        PathPlannerTrajectory rowdyPath = PathPlanner.loadPath(pPlan, config);
+        List<PathPlannerTrajectory> clockwise180 = PathPlanner.loadPathGroup("Clockwise180", 
+        new PathConstraints(.75,2)
+        );
+
+        List<PathPlannerTrajectory> counterclockwise180 = PathPlanner.loadPathGroup("Counterclockwise180", 
+        new PathConstraints(.75,2)
+        );
+
+        List<PathPlannerTrajectory> oneCycleMove = PathPlanner.loadPathGroup("move3.2Meters", 
+        new PathConstraints(4,2)
+        );
+
+        List<PathPlannerTrajectory> oneCycleMoveBack = PathPlanner.loadPathGroup("move-3.2Meters",
+        new PathConstraints(4, 2)
+        );
+
+        // List<PathPlannerTrajectory> oneCycleCollect = PathPlanner.loadPathGroup("move.25Meters",
+        // new PathConstraints(1.5, 2)
+        // );
+
+        List<PathPlannerTrajectory> oneCycleScore = PathPlanner.loadPathGroup("move-.25Meters",
+        new PathConstraints(1.5, 2)
+        );
+
+        List<PathPlannerTrajectory> oneCycleMoveUp = PathPlanner.loadPathGroup("moveUp",
+        new PathConstraints(2.5, 2)
+        );
         
-        // Print out messages when markers are passed. This can be enhanced in the future by running auto commands, like s_Elevator.setHeight
+        // Run a command when markers are passed. If you add a "balance" marker in Path Planner, this will cause the robot to run s_Swerve.autoBalance()
         HashMap<String, Command> eventMap = new HashMap<>();
         eventMap.put("start1", new PrintCommand("at start"));
         eventMap.put("mid", new PrintCommand("halfway done"));
-        eventMap.put("end1", new InstantCommand(()-> s_Swerve.autoBalance()));
+        eventMap.put("elevatorUp", new InstantCommand(() -> s_Elevator.setHeight(Constants.elevatorTop)));
+        eventMap.put("balance", new InstantCommand(() -> s_Swerve.autoBalance()));
         
-        // This commands the path of the robot
+        // This defines swerve drive for autonomous path following
         // TODO: TUNE PID Constants
         SwerveAutoBuilder swervecontrollercommand = new SwerveAutoBuilder(
           s_Swerve::getPose,
           s_Swerve::resetOdometry,
           Constants.Swerve.swerveKinematics,
           new PIDConstants(1.5, 0.015, 0.01),
-          new PIDConstants(0.15, 0.3, 0.0002),
+          new PIDConstants(0.2, 0.35, 0),
           s_Swerve::setModuleStates,
           eventMap,
           true,
           s_Swerve
         );
 
-        Command fullAuto = swervecontrollercommand.fullAuto(rowdyPath);
+        autoCode = Commands.sequence(
+          // Score a cube command
+          new InstantCommand(() -> s_Elevator.setHeight(Constants.elevatorTop)),
+          new WaitCommand(1.2),
+          new AutoIntakeCmd(s_Intake, -1),
+          new WaitCommand(0.5),
+          new InstantCommand(() -> s_Elevator.setHeight(Constants.elevatorLow)),
+          swervecontrollercommand.fullAuto(oneCycleMove.get(0)),
+          new PrintCommand("path 1 complete"),
+          swervecontrollercommand.fullAuto(clockwise180.get(0)),
+          new PrintCommand("path 2 complete"),
+          // Pickup cone command
+          swervecontrollercommand.fullAuto(oneCycleScore.get(0)),
+          new PrintCommand("path 3 complete"),
+          swervecontrollercommand.fullAuto(counterclockwise180.get(0)),
+          new PrintCommand("path 4 complete"),
+          // run another path
+          swervecontrollercommand.fullAuto(oneCycleMoveUp.get(0)),
+          swervecontrollercommand.fullAuto(oneCycleMoveBack.get(0)),
+          new PrintCommand("path 5 complete"),
+          // score cone command
+          swervecontrollercommand.fullAuto(oneCycleMoveUp.get(0)),
+          swervecontrollercommand.fullAuto(oneCycleScore.get(0)),
+          new PrintCommand("path 6 complete")
+          // run another path
 
-          new InstantCommand(() -> s_Swerve.resetOdometry(s_Swerve.getPose()));
-          new PrintCommand("balancing...");
-          
-        // );
-  
-      
-       
+        );
 
-        /*
-         * 
-         * This is Mishawauka (Penn) Autonomous
-         * 
-         */
 
-        /*
-        SequentialCommandGroup startAuto = new SequentialCommandGroup(
-        
-            // Set Elevator to top height
-            new InstantCommand(() -> s_Elevator.setHeight(Constants.elevatorTop)),
+        //Command fullAuto = swervecontrollercommand.fullAuto(rowdyPath);
 
-            // Wait 1 second before next command
-            new WaitCommand(1),
-            
-            // Turn intake on to eject cube using AutoIntakeCmd
-            new AutoIntakeCmd(s_Intake, -1),
-
-            // Set Elevator to low height
-            new InstantCommand(() -> s_Elevator.setHeight(Constants.elevatorBot)),
-
-            // Wait 1.25 seconds before next command
-            new WaitCommand(1.25)
-
-            );
-        
-        startAuto.schedule();
-        startAuto.execute();
-
-     
+        new InstantCommand(() -> s_Swerve.resetOdometry(s_Swerve.getPose()));
+              
         // SwerveModuleState[] xMode = {
         //     new SwerveModuleState(0, Rotation2d.fromDegrees(45)),
         //     new SwerveModuleState(0, Rotation2d.fromDegrees(45+90)),
@@ -290,43 +287,7 @@ public class RobotContainer {
 
         // s_Swerve.setModuleStates(xMode);
         
-      
-        PathPlannerTrajectory autoTrajectory = PathPlanner.loadPath(pPlan, config);
-        for (int i = 0; i < autoTrajectory.getMarkers().size(); i++) {
-        }
-        
 
-        System.out.println("While driving: " + Timer.getMatchTime());
-
-        var thetaController =
-            new ProfiledPIDController(
-                Constants.AutoConstants.kPThetaController, 0, 0, Constants.AutoConstants.kThetaControllerConstraints);
-        thetaController.enableContinuousInput(-Math.PI, Math.PI);
-
-        s_Swerve.resetOdometry(autoTrajectory.getInitialHolonomicPose());
-
-        HashMap<String, Command> eventMap = new HashMap<>();
-        eventMap.put("xmode", new InstantCommand(()->s_Swerve.resetOdometry(autoTrajectory.getInitialHolonomicPose())));   
-
-        SwerveControllerCommand swervecontrollercommand = new SwerveControllerCommand(
-                autoTrajectory,
-                s_Swerve::getPose,
-                Constants.Swerve.swerveKinematics,
-                new PIDController(Constants.AutoConstants.kPXController, 0, 0),
-                new PIDController(Constants.AutoConstants.kPYController, 0, 0),
-                thetaController,
-                s_Swerve::setModuleStates,
-                s_Swerve);
-        
-
-        autoWithEvents = new FollowPathWithEvents(swervecontrollercommand, autoTrajectory.getMarkers(), eventMap);
-      
-        // s_Swerve.setModuleStates(xMode);
-
-        s_Swerve.resetOdometry(autoTrajectory.getInitialHolonomicPose());
-
-      */
-
-      return fullAuto;
+      return autoCode;
     }
 }

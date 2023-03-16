@@ -163,7 +163,7 @@ public void autoBalance(){
         balanceController.setTolerance(2.5);
         System.out.println(-target);
 
-        drive(new Translation2d(-1*target, 0), 0, false, true);        
+        drive(new Translation2d(-1*target, 0), 0, false, true);
     }
     System.out.println("stopped balancing");
 }

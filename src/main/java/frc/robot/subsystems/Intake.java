@@ -43,7 +43,7 @@ public class Intake extends SubsystemBase {
             intake.set(-1);
         } else if (joystick.getRawButton(XboxController.Button.kLeftBumper.value)) {
             intake.set(0.7);
-            showLights(255, 255, 255);
+            showLights(255, 0, 255);
         } else if (joystick.getRawAxis(XboxController.Axis.kRightTrigger.value) > 0.2) {
             intake.set(0.7);
         } else if (joystick.getRawAxis(XboxController.Axis.kLeftTrigger.value) > 0.2) {
