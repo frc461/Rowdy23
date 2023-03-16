@@ -54,7 +54,7 @@ public class Wrist extends SubsystemBase{
 
     public void moveWrist(double movementVector)
     {
-        double wristPracticalLowerLimit = Constants.WRIST_LOWER_LIMIT + calculateBottomLimit();
+        double wristPracticalLowerLimit = Constants.WRIST_LOWER_LIMIT; //+ calculateBottomLimit();
         if(movementVector < 0 && wristEncoder.getPosition() < wristPracticalLowerLimit)
         {
             target = wristPracticalLowerLimit;
@@ -75,7 +75,7 @@ public class Wrist extends SubsystemBase{
 
     public void holdWrist()
     {
-        double wristPracticalLowerLimit = Constants.WRIST_LOWER_LIMIT + calculateBottomLimit();
+        double wristPracticalLowerLimit = Constants.WRIST_LOWER_LIMIT; //+ calculateBottomLimit();
         if(target < wristPracticalLowerLimit){
             target = wristPracticalLowerLimit;
         }
@@ -92,13 +92,13 @@ public class Wrist extends SubsystemBase{
         return reverseLimitSwitch.isPressed();
     }
 
-    private double calculateBottomLimit(){
-        double adjustment = 0;
-        if(elevatorEncoder.getPosition() < 10){
-            adjustment = 0.1 * (1 - (elevatorEncoder.getPosition()/10));
-        }
+    // private double calculateBottomLimit(){
+    //     double adjustment = 0;
+    //     if(elevatorEncoder.getPosition() < 10){
+    //         adjustment = 0.1 * (1 - (elevatorEncoder.getPosition()/10));
+    //     }
 
-        return adjustment;
-    }
+    //     return adjustment;
+    // }
 
 }

@@ -39,7 +39,7 @@ public class Intake extends SubsystemBase {
 
     public void runIntake(Joystick joystick){
         if (joystick.getRawButton(XboxController.Button.kRightBumper.value)) {
-            showLights(255, 255, 255);
+            showLights(255, 255, 0);
             intake.set(-1);
         } else if (joystick.getRawButton(XboxController.Button.kLeftBumper.value)) {
             intake.set(0.7);

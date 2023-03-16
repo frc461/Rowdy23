@@ -56,6 +56,7 @@ public class RobotContainer {
     private final JoystickButton e_presButton_0 = new JoystickButton(operator, XboxController.Button.kY.value);
     private final JoystickButton e_presButton_1 = new JoystickButton(operator, XboxController.Button.kX.value);
     private final JoystickButton e_presButton_2 = new JoystickButton(operator, XboxController.Button.kA.value);
+    private final JoystickButton e_presButton_3 = new JoystickButton(operator, XboxController.Button.kB.value);
 
 
     private final POVButton w_preset_0 = new POVButton(operator, 0);
@@ -67,9 +68,9 @@ public class RobotContainer {
     /* Driver Buttons */
     private final JoystickButton zeroGyro = new JoystickButton(driver, XboxController.Button.kY.value);
     private final JoystickButton robotCentric = new JoystickButton(driver, XboxController.Button.kLeftBumper.value);
-    private final JoystickButton driver_stowButton2 = new JoystickButton(driver, XboxController.Button.kRightBumper.value);
+    private final JoystickButton driver_stowButton = new JoystickButton(driver, XboxController.Button.kRightBumper.value);
 
-    private final POVButton driver_stowButton = new POVButton(operator, 270);
+    private final POVButton driver_stowButton2 = new POVButton(operator, 270);
 
     /* Variables */
     boolean driveStatus = false;
@@ -111,21 +112,69 @@ public class RobotContainer {
         w_preset_0.onTrue(new InstantCommand(() -> s_Wrist.setRotation(Constants.WRIST_UPPER_LIMIT)));     
         w_preset_1.onTrue(new InstantCommand(() -> s_Wrist.setRotation(Constants.WRIST_MID_LIMIT)));
         w_preset_2.onTrue(new InstantCommand(() -> s_Wrist.setRotation(Constants.WRIST_LOWER_LIMIT)));
-        
-        e_presButton_0.onTrue(new InstantCommand(() -> s_Elevator.setHeight(Constants.elevatorTop)));
-        e_presButton_1.onTrue(new InstantCommand(() -> s_Elevator.setHeight(Constants.elevatorMid)));
-        e_presButton_2.onTrue(new InstantCommand(() -> s_Elevator.setHeight(6.52)));
-        e_presButton_2.onTrue(new InstantCommand(() -> s_Wrist.setRotation(.485)));
 
+        e_presButton_0.onTrue( // Preset to score high cone
+          Commands.sequence(
+            new InstantCommand(() -> s_Elevator.setHeight(Constants.elevatorHighScore)),
+            new WaitCommand(.75),
+            new InstantCommand(() -> s_Wrist.setRotation(Constants.wristHighConeScore))
+          )
+          
+        );
 
-        operator_stowButton.onTrue(new InstantCommand(() -> s_Elevator.setHeight(0)));
+        e_presButton_1.onTrue( // Preset to score mid cone
+          Commands.sequence(
+            new InstantCommand(() -> s_Elevator.setHeight(Constants.elevatorMidScore)),
+            new WaitCommand(.25),
+            new InstantCommand(() -> s_Wrist.setRotation(Constants.wristMidConeScore))
+          )
+        );
+
+        e_presButton_2.onTrue( // Preset to pick up fallen cone
+          Commands.sequence(
+            new InstantCommand(() -> s_Elevator.setHeight(Constants.elevatorConePickup)),
+            new InstantCommand(() -> s_Wrist.setRotation(Constants.wristConePickup))
+          )
+        );
+
+        e_presButton_3.onTrue( // Preset to pick up cone from single substation
+          Commands.sequence(
+            new InstantCommand(() -> s_Elevator.setHeight(Constants.elevatorBot)),
+            new InstantCommand(() -> s_Wrist.setRotation(Constants.wristConePickup2))
+          )
+        );
+
+        w_preset_0.onTrue( // Preset to score high cube
+          Commands.sequence(
+            new InstantCommand(() -> s_Elevator.setHeight(Constants.elevatorHighScore)),
+            new WaitCommand(.75),
+            new InstantCommand(() -> s_Wrist.setRotation(Constants.wristHighCubeScore))
+          )
+        );
+
+        w_preset_1.onTrue( // Preset to pick up cube
+          Commands.sequence(
+            new InstantCommand(() -> s_Elevator.setHeight(Constants.elevatorBot)),
+            new InstantCommand(() -> s_Wrist.setRotation(Constants.wristCubePickup))
+          )
+        );
+
+        w_preset_2.onTrue( // Preset to score mid cube
+          Commands.sequence(
+            new InstantCommand(() -> s_Elevator.setHeight(Constants.elevatorMidScore)),
+            new WaitCommand(.25),
+            new InstantCommand(() -> s_Wrist.setRotation(Constants.wristMidCubeScore))
+          )
+        );
+
+        operator_stowButton.onTrue(new InstantCommand(() -> s_Elevator.setHeight(Constants.elevatorBot)));
         operator_stowButton.onTrue(new InstantCommand(() -> s_Wrist.setRotation(Constants.WRIST_UPPER_LIMIT)));
 
-        driver_stowButton.onTrue(new InstantCommand(() -> s_Elevator.setHeight(0)));
-        driver_stowButton.onTrue(new InstantCommand(() -> s_Wrist.setRotation(Constants.WRIST_UPPER_LIMIT)));
-
-        driver_stowButton2.onTrue(new InstantCommand(() -> s_Elevator.setHeight(0)));
+        driver_stowButton2.onTrue(new InstantCommand(() -> s_Elevator.setHeight(Constants.elevatorBot)));
         driver_stowButton2.onTrue(new InstantCommand(() -> s_Wrist.setRotation(Constants.WRIST_UPPER_LIMIT)));
+
+        driver_stowButton.onTrue(new InstantCommand(() -> s_Elevator.setHeight(Constants.elevatorBot)));
+        driver_stowButton.onTrue(new InstantCommand(() -> s_Wrist.setRotation(Constants.WRIST_UPPER_LIMIT)));
         
         zeroGyro.onTrue(new InstantCommand(() -> s_Swerve.zeroGyro()));
         
@@ -228,7 +277,7 @@ public class RobotContainer {
         HashMap<String, Command> eventMap = new HashMap<>();
         eventMap.put("start1", new PrintCommand("at start"));
         eventMap.put("mid", new PrintCommand("halfway done"));
-        eventMap.put("elevatorUp", new InstantCommand(() -> s_Elevator.setHeight(Constants.elevatorTop)));
+        eventMap.put("elevatorUp", new InstantCommand(() -> s_Elevator.setHeight(Constants.elevatorHighScore)));
         eventMap.put("balance", new InstantCommand(() -> s_Swerve.autoBalance()));
         
         // This defines swerve drive for autonomous path following
@@ -247,11 +296,11 @@ public class RobotContainer {
 
         autoCode = Commands.sequence(
           // Score a cube command
-          new InstantCommand(() -> s_Elevator.setHeight(Constants.elevatorTop)),
+          new InstantCommand(() -> s_Elevator.setHeight(Constants.elevatorHighScore)),
           new WaitCommand(1.2),
           new AutoIntakeCmd(s_Intake, -1),
           new WaitCommand(0.5),
-          new InstantCommand(() -> s_Elevator.setHeight(Constants.elevatorLow)),
+          new InstantCommand(() -> s_Elevator.setHeight(Constants.elevatorConePickup)),
           swervecontrollercommand.fullAuto(oneCycleMove.get(0)),
           new PrintCommand("path 1 complete"),
           swervecontrollercommand.fullAuto(clockwise180.get(0)),
