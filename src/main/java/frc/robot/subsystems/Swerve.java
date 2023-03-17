@@ -1,6 +1,7 @@
 package frc.robot.subsystems;
 
 import frc.robot.SwerveModule;
+import frc.robot.Constants.Swerve.Mod0;
 import frc.robot.Constants;
 
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
@@ -144,21 +145,19 @@ public class Swerve extends SubsystemBase {
 
 public void setXMode(){
 
-    SwerveModuleState[] xMode = {
-        new SwerveModuleState(0.01, Rotation2d.fromDegrees(45)),
-        new SwerveModuleState(0.01, Rotation2d.fromDegrees(45+90)),
-        new SwerveModuleState(0.01, Rotation2d.fromDegrees(45+90+90)),
-        new SwerveModuleState(0.01, Rotation2d.fromDegrees(45+90+90+90))
-    };
     
-    
+// bruh    Constants.Mod0.setAngle(new SwerveModuleState(0.0, Rotation2d.fromDegrees(45)));    
 
-    setModuleStates(xMode);
+
+    // .setAngle(new SwerveModuleState(0.0, Rotation2d.fromDegrees(45+90)));    
+    // SwerveModule.setAngle(new SwerveModuleState(0.0, Rotation2d.fromDegrees(45+90+90)));    
+    // SwerveModule.setAngle(new SwerveModuleState(0.0, Rotation2d.fromDegrees(45+90+90+90)));    
+
 }
 
 public void autoBalance(){
     double target = 0;
-
+    System.out.println("Autobalance Start");
     Timer timer = new Timer();
     timer.reset();
     timer.start();
@@ -166,13 +165,14 @@ public void autoBalance(){
     Timer Balancetimer = new Timer();
     Balancetimer.reset();
 
-    while(timer.get() > 15){
-        System.out.println("gyro: "+gyro.getPitch());
-        System.out.println("target: "+target);
+    while(timer.get() < 5){
+        //System.out.println("gyro: "+gyro.getPitch());
+        //System.out.println("target: "+target);
+        //System.out.println("Match time: "+timer.getMatchTime());
         PIDController balanceController = new PIDController(.033,0.01 ,0.00000000000001); 
         
-        //PIDCommand autoSwerve = new PIDCommand(balanceController, gyro.getPitch(), 1.5 ()-> drive(null, target, false, false)
-        //);
+        // PIDCommand autoSwerve = new PIDCommand(balanceController, gyro.getPitch(), 1.5 ()-> drive(null, target, false, false)
+        // );
 
         // if(gyro.getPitch() < 6 && gyro.getPitch() > -2){
         //     balanceController.setP(.05);
@@ -182,7 +182,7 @@ public void autoBalance(){
 
         target = balanceController.calculate(gyro.getPitch(), Constants.gyroOffset);
         balanceController.setTolerance(2.5);
-        System.out.println(-target);
+        //System.out.println(-target);
 
         drive(new Translation2d(-1*target, 0), 0, false, true);
         

@@ -43,7 +43,7 @@ public class AutoIntakeCmd extends CommandBase {
     }
     else if (intakeSetting == 1) {
       while (timer.get() < 1) {
-        // s_Intake.setSpeed(speed);
+        s_Intake.setSpeed(speed);
       }
     }
   }

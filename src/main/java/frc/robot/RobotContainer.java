@@ -268,7 +268,11 @@ public class RobotContainer {
         // Run a command when markers are passed. If you add a "balance" marker in Path Planner, this will cause the robot to run s_Swerve.autoBalance()
         HashMap<String, Command> eventMap = new HashMap<>();
         eventMap.put("intakeConeOut", new AutoIntakeCmd(s_Intake, 1, 1));
-        eventMap.put("intakeConeIn", new AutoIntakeCmd(s_Intake, -1, 1));
+        eventMap.put("intakeConeIn", 
+        // new InstantCommand(() -> s_Elevator.setHeight(Constants.elevatorConePickup)),
+        // new InstantCommand(() -> s_Wrist.setRotation(Constants.wristConePickup)),
+        new AutoIntakeCmd(s_Intake, -1, 1)
+        );
         eventMap.put(
           "elevatorUp",
           Commands.sequence(
@@ -288,7 +292,7 @@ public class RobotContainer {
           s_Swerve::resetOdometry,
           Constants.Swerve.swerveKinematics,
           new PIDConstants(1.5, 0.015, 0.01), //translation
-          new PIDConstants(0.01, 0.35, 0.00003), //rotation
+          new PIDConstants(0.2, 0.03, 0.02), //rotation
           s_Swerve::setModuleStates,
           eventMap,
           true,
@@ -325,7 +329,7 @@ public class RobotContainer {
           new PrintCommand("path 5 complete"),
           // Score cone command
           swervecontrollercommand.fullAuto(oneCycleMoveUp.get(0)),
-          swervecontrollercommand.fullAuto(oneCycleScore.get(0)),
+          //swervecontrollercommand.fullAuto(oneCycleScore.get(0)),
           new PrintCommand("path 6 complete")
         );
         
@@ -334,7 +338,13 @@ public class RobotContainer {
             swervecontrollercommand.fullAuto(GrabConeMobility.get(0))
           );
 
+        }else {
+          autoCode = Commands.sequence(
+            swervecontrollercommand.fullAuto(clockwise180.get(0)),
+            swervecontrollercommand.fullAuto(counterclockwise180.get(0))
+          );
         }
+          
 
         //Command fullAuto = swervecontrollercommand.fullAuto(rowdyPath);
 

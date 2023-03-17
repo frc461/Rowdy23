@@ -45,12 +45,5 @@
       }
     }
   ],
-  "markers": [
-    {
-      "position": 0.9090909090908852,
-      "names": [
-        "elevatorUp"
-      ]
-    }
-  ]
+  "markers": []
 }
