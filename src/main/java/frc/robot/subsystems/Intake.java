@@ -20,8 +20,10 @@ public class Intake extends SubsystemBase {
     private AddressableLEDBuffer ledData = new AddressableLEDBuffer(13);
 
     //private AddressableLEDBuffer ledData2 = new AddressableLEDBuffer(13);
+    public boolean intakeCube = false;
 
     public Intake() {
+
         intake = new CANSparkMax(33, MotorType.kBrushed);
         intake.restoreFactoryDefaults();
         intake.setInverted(true);
@@ -42,18 +44,30 @@ public class Intake extends SubsystemBase {
         if (joystick.getRawButton(XboxController.Button.kRightBumper.value)) {
             showLights(255, 0, 255);
             intake.set(-1);
+            intakeCube = false;
         } else if (joystick.getRawButton(XboxController.Button.kLeftBumper.value)) {
             intake.set(0.7);
             showLights(255, 255, 0);
+            intakeCube = true;
         } else if (joystick.getRawAxis(XboxController.Axis.kRightTrigger.value) > 0.2) {
             intake.set(0.7);
         } else if (joystick.getRawAxis(XboxController.Axis.kLeftTrigger.value) > 0.2) {
             intake.set(-0.7);
-        } else if (coneBeamBroken() == true && !joystick.getRawButton(XboxController.Button.kLeftBumper.value) && !joystick.getRawButton(XboxController.Button.kRightBumper.value)){
-            pulseIntake(-.1);
-        } else if (cubeBeamBroken() == true && !joystick.getRawButton(XboxController.Button.kLeftBumper.value) && !joystick.getRawButton(XboxController.Button.kRightBumper.value)){
+        // } else if (coneBeamBroken() == true && !joystick.getRawButton(XboxController.Button.kLeftBumper.value) && !joystick.getRawButton(XboxController.Button.kRightBumper.value)){
+        //     pulseIntake(-.1);
+        // } else if (cubeBeamBroken() == true && !joystick.getRawButton(XboxController.Button.kLeftBumper.value) && !joystick.getRawButton(XboxController.Button.kRightBumper.value)){
+        //     pulseIntake(.1);
+
+        }else if((intakeCube == true && cubeBeamBroken() == true) && (!joystick.getRawButton(XboxController.Button.kLeftBumper.value) && !joystick.getRawButton(XboxController.Button.kRightBumper.value))){
             pulseIntake(.1);
-        } else {
+            System.out.println("cubeBeam"+ intakeCube);
+
+        }else if((intakeCube == false && coneBeamBroken() == true) && (!joystick.getRawButton(XboxController.Button.kLeftBumper.value) && !joystick.getRawButton(XboxController.Button.kRightBumper.value))){
+            pulseIntake(-.1);
+            System.out.println("coneBeam:" + intakeCube);
+        }
+
+        else {
             intake.set(0);
             showLights(255, 0, 0);
         }

@@ -31,8 +31,8 @@ public final class Constants {
 
     //public static final double wristStowPos = 0.9;
 
-    public static final double WRIST_P = 8.0;
-    public static final double WRIST_I = 0;
+    public static final double WRIST_P = 4.0;
+    public static final double WRIST_I = 0.1;
     public static final double WRIST_D = 0.5;
     public static final double WRIST_FF = 0.5;
     public static final double WRIST_LOWER_LIMIT = 0.42;

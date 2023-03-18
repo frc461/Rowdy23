@@ -221,6 +221,18 @@ public class RobotContainer {
         else if(autoSelect.equals("center")){
           pPlan = "GrabConeMobility";
         }
+        else if(autoSelect.equals("twogamep")){
+          pPlan = "TwoGameP";
+        }
+        else if(autoSelect.equals("collectbalanceaud")){
+          pPlan = "collectbalanceaud";
+        }
+        else if(autoSelect.equals("collectbalancescore")){
+          pPlan = "collectbalancescore";
+        }
+        else if(autoSelect.equals("scoremobilityengage")){
+          pPlan = "scoremobilityengage";
+        }
         else {
           pPlan = "noAuto";
         }
@@ -264,15 +276,53 @@ public class RobotContainer {
         new PathConstraints(1, 1)
         );
 
+        List<PathPlannerTrajectory> TestPath = PathPlanner.loadPathGroup("testPath",
+        new PathConstraints(2.5, 2)
+        );
+
+        List<PathPlannerTrajectory> foo = PathPlanner.loadPathGroup("TwoGameP",
+        new PathConstraints(2.5, 2)
+        );
+
+        List<PathPlannerTrajectory> collectbalanceaud = PathPlanner.loadPathGroup("collectbalanceaud",
+        new PathConstraints(2.5, 2)
+        );
+
+        List<PathPlannerTrajectory> scoremobilityengage = PathPlanner.loadPathGroup("scoremobilityengage",
+        new PathConstraints(2.5, 2)
+        );
+
+        List<PathPlannerTrajectory> collectbalancescore = PathPlanner.loadPathGroup("collectbalancescore",
+        new PathConstraints(1.3, 2),
+        new PathConstraints(2.5, 2)
+        );
+
         
         // Run a command when markers are passed. If you add a "balance" marker in Path Planner, this will cause the robot to run s_Swerve.autoBalance()
         HashMap<String, Command> eventMap = new HashMap<>();
-        eventMap.put("intakeConeOut", new AutoIntakeCmd(s_Intake, 1, 1));
-        eventMap.put("intakeConeIn", 
-        // new InstantCommand(() -> s_Elevator.setHeight(Constants.elevatorConePickup)),
-        // new InstantCommand(() -> s_Wrist.setRotation(Constants.wristConePickup)),
-        new AutoIntakeCmd(s_Intake, -1, 1)
+
+        eventMap.put("intakeOn", new AutoIntakeCmd(s_Intake, 1, true));
+        eventMap.put("intakeOff", new AutoIntakeCmd(s_Intake, 0, false));
+        eventMap.put("balance", new InstantCommand(() -> s_Swerve.autoBalance()));
+
+        eventMap.put("intakeCone", 
+          Commands.sequence(
+            new InstantCommand(() -> s_Elevator.setHeight(Constants.elevatorConePickup)),
+            new InstantCommand(() -> s_Wrist.setRotation(Constants.wristConePickup)),
+            new AutoIntakeCmd(s_Intake, 1, true)
+          )
         );
+
+        eventMap.put("scoreCube", 
+          Commands.sequence(
+          new InstantCommand(() -> s_Elevator.setHeight(Constants.elevatorHighScore)),
+          new WaitCommand(1.2), //TODO could be slower
+          new AutoIntakeCmd(s_Intake, -1, true),
+          new WaitCommand(0.5),
+          new InstantCommand(() -> s_Elevator.setHeight(Constants.elevatorBot))
+          )
+        );
+
         eventMap.put(
           "elevatorUp",
           Commands.sequence(
@@ -280,10 +330,14 @@ public class RobotContainer {
             new InstantCommand(() -> s_Wrist.setRotation(Constants.wristHighConeScore))
           )
         );
-        eventMap.put("balance", new InstantCommand(() -> s_Swerve.autoBalance()));
-        
 
-        
+        eventMap.put(
+          "stow",
+          Commands.sequence(
+            new InstantCommand(() -> s_Elevator.setHeight(0)),
+            new InstantCommand(() -> s_Wrist.setRotation(Constants.wristHighCubeScore))
+          )
+        );
 
         // This defines swerve drive for autonomous path following
         // TODO: TUNE PID Constants
@@ -291,8 +345,8 @@ public class RobotContainer {
           s_Swerve::getPose,
           s_Swerve::resetOdometry,
           Constants.Swerve.swerveKinematics,
-          new PIDConstants(1.5, 0.015, 0.01), //translation
-          new PIDConstants(0.2, 0.03, 0.02), //rotation
+          new PIDConstants(1.6, 0.0, 0.0022), //translation Default: P: 1.5 I: 0.015 D: 0.01
+          new PIDConstants(0.15, 0.075, 0.0), //rotation Default: P: 0.2 I: 0.04 D: 0.02
           s_Swerve::setModuleStates,
           eventMap,
           true,
@@ -304,17 +358,17 @@ public class RobotContainer {
 
         autoCode = Commands.sequence(
           // Score a cube command
-          new InstantCommand(() -> s_Elevator.setHeight(Constants.elevatorHighScore)),
-          new WaitCommand(1.2),
-          new AutoIntakeCmd(s_Intake, -1, 0),
-          new WaitCommand(0.5),
-          new InstantCommand(() -> s_Elevator.setHeight(Constants.elevatorBot)),
+          
           // Move to cone, prepare elevator and wrist
-          swervecontrollercommand.fullAuto(oneCycleMove.get(0)),
+          //swervecontrollercommand.fullAuto(oneCycleMove.get(0)),
+
+          swervecontrollercommand.fullAuto(TestPath.get(0)),
+
           new PrintCommand("path 1 complete"),
           new InstantCommand(() -> s_Elevator.setHeight(Constants.elevatorConePickup)),
           new InstantCommand(() -> s_Wrist.setRotation(Constants.wristConePickup)),
-          swervecontrollercommand.fullAuto(clockwise180.get(0)),
+
+          // swervecontrollercommand.fullAuto(clockwise180.get(0)),
           new PrintCommand("path 2 complete"),
           // Pickup cone command
           swervecontrollercommand.fullAuto(oneCycleCollect.get(0)),
@@ -338,10 +392,29 @@ public class RobotContainer {
             swervecontrollercommand.fullAuto(GrabConeMobility.get(0))
           );
 
+        }else if(pPlan == "TwoGameP"){
+          autoCode = Commands.sequence(
+            new PrintCommand(pPlan),
+            swervecontrollercommand.fullAuto(foo.get(0))
+          );
+
+        }else if(pPlan == "collectbalanceaud"){
+          autoCode = Commands.sequence(swervecontrollercommand.fullAuto(collectbalanceaud.get(0))
+          );
+
+        }else if(pPlan == "collectbalancescore"){
+          autoCode = Commands.sequence(swervecontrollercommand.fullAuto(collectbalancescore.get(0)),
+          autoCode = Commands.sequence(swervecontrollercommand.fullAuto(collectbalancescore.get(1)))
+          );
+
+        }else if(pPlan == "scoremobilityengage"){
+          autoCode = Commands.sequence(swervecontrollercommand.fullAuto(scoremobilityengage.get(0))
+          );
         }else {
           autoCode = Commands.sequence(
-            swervecontrollercommand.fullAuto(clockwise180.get(0)),
-            swervecontrollercommand.fullAuto(counterclockwise180.get(0))
+            new PrintCommand(pPlan)
+            //swervecontrollercommand.fullAuto(TestPath.get(0))
+            //swervecontrollercommand.fullAuto(counterclockwise180.get(0))
           );
         }
           

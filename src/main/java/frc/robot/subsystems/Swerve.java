@@ -171,15 +171,6 @@ public void autoBalance(){
         //System.out.println("Match time: "+timer.getMatchTime());
         PIDController balanceController = new PIDController(.033,0.01 ,0.00000000000001); 
         
-        // PIDCommand autoSwerve = new PIDCommand(balanceController, gyro.getPitch(), 1.5 ()-> drive(null, target, false, false)
-        // );
-
-        // if(gyro.getPitch() < 6 && gyro.getPitch() > -2){
-        //     balanceController.setP(.05);
-        //     balanceController.setI(.5);
-        //     balanceController.setD(.5);
-        // }
-
         target = balanceController.calculate(gyro.getPitch(), Constants.gyroOffset);
         balanceController.setTolerance(2.5);
         //System.out.println(-target);

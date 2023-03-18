@@ -29,6 +29,12 @@ public class Robot extends TimedRobot {
   private static final String kDefaultAuto = "no auto";
   private static final String kAudienceAuto = "audience";
   private static final String kCenterAuto = "center";
+  private static final String kTwoGameP = "TwoGameP";
+  private static final String kCollectBalanceAud = "collectbalanceaud";
+  private static final String kCollectBalanceScore = "collectbalancescore";
+  private static final String kScoreMobilityEngage = "scoremobilityengage";
+
+
 
   private final SendableChooser<String> m_chooser = new SendableChooser<>();
 
@@ -42,8 +48,11 @@ public class Robot extends TimedRobot {
     m_chooser.setDefaultOption("No Auto Selected", kDefaultAuto);
     m_chooser.addOption("CenterAuto", kCenterAuto);
     m_chooser.addOption("Audience Side", kAudienceAuto);
+    m_chooser.addOption("Two Game P", kTwoGameP);
+    m_chooser.addOption("Collect And Balance Audience Side", kCollectBalanceAud);
+    m_chooser.addOption("Collect And Balance Scoring Table Side", kCollectBalanceScore);
+    m_chooser.addOption("Score Mobility Engage", kScoreMobilityEngage);
     
-
     SmartDashboard.putData("Auto Choices", m_chooser);
 
     ctreConfigs = new CTREConfigs();
