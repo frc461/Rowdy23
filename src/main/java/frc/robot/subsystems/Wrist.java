@@ -17,7 +17,6 @@ public class Wrist extends SubsystemBase{
     private SparkMaxAbsoluteEncoder wristEncoder;
     private SparkMaxLimitSwitch forwardLimitSwitch;
     private SparkMaxLimitSwitch reverseLimitSwitch;
-    private RelativeEncoder elevatorEncoder;
 
     double target = Constants.WRIST_UPPER_LIMIT;
 
@@ -31,7 +30,6 @@ public class Wrist extends SubsystemBase{
         //wrist.set(wristPidController.calculate(wristEncoder.getAbsolutePosition(), Constants.WRIST_UPPER_LIMIT));
         forwardLimitSwitch = wrist.getForwardLimitSwitch(SparkMaxLimitSwitch.Type.kNormallyOpen);
         reverseLimitSwitch = wrist.getReverseLimitSwitch(SparkMaxLimitSwitch.Type.kNormallyOpen);
-        elevatorEncoder = _encoder;
     }
 
     public SparkMaxAbsoluteEncoder getEncoder() {

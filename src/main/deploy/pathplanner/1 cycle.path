@@ -17,8 +17,7 @@
       "isStopPoint": false,
       "stopEvent": {
         "names": [
-          "elevatorhigh",
-          "intakeout"
+          "scoreCubeHigh"
         ],
         "executionBehavior": "parallel",
         "waitBehavior": "before",
@@ -169,10 +168,12 @@
       "isLocked": false,
       "isStopPoint": true,
       "stopEvent": {
-        "names": [],
+        "names": [
+          "scoreConeHigh"
+        ],
         "executionBehavior": "sequential",
-        "waitBehavior": "none",
-        "waitTime": 0
+        "waitBehavior": "before",
+        "waitTime": 1.0
       }
     },
     {
@@ -198,5 +199,19 @@
       }
     }
   ],
-  "markers": []
+  "markers": [
+    {
+      "position": 1.4254545454539596,
+      "names": [
+        "intakeCone"
+      ]
+    },
+    {
+      "position": 3.4618181818179883,
+      "names": [
+        "intakeOff",
+        "stow"
+      ]
+    }
+  ]
 }

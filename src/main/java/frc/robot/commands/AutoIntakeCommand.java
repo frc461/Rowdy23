@@ -4,20 +4,17 @@
 
 package frc.robot.commands;
 
-import edu.wpi.first.wpilibj.Timer;
-
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Intake;
 
-public class AutoIntakeCmd extends CommandBase {
+public class AutoIntakeCommand extends CommandBase {
   /** Creates a new AutoIntakeCmd. */
 
   private Intake s_Intake;
   private final double speed;
-  private int intakeSetting;
   private boolean intakeOn;
 
-  public AutoIntakeCmd(Intake s_Intake, double speed, boolean intakeOn) {
+  public AutoIntakeCommand(Intake s_Intake, double speed, boolean intakeOn) {
     // Use addRequirements() here to declare subsystem dependencies.
     this.s_Intake = s_Intake;
     this.speed = speed;
@@ -32,11 +29,11 @@ public class AutoIntakeCmd extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-   if(intakeOn == true){
-    s_Intake.setSpeed(speed);
-   }else{
-    s_Intake.setSpeed(0);
-   }
+    if (intakeOn == true) {
+      s_Intake.setSpeed(speed);
+    } else {
+      s_Intake.setSpeed(0);
+    }
   }
 
   // Called once the command ends or is interrupted.
@@ -44,7 +41,6 @@ public class AutoIntakeCmd extends CommandBase {
   public void end(boolean interrupted) {
     s_Intake.setSpeed(0);
     System.out.println("Auto Intake Ended");
-
   }
 
   // Returns true when the command should end.

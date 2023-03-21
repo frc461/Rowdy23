@@ -17,17 +17,10 @@ public class TeleopIntake extends CommandBase {
     this.s_Intake = s_Intake;
     this.operator = operator;
     addRequirements(s_Intake); 
-  
   // Called when the command is initially scheduled.
-
-
 }
 
 // Called every time the scheduler runs while the command is scheduled.
-
-
-  //TODO dont forget this override thiny
-
   @Override
   public void execute() {
     s_Intake.runIntake(operator);

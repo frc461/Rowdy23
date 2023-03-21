@@ -17,7 +17,7 @@
       "isStopPoint": false,
       "stopEvent": {
         "names": [
-          "scoreCube"
+          "scoreCubeHigh"
         ],
         "executionBehavior": "parallel",
         "waitBehavior": "none",
@@ -105,22 +105,14 @@
       ]
     },
     {
-      "position": 1.3527272727272703,
-      "names": [
-        "event"
-      ]
-    },
-    {
       "position": 2.2472727272726076,
       "names": [
-        "event",
         "stow"
       ]
     },
     {
       "position": 2.836363636363672,
       "names": [
-        "event",
         "elevatorUp"
       ]
     }

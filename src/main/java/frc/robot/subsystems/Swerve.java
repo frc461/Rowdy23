@@ -1,17 +1,12 @@
 package frc.robot.subsystems;
 
 import frc.robot.SwerveModule;
-import frc.robot.Constants.Swerve.Mod0;
 import frc.robot.Constants;
 
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
-
-import java.lang.annotation.Target;
-
-import javax.xml.validation.SchemaFactory;
 
 import com.ctre.phoenix.sensors.Pigeon2;
 
@@ -22,9 +17,6 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.PIDCommand;
-import edu.wpi.first.wpilibj2.command.PIDSubsystem;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class Swerve extends SubsystemBase {
@@ -143,43 +135,27 @@ public class Swerve extends SubsystemBase {
         }
     }
 
-public void setXMode(){
+    // public void setXMode(){
+        // Constants.Mod0.setAngle(new SwerveModuleState(0.0, Rotation2d.fromDegrees(45)));
+        // .setAngle(new SwerveModuleState(0.0, Rotation2d.fromDegrees(45+90)));
+        // SwerveModule.setAngle(new SwerveModuleState(0.0, Rotation2d.fromDegrees(45+90+90)));
+        // SwerveModule.setAngle(new SwerveModuleState(0.0, Rotation2d.fromDegrees(45+90+90+90)));
+    // }
 
-    
-// bruh    Constants.Mod0.setAngle(new SwerveModuleState(0.0, Rotation2d.fromDegrees(45)));    
+    public void autoBalance(){
+        double target = 0;
+        System.out.println("Autobalance Start");
+        Timer timer = new Timer();
+        timer.reset();
+        timer.start();
 
-
-    // .setAngle(new SwerveModuleState(0.0, Rotation2d.fromDegrees(45+90)));    
-    // SwerveModule.setAngle(new SwerveModuleState(0.0, Rotation2d.fromDegrees(45+90+90)));    
-    // SwerveModule.setAngle(new SwerveModuleState(0.0, Rotation2d.fromDegrees(45+90+90+90)));    
-
-}
-
-public void autoBalance(){
-    double target = 0;
-    System.out.println("Autobalance Start");
-    Timer timer = new Timer();
-    timer.reset();
-    timer.start();
-
-    Timer Balancetimer = new Timer();
-    Balancetimer.reset();
-
-    while(timer.get() < 5){
-        //System.out.println("gyro: "+gyro.getPitch());
-        //System.out.println("target: "+target);
-        //System.out.println("Match time: "+timer.getMatchTime());
-        PIDController balanceController = new PIDController(.033,0.01 ,0.00000000000001); 
-        
-        target = balanceController.calculate(gyro.getPitch(), Constants.gyroOffset);
+        PIDController balanceController = new PIDController(.033,0.01 ,0.00000000000001);
         balanceController.setTolerance(2.5);
-        //System.out.println(-target);
 
-        drive(new Translation2d(-1*target, 0), 0, false, true);
-        
-
-    }
-    System.out.println("stopped balancing");
-}
-    
+        while(timer.get() < 8){
+            target = balanceController.calculate(gyro.getPitch(), Constants.gyroOffset);
+            drive(new Translation2d(-1*target, 0), 0, false, true);        
+        } 
+        System.out.println("stopped balancing");
+    }   
 }

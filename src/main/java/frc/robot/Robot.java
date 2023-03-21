@@ -7,7 +7,6 @@ package frc.robot;
 import com.pathplanner.lib.server.PathPlannerServer;
 
 import edu.wpi.first.wpilibj.TimedRobot;
-import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -33,8 +32,7 @@ public class Robot extends TimedRobot {
   private static final String kCollectBalanceAud = "collectbalanceaud";
   private static final String kCollectBalanceScore = "collectbalancescore";
   private static final String kScoreMobilityEngage = "scoremobilityengage";
-
-
+  private static final String kScoremobilityengagepickup = "scoremobilityengagepickup";
 
   private final SendableChooser<String> m_chooser = new SendableChooser<>();
 
@@ -47,15 +45,17 @@ public class Robot extends TimedRobot {
    
     m_chooser.setDefaultOption("No Auto Selected", kDefaultAuto);
     m_chooser.addOption("CenterAuto", kCenterAuto);
-    m_chooser.addOption("Audience Side", kAudienceAuto);
+    m_chooser.addOption("Audience Side (1 cycle)", kAudienceAuto);
     m_chooser.addOption("Two Game P", kTwoGameP);
     m_chooser.addOption("Collect And Balance Audience Side", kCollectBalanceAud);
     m_chooser.addOption("Collect And Balance Scoring Table Side", kCollectBalanceScore);
     m_chooser.addOption("Score Mobility Engage", kScoreMobilityEngage);
+    m_chooser.addOption("score mobility engage pickup", kScoremobilityengagepickup);
     
     SmartDashboard.putData("Auto Choices", m_chooser);
 
     ctreConfigs = new CTREConfigs();
+    
     // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
     // autonomous chooser on the dashboard.
     m_robotContainer = new RobotContainer();
@@ -77,7 +77,6 @@ public class Robot extends TimedRobot {
     // and running subsystem periodic() methods.  This must be called from the robot's periodic
     // block in order for anything in the Command-based framework to work.
     CommandScheduler.getInstance().run();
-
     m_robotContainer.printValues();
   }
 

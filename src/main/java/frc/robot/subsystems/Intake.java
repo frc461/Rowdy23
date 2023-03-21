@@ -4,8 +4,8 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import edu.wpi.first.wpilibj.AddressableLED;
 import edu.wpi.first.wpilibj.AddressableLEDBuffer;
 import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.DigitalOutput;
 import edu.wpi.first.wpilibj.Joystick;
-import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
@@ -14,16 +14,15 @@ public class Intake extends SubsystemBase {
     DigitalInput cubeBeam = new DigitalInput(0);
     DigitalInput coneBeam = new DigitalInput(1);
     private int counter = 0;
+    
     private AddressableLED led = new AddressableLED(4);
-    //private AddressableLED led2 = new AddressableLED(5);
+    private DigitalOutput intakeIndicator = new DigitalOutput(4);
 
     private AddressableLEDBuffer ledData = new AddressableLEDBuffer(13);
 
-    //private AddressableLEDBuffer ledData2 = new AddressableLEDBuffer(13);
     public boolean intakeCube = false;
 
     public Intake() {
-
         intake = new CANSparkMax(33, MotorType.kBrushed);
         intake.restoreFactoryDefaults();
         intake.setInverted(true);
@@ -31,14 +30,17 @@ public class Intake extends SubsystemBase {
         showLights(255, 0, 0);
     }
 
+    public void turnOnIndicator() { intakeIndicator.set(true); }
 
-    public boolean cubeBeamBroken(){
-        return cubeBeam.get();
-    }
+    public void turnOffIndicator() { intakeIndicator.set(false); }
 
-    public boolean coneBeamBroken() {
-        return coneBeam.get();
-    }
+    public boolean cubeBeamBroken() { return cubeBeam.get(); }
+
+    public boolean coneBeamBroken() { return coneBeam.get(); }
+
+    public void setSpeed(double speed) { intake.set(speed); }
+    
+    public double getSpeed() { return intake.get(); }
 
     public void runIntake(Joystick joystick){
         if (joystick.getRawButton(XboxController.Button.kRightBumper.value)) {
@@ -53,24 +55,19 @@ public class Intake extends SubsystemBase {
             intake.set(0.7);
         } else if (joystick.getRawAxis(XboxController.Axis.kLeftTrigger.value) > 0.2) {
             intake.set(-0.7);
-        // } else if (coneBeamBroken() == true && !joystick.getRawButton(XboxController.Button.kLeftBumper.value) && !joystick.getRawButton(XboxController.Button.kRightBumper.value)){
-        //     pulseIntake(-.1);
-        // } else if (cubeBeamBroken() == true && !joystick.getRawButton(XboxController.Button.kLeftBumper.value) && !joystick.getRawButton(XboxController.Button.kRightBumper.value)){
-        //     pulseIntake(.1);
-
-        }else if((intakeCube == true && cubeBeamBroken() == true) && (!joystick.getRawButton(XboxController.Button.kLeftBumper.value) && !joystick.getRawButton(XboxController.Button.kRightBumper.value))){
-            pulseIntake(.1);
+        } else if ((intakeCube && cubeBeamBroken()) && (!joystick.getRawButton(XboxController.Button.kLeftBumper.value) && !joystick.getRawButton(XboxController.Button.kRightBumper.value))) {
+            pulseIntake(0.1);
             System.out.println("cubeBeam"+ intakeCube);
-
-        }else if((intakeCube == false && coneBeamBroken() == true) && (!joystick.getRawButton(XboxController.Button.kLeftBumper.value) && !joystick.getRawButton(XboxController.Button.kRightBumper.value))){
-            pulseIntake(-.1);
+        } else if ((!intakeCube && coneBeamBroken()) && (!joystick.getRawButton(XboxController.Button.kLeftBumper.value) && !joystick.getRawButton(XboxController.Button.kRightBumper.value))) {
+            pulseIntake(-0.1);
             System.out.println("coneBeam:" + intakeCube);
-        }
-
-        else {
+        } else {
             intake.set(0);
             showLights(255, 0, 0);
         }
+
+        // beam brake indicator
+        if (cubeBeamBroken() || coneBeamBroken()) { turnOnIndicator(); } else { turnOffIndicator(); }
     }
 
     public void pulseIntake(double speed){
@@ -78,46 +75,20 @@ public class Intake extends SubsystemBase {
         if(counter++ < 5000) { intake.set(speed); }
     }
 
-    public void setSpeed(double speed) {
-        intake.set(speed);
-        
-    }
-    
-
-    public double getSpeed() {
-        return intake.get();
-    }
-
-
     public void showLights(int r, int g, int b) {
-        
-        //led2.setLength(ledData.getLength());
         for (int i = 0; i < ledData.getLength(); i++) {
             ledData.setRGB(i, r, g, b);
             //ledData2.setRGB(i, r, g, b);
         }
         led.setData(ledData);
-        //led2.setData(ledData);
-
         led.start();
-        //led2.start();
-
     }
 
     public void stopLights() {
-
-        //led2.setLength(ledData.getLength());
         for (int i = 0; i < ledData.getLength(); i++) {
             ledData.setRGB(i, 0, 0, 0);
-            //ledData2.setRGB(i, 0, 0, 0);
         }
         led.setData(ledData);
-        //led2.setData(ledData);
-
         led.start();
-        //led2.start();
-
     }
-
-   
 }

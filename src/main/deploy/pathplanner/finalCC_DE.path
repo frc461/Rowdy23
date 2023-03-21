@@ -16,10 +16,7 @@
       "isLocked": false,
       "isStopPoint": false,
       "stopEvent": {
-        "names": [
-          "Event1",
-          "Move"
-        ],
+        "names": [],
         "executionBehavior": "sequential",
         "waitBehavior": "before",
         "waitTime": 5.0
