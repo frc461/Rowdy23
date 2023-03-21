@@ -11,8 +11,8 @@ import frc.robot.Constants;
 import frc.robot.subsystems.Wrist;
 
 public class TeleopWrist extends CommandBase {
-  private Wrist s_Wrist;
-  private DoubleSupplier motionSup;
+  private final Wrist s_Wrist;
+  private final DoubleSupplier motionSup;
 
   /** Creates a new TeleopWrist. */
   public TeleopWrist(Wrist s_Wrist, DoubleSupplier motionSup) {

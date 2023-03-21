@@ -8,9 +8,9 @@ import com.ctre.phoenix.sensors.SensorInitializationStrategy;
 import com.ctre.phoenix.sensors.SensorTimeBase;
 
 public final class CTREConfigs {
-    public TalonFXConfiguration swerveAngleFXConfig;
-    public TalonFXConfiguration swerveDriveFXConfig;
-    public CANCoderConfiguration swerveCanCoderConfig;
+    public final TalonFXConfiguration swerveAngleFXConfig;
+    public final TalonFXConfiguration swerveDriveFXConfig;
+    public final CANCoderConfiguration swerveCanCoderConfig;
 
     public CTREConfigs(){
         swerveAngleFXConfig = new TalonFXConfiguration();

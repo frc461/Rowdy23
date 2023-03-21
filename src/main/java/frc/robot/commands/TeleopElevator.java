@@ -7,8 +7,8 @@ import frc.robot.Constants;
 import frc.robot.subsystems.Elevator;
 
 public class TeleopElevator extends CommandBase {    
-    private Elevator s_Elevator;    
-    private DoubleSupplier motionSup;
+    private final Elevator s_Elevator;
+    private final DoubleSupplier motionSup;
 
 
     public TeleopElevator(Elevator s_Elevator, DoubleSupplier motionSup) {

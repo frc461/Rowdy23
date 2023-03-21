@@ -20,13 +20,12 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class Swerve extends SubsystemBase {
-    public SwerveDriveOdometry swerveOdometry;
-    public SwerveModule[] mSwerveMods;
-    public Pigeon2 gyro;
+    public final SwerveDriveOdometry swerveOdometry;
+    public final SwerveModule[] mSwerveMods;
+    public final Pigeon2 gyro;
 
     public Swerve() {
-        
-        Subsystems.initSubsystems();
+
         gyro = new Pigeon2(Constants.Swerve.pigeonID);
         gyro.configFactoryDefault();
         zeroGyro();
@@ -142,9 +141,9 @@ public class Swerve extends SubsystemBase {
         // SwerveModule.setAngle(new SwerveModuleState(0.0, Rotation2d.fromDegrees(45+90+90+90)));
     // }
 
-    public void autoBalance(){
-        double target = 0;
-        System.out.println("Autobalance Start");
+    public void autoBalance() {
+        double target;
+        System.out.println("balance Start");
         Timer timer = new Timer();
         timer.reset();
         timer.start();
@@ -152,7 +151,7 @@ public class Swerve extends SubsystemBase {
         PIDController balanceController = new PIDController(.033,0.01 ,0.00000000000001);
         balanceController.setTolerance(2.5);
 
-        while(timer.get() < 8){
+        while(timer.get() < 8) {
             target = balanceController.calculate(gyro.getPitch(), Constants.gyroOffset);
             drive(new Translation2d(-1*target, 0), 0, false, true);        
         } 

@@ -9,8 +9,8 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Intake;
 
 public class TeleopIntake extends CommandBase {
-  private Intake s_Intake;
-  private Joystick operator;
+  private final Intake s_Intake;
+  private final Joystick operator;
  // private DoubleSupplier vec;
   /** Creates a new TeleopRoller. */
   public TeleopIntake(Intake s_Intake, Joystick operator) {

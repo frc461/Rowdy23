@@ -10,12 +10,11 @@ import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class Elevator extends SubsystemBase{
-    private CANSparkMax elevator;
-    private PIDController pidController = new PIDController(Constants.ELEVATOR_P, Constants.ELEVATOR_I, Constants.ELEVATOR_D);
-    private RelativeEncoder m_encoder;
-    double position = 0;
+    private final CANSparkMax elevator;
+    private final PIDController pidController = new PIDController(Constants.ELEVATOR_P, Constants.ELEVATOR_I, Constants.ELEVATOR_D);
+    private final RelativeEncoder m_encoder;
     double target = 0;
-    DigitalInput elevatorSwitch = new DigitalInput(3);
+    final DigitalInput elevatorSwitch = new DigitalInput(3);
 
     public Elevator() {
         elevator = new CANSparkMax(31, MotorType.kBrushless);
@@ -32,12 +31,6 @@ public class Elevator extends SubsystemBase{
 
     public double getTarget() {
         return target;
-    }
-    
-    //goto a preset
-
-    public void setElevatorPreset(double target){
-        elevator.set(pidController.calculate(m_encoder.getPosition(), target));
     }
 
     public void setHeight(double height) {

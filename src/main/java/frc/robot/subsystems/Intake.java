@@ -10,15 +10,15 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class Intake extends SubsystemBase {
-    private CANSparkMax intake;
-    DigitalInput cubeBeam = new DigitalInput(0);
-    DigitalInput coneBeam = new DigitalInput(1);
+    private final CANSparkMax intake;
+    final DigitalInput cubeBeam = new DigitalInput(0);
+    final DigitalInput coneBeam = new DigitalInput(1);
     private int counter = 0;
     
-    private AddressableLED led = new AddressableLED(4);
-    private DigitalOutput intakeIndicator = new DigitalOutput(4);
+    private final AddressableLED led = new AddressableLED(4);
+    private final DigitalOutput intakeIndicator = new DigitalOutput(4);
 
-    private AddressableLEDBuffer ledData = new AddressableLEDBuffer(13);
+    private final AddressableLEDBuffer ledData = new AddressableLEDBuffer(13);
 
     public boolean intakeCube = false;
 
@@ -45,16 +45,16 @@ public class Intake extends SubsystemBase {
     public void runIntake(Joystick joystick){
         if (joystick.getRawButton(XboxController.Button.kRightBumper.value)) {
             showLights(255, 0, 255);
-            intake.set(-1);
+            setSpeed(-1);
             intakeCube = false;
         } else if (joystick.getRawButton(XboxController.Button.kLeftBumper.value)) {
-            intake.set(0.7);
+            setSpeed(0.7);
             showLights(255, 255, 0);
             intakeCube = true;
         } else if (joystick.getRawAxis(XboxController.Axis.kRightTrigger.value) > 0.2) {
-            intake.set(0.7);
+            setSpeed(0.7);
         } else if (joystick.getRawAxis(XboxController.Axis.kLeftTrigger.value) > 0.2) {
-            intake.set(-0.7);
+            setSpeed(-0.7);
         } else if ((intakeCube && cubeBeamBroken()) && (!joystick.getRawButton(XboxController.Button.kLeftBumper.value) && !joystick.getRawButton(XboxController.Button.kRightBumper.value))) {
             pulseIntake(0.1);
             System.out.println("cubeBeam"+ intakeCube);
@@ -62,7 +62,7 @@ public class Intake extends SubsystemBase {
             pulseIntake(-0.1);
             System.out.println("coneBeam:" + intakeCube);
         } else {
-            intake.set(0);
+            setSpeed(0);
             showLights(255, 0, 0);
         }
 
@@ -70,25 +70,21 @@ public class Intake extends SubsystemBase {
         if (cubeBeamBroken() || coneBeamBroken()) { turnOnIndicator(); } else { turnOffIndicator(); }
     }
 
-    public void pulseIntake(double speed){
+    public void pulseIntake(double speed) {
         if(counter > 10000) { counter = 0; }
         if(counter++ < 5000) { intake.set(speed); }
     }
 
     public void showLights(int r, int g, int b) {
-        for (int i = 0; i < ledData.getLength(); i++) {
-            ledData.setRGB(i, r, g, b);
-            //ledData2.setRGB(i, r, g, b);
-        }
+        for (int i = 0; i < ledData.getLength(); i++) { ledData.setRGB(i, r, g, b); }
         led.setData(ledData);
         led.start();
     }
 
-    public void stopLights() {
-        for (int i = 0; i < ledData.getLength(); i++) {
-            ledData.setRGB(i, 0, 0, 0);
-        }
-        led.setData(ledData);
-        led.start();
-    }
+    // do not delete just in case we need this again
+//    public void stopLights() {
+//        for (int i = 0; i < ledData.getLength(); i++) { ledData.setRGB(i, 0, 0, 0); }
+//        led.setData(ledData);
+//        led.start();
+//    }
 }

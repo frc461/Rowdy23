@@ -22,22 +22,22 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import com.revrobotics.RelativeEncoder;
 
 public class SwerveModule {
-    public int moduleNumber;
-    private Rotation2d angleOffset;
+    public final int moduleNumber;
+    private final Rotation2d angleOffset;
     private Rotation2d lastAngle;
 
-    private CANSparkMax mAngleMotor;
-    private CANSparkMax mDriveMotor;
+    private final CANSparkMax mAngleMotor;
+    private final CANSparkMax mDriveMotor;
 
 
-    private RelativeEncoder driveEncoder;
-    private RelativeEncoder integratedAngleEncoder;
-    private CANCoder angleEncoder;
+    private final RelativeEncoder driveEncoder;
+    private final RelativeEncoder integratedAngleEncoder;
+    private final CANCoder angleEncoder;
 
-    private SparkMaxPIDController driveController;
-    private SparkMaxPIDController angleController;
+    private final SparkMaxPIDController driveController;
+    private final SparkMaxPIDController angleController;
 
-    private SimpleMotorFeedforward feedforward = new SimpleMotorFeedforward(Constants.Swerve.driveKS, Constants.Swerve.driveKV, Constants.Swerve.driveKA);
+    private final SimpleMotorFeedforward feedforward = new SimpleMotorFeedforward(Constants.Swerve.driveKS, Constants.Swerve.driveKV, Constants.Swerve.driveKA);
 
     public SwerveModule(int moduleNumber, SwerveModuleConstants moduleConstants){
         this.moduleNumber = moduleNumber;
@@ -85,7 +85,7 @@ public class SwerveModule {
     }
 
     public void setAngle(SwerveModuleState desiredState){
-        Rotation2d angle = (Math.abs(desiredState.speedMetersPerSecond) <= (Constants.Swerve.maxSpeed * 0.01)) ? lastAngle : desiredState.angle; //Prevent rotating module if speed is less then 1%. Prevents Jittering.
+        Rotation2d angle = (Math.abs(desiredState.speedMetersPerSecond) <= (Constants.Swerve.maxSpeed * 0.01)) ? lastAngle : desiredState.angle; //Prevent rotating module if speed is less than 1%. Prevents Jittering.
         angleController.setReference(angle.getDegrees(), ControlType.kPosition);
         lastAngle = angle;
     }
