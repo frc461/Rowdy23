@@ -39,16 +39,18 @@ public class AutoIntake extends CommandBase {
         Timer timer = new Timer();
         timer.reset();
         timer.start();
-        if (timer.get() > time) { s_Intake.setSpeed(0); }
-        if (!cone && in || cone && !in && !(s_Intake.coneBeamBroken() || s_Intake.cubeBeamBroken())) {
-            s_Intake.setSpeed(0.7);
-        } else if (!(s_Intake.coneBeamBroken() || s_Intake.cubeBeamBroken())) {
-            s_Intake.setSpeed(-0.7);
-        } else if (!cone) {
-            s_Intake.pulseIntake(0.1);
-        } else {
-            s_Intake.pulseIntake(-0.1);
+        while (timer.get() < time) {
+            if (!cone && in || cone && !in && !(s_Intake.coneBeamBroken() || s_Intake.cubeBeamBroken())) {
+                s_Intake.setSpeed(0.7);
+            } else if (!(s_Intake.coneBeamBroken() || s_Intake.cubeBeamBroken())) {
+                s_Intake.setSpeed(-0.7);
+            } else if (!cone) {
+                s_Intake.pulseIntake(0.1);
+            } else {
+                s_Intake.pulseIntake(-0.1);
+            }
         }
+        s_Intake.setSpeed(0);
     }
 
     // Called once the command ends or is interrupted.
