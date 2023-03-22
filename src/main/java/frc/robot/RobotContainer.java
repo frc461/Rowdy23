@@ -229,7 +229,9 @@ public class RobotContainer {
         pPlan = "1 cycle";
       } else if (autoSelect.equals("center")){
         pPlan = "GrabConeMobility";
-      } else if (autoSelect.equals("twogamep")){
+      } else if (autoSelect.equals("scoremobilitycollect")){
+        pPlan = "scoremobilitycollect";
+      }else if (autoSelect.equals("twogamep")){
         pPlan = "TwoGameP";
       } else if (autoSelect.equals("collectbalanceaud")){
         pPlan = "collectbalanceaud";
@@ -278,11 +280,15 @@ public class RobotContainer {
       List<PathPlannerTrajectory> scoreMobilityEngagePickup = PathPlanner.loadPathGroup("scoremobilityengagepickup",
       new PathConstraints(1.5, 1.5)
       );
+
+      List<PathPlannerTrajectory> scoremobilitycollect = PathPlanner.loadPathGroup("scoremobilitycollect",
+      new PathConstraints(1, 1)
+      );
       
       // Run a command when markers are passed. If you add a "balance" marker in Path Planner, this will cause the robot to run s_Swerve.autoBalance()
       HashMap<String, Command> eventMap = new HashMap<>();
       
-      eventMap.put("intakeOff", new AutoIntakeCommand(s_Intake, 0, false)); // usually used after pickup cone/cube
+      eventMap.put("intakeOff", new AutoIntakeCommand(s_Intake, 0)); // usually used after pickup cone/cube
       eventMap.put("balance", new InstantCommand(() -> s_Swerve.autoBalance())); // balance on charge station
       eventMap.put("elevatorUp", new InstantCommand(() -> s_Elevator.setHeight(Constants.elevatorHighScore)));
 
@@ -299,7 +305,7 @@ public class RobotContainer {
         Commands.sequence(
           new InstantCommand(() -> s_Elevator.setHeight(Constants.elevatorConePickup)),
           new InstantCommand(() -> s_Wrist.setRotation(Constants.wristConePickup)),
-          new AutoIntakeCommand(s_Intake, 1, true)
+          new AutoIntakeCommand(s_Intake, 1)
         )
       );
 
@@ -308,7 +314,7 @@ public class RobotContainer {
         Commands.sequence(
           new InstantCommand(() -> s_Elevator.setHeight(Constants.elevatorBot)),
           new InstantCommand(() -> s_Wrist.setRotation(Constants.wristCubePickup)),
-          new AutoIntakeCommand(s_Intake, -1, true)
+          new AutoIntakeCommand(s_Intake, -1)
         )
       );
 
@@ -318,7 +324,7 @@ public class RobotContainer {
           new InstantCommand(() -> s_Elevator.setHeight(Constants.elevatorHighScore)),
           new InstantCommand(() -> s_Wrist.setRotation(Constants.wristHighConeScore)),
           new WaitCommand(1.2),
-          new AutoIntakeCommand(s_Intake, -1, true),
+          new AutoIntakeCommand(s_Intake, -1),
           new WaitCommand(0.5),
           new InstantCommand(() -> s_Elevator.setHeight(Constants.elevatorBot)),
           new InstantCommand(() -> s_Wrist.setRotation(Constants.WRIST_UPPER_LIMIT))
@@ -331,7 +337,7 @@ public class RobotContainer {
           new InstantCommand(() -> s_Elevator.setHeight(Constants.elevatorHighScore)),
           new InstantCommand(() -> s_Wrist.setRotation(Constants.wristHighCubeScore)),
           new WaitCommand(1.2), //TODO could be slower
-          new AutoIntakeCommand(s_Intake, 1, true),
+          new AutoIntakeCommand(s_Intake, 1),
           new WaitCommand(0.5),
           new InstantCommand(() -> s_Elevator.setHeight(Constants.elevatorBot)),
           new InstantCommand(() -> s_Wrist.setRotation(Constants.WRIST_UPPER_LIMIT))
@@ -377,6 +383,8 @@ public class RobotContainer {
         autoCode = swerveControllerCommand.fullAuto(scoreMobilityEngage.get(0));
       } else if (pPlan == "scoremobilityengagepickup") {
         autoCode = swerveControllerCommand.fullAuto(scoreMobilityEngagePickup.get(0));
+      } else if (pPlan == "scoremobilitycollect"){
+        autoCode = swerveControllerCommand.fullAuto(scoremobilitycollect.get(0));
       } else {
         autoCode = new PrintCommand(pPlan);
       }

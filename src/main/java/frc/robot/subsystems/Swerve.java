@@ -149,10 +149,11 @@ public class Swerve extends SubsystemBase {
         timer.reset();
         timer.start();
 
-        PIDController balanceController = new PIDController(.033,0.01 ,0.00000000000001);
-        balanceController.setTolerance(2.5);
-
         while(timer.get() < 8){
+
+            PIDController balanceController = new PIDController(.033,0.01 ,0.00000000000001);
+            balanceController.setTolerance(2.5);
+
             target = balanceController.calculate(gyro.getPitch(), Constants.gyroOffset);
             drive(new Translation2d(-1*target, 0), 0, false, true);        
         } 

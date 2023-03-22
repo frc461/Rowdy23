@@ -12,13 +12,11 @@ public class AutoIntakeCommand extends CommandBase {
 
   private Intake s_Intake;
   private final double speed;
-  private boolean intakeOn;
 
-  public AutoIntakeCommand(Intake s_Intake, double speed, boolean intakeOn) {
+  public AutoIntakeCommand(Intake s_Intake, double speed) {
     // Use addRequirements() here to declare subsystem dependencies.
     this.s_Intake = s_Intake;
     this.speed = speed;
-    this.intakeOn = intakeOn;
     addRequirements(s_Intake);
   }
 
@@ -29,11 +27,7 @@ public class AutoIntakeCommand extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if (intakeOn == true) {
-      s_Intake.setSpeed(speed);
-    } else {
-      s_Intake.setSpeed(0);
-    }
+   s_Intake.setSpeed(speed);
   }
 
   // Called once the command ends or is interrupted.

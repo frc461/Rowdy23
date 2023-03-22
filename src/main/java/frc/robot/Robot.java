@@ -33,6 +33,7 @@ public class Robot extends TimedRobot {
   private static final String kCollectBalanceScore = "collectbalancescore";
   private static final String kScoreMobilityEngage = "scoremobilityengage";
   private static final String kScoremobilityengagepickup = "scoremobilityengagepickup";
+  private static final String kScoremobilitycollect = "scoremobilitycollect";
 
   private final SendableChooser<String> m_chooser = new SendableChooser<>();
 
@@ -51,6 +52,7 @@ public class Robot extends TimedRobot {
     m_chooser.addOption("Collect And Balance Scoring Table Side", kCollectBalanceScore);
     m_chooser.addOption("Score Mobility Engage", kScoreMobilityEngage);
     m_chooser.addOption("score mobility engage pickup", kScoremobilityengagepickup);
+    m_chooser.addOption("Side score mobility collect", kScoremobilitycollect);
     
     SmartDashboard.putData("Auto Choices", m_chooser);
 
