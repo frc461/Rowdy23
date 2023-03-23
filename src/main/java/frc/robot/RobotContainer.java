@@ -243,6 +243,8 @@ public class RobotContainer {
         pPlan = "scoremobilityengage";
       } else if (autoSelect.equals("scoremobilityengagepickup")) {
         pPlan = "scoremobilityengagepickup";
+      } else if (autoSelect.equals("scoremobilitycollectcablecarrier")){
+        pPlan = "scoremobilitycollectcablecarrier";
       }
       
 
@@ -284,6 +286,10 @@ public class RobotContainer {
       );
 
       List<PathPlannerTrajectory> scoremobilitycollect = PathPlanner.loadPathGroup("scoremobilitycollect",
+      new PathConstraints(2, 2)
+      );
+
+      List<PathPlannerTrajectory> scoremobilitycollectcablecarrier = PathPlanner.loadPathGroup("scoremobilitycollectcablecarrier",
       new PathConstraints(2, 2)
       );
 
@@ -392,6 +398,8 @@ public class RobotContainer {
         autoCode = swerveControllerCommand.fullAuto(scoreMobilityEngagePickup.get(0));
       } else if (pPlan == "scoremobilitycollect"){
         autoCode = swerveControllerCommand.fullAuto(scoremobilitycollect.get(0));
+      } else if (pPlan == "scoremobilitycollectcablecarrier"){
+        autoCode = swerveControllerCommand.fullAuto(scoremobilitycollectcablecarrier.get(0)); 
       } else {
         autoCode = new PrintCommand(pPlan);
       }

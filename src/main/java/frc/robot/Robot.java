@@ -34,6 +34,8 @@ public class Robot extends TimedRobot {
   private static final String kScoreMobilityEngage = "scoremobilityengage";
   private static final String kScoremobilityengagepickup = "scoremobilityengagepickup";
   private static final String kScoremobilitycollect = "scoremobilitycollect";
+  private static final String kScoremobilitycollectcablecarrier = "scoremobilitycollectcablecarrier";
+
 
   private final SendableChooser<String> m_chooser = new SendableChooser<>();
 
@@ -53,6 +55,7 @@ public class Robot extends TimedRobot {
     m_chooser.addOption("Score Mobility Engage", kScoreMobilityEngage);
     m_chooser.addOption("score mobility engage pickup", kScoremobilityengagepickup);
     m_chooser.addOption("Side score mobility collect", kScoremobilitycollect);
+    m_chooser.addOption("cable carrier side score mobility collect", kScoremobilitycollectcablecarrier);
     
     SmartDashboard.putData("Auto Choices", m_chooser);
 
@@ -62,7 +65,7 @@ public class Robot extends TimedRobot {
     // autonomous chooser on the dashboard.
     m_robotContainer = new RobotContainer();
     PathPlannerServer.startServer(5811);
-    
+
     
   }
 
