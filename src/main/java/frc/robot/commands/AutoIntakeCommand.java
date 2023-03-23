@@ -12,11 +12,13 @@ public class AutoIntakeCommand extends CommandBase {
 
   private Intake s_Intake;
   private final double speed;
+  private final boolean cone;
 
-  public AutoIntakeCommand(Intake s_Intake, double speed) {
+  public AutoIntakeCommand(Intake s_Intake, double speed, boolean cone) {
     // Use addRequirements() here to declare subsystem dependencies.
     this.s_Intake = s_Intake;
     this.speed = speed;
+    this.cone = cone;
     addRequirements(s_Intake);
   }
 
@@ -27,7 +29,7 @@ public class AutoIntakeCommand extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-   s_Intake.setSpeed(speed);
+    s_Intake.setSpeed(speed); 
   }
 
   // Called once the command ends or is interrupted.
@@ -40,13 +42,15 @@ public class AutoIntakeCommand extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    boolean i_status = false;
-    if (s_Intake.cubeBeamBroken() == false) {
-      i_status = true;
+    if (cone) {
+      if (speed < 0) {
+        return s_Intake.coneBeamBroken();
+      }
+      return !s_Intake.coneBeamBroken();
     }
-    else {
-      i_status = false;
-  }
-    return i_status;
+    if (speed > 0) {
+      return s_Intake.cubeBeamBroken();
+    }
+    return !s_Intake.cubeBeamBroken();
   }
 }
