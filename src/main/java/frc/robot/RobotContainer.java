@@ -282,10 +282,22 @@ public class RobotContainer {
             new PathConstraints(1.5, 1.5)
         );
 
+        List<PathPlannerTrajectory> scoreMobilityCollect = PathPlanner.loadPathGroup("scoremobilitycollect",
+                new PathConstraints(2, 2)
+        );
+
+        List<PathPlannerTrajectory> scoreMobilityCollectCableCarrier = PathPlanner.loadPathGroup("scoremobilitycollectcablecarrier",
+                new PathConstraints(2, 2)
+        );
+
+        List<PathPlannerTrajectory> rotate = PathPlanner.loadPathGroup("New Path",
+                new PathConstraints(2, 1)
+        );
+
         // Run a command when markers are passed. If you add a "balance" marker in Path Planner, this will cause the robot to run s_Swerve.autoBalance()
         HashMap<String, Command> eventMap = new HashMap<>();
 
-        eventMap.put("intakeOff", new AutoIntake(s_Intake, 0, true, true)); // usually used after pickup cone/cube
+        eventMap.put("intakeOff", new AutoIntake(s_Intake, true)); // usually used after pickup cone/cube
         eventMap.put("balance", new InstantCommand(s_Swerve::autoBalance)); // balance on charge station
         eventMap.put("elevatorUp", new InstantCommand(() -> s_Elevator.setHeight(Constants.elevatorHighScore)));
 
@@ -302,7 +314,7 @@ public class RobotContainer {
             Commands.sequence(
                 new InstantCommand(() -> s_Elevator.setHeight(Constants.elevatorConePickup)),
                 new InstantCommand(() -> s_Wrist.setRotation(Constants.wristConePickup)),
-                new AutoIntake(s_Intake, 1, true, true)
+                new AutoIntake(s_Intake, true, true)
             )
         );
 
@@ -311,7 +323,7 @@ public class RobotContainer {
             Commands.sequence(
                 new InstantCommand(() -> s_Elevator.setHeight(Constants.elevatorBot)),
                 new InstantCommand(() -> s_Wrist.setRotation(Constants.wristCubePickup)),
-                new AutoIntake(s_Intake, 1, false, true)
+                new AutoIntake(s_Intake, false, true)
             )
         );
 
@@ -321,7 +333,7 @@ public class RobotContainer {
                 new InstantCommand(() -> s_Elevator.setHeight(Constants.elevatorHighScore)),
                 new InstantCommand(() -> s_Wrist.setRotation(Constants.wristHighConeScore)),
                 new WaitCommand(1.2),
-                new AutoIntake(s_Intake, 1, true, false),
+                new AutoIntake(s_Intake, true, false),
                 new WaitCommand(0.5),
                 new InstantCommand(() -> s_Elevator.setHeight(Constants.elevatorBot)),
                 new InstantCommand(() -> s_Wrist.setRotation(Constants.WRIST_UPPER_LIMIT))
@@ -334,7 +346,7 @@ public class RobotContainer {
                 new InstantCommand(() -> s_Elevator.setHeight(Constants.elevatorHighScore)),
                 new InstantCommand(() -> s_Wrist.setRotation(Constants.wristHighCubeScore)),
                 new WaitCommand(1.2), //TODO could be slower
-                new AutoIntake(s_Intake, 1, false, false),
+                new AutoIntake(s_Intake, false, false),
                 new WaitCommand(0.5),
                 new InstantCommand(() -> s_Elevator.setHeight(Constants.elevatorBot)),
                 new InstantCommand(() -> s_Wrist.setRotation(Constants.WRIST_UPPER_LIMIT))
@@ -388,12 +400,17 @@ public class RobotContainer {
             case "scoremobilityengagepickup":
                 autoCode = swerveControllerCommand.fullAuto(scoreMobilityEngagePickup.get(0));
                 break;
+            case "scoremobilitycollect":
+                autoCode = swerveControllerCommand.fullAuto(scoreMobilityCollect.get(0));
+                break;
+            case "scoremobilitycollectcablecarrier":
+                autoCode = swerveControllerCommand.fullAuto(scoreMobilityCollectCableCarrier.get(0));
             default:
                 autoCode = new PrintCommand(pPlan);
                 break;
         }
 
-        new InstantCommand(() -> s_Swerve.resetOdometry(s_Swerve.getPose()));
+        new InstantCommand(() -> s_Swerve.resetOdometry(rotate.get(0).getInitialHolonomicPose()));
 
         return autoCode;
     }

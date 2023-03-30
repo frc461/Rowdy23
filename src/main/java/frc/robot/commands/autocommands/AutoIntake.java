@@ -14,16 +14,24 @@ public class AutoIntake extends CommandBase {
      */
 
     private final Intake s_Intake;
-    private final int time;
+    private final boolean stop;
     private final boolean cone;
     private final boolean in;
 
-    public AutoIntake(Intake s_Intake, int time, boolean cone, boolean in) {
+    public AutoIntake(Intake s_Intake, boolean cone, boolean in) {
         // Use addRequirements() here to declare subsystem dependencies.
         this.s_Intake = s_Intake;
-        this.time = time;
         this.cone = cone;
         this.in = in;
+        this.stop = false;
+        addRequirements(s_Intake);
+    }
+
+    public AutoIntake(Intake s_Intake, boolean stop) {
+        this.s_Intake = s_Intake;
+        this.cone = false;
+        this.in = false;
+        this.stop = true;
         addRequirements(s_Intake);
     }
 
@@ -36,10 +44,9 @@ public class AutoIntake extends CommandBase {
     // Called every time the scheduler runs while the command is scheduled.
     @Override
     public void execute() {
-        Timer timer = new Timer();
-        timer.reset();
-        timer.start();
-        while (timer.get() < time) {
+        if (stop) {
+            s_Intake.setSpeed(0);
+        } else {
             if (!cone && in || cone && !in && !(s_Intake.coneBeamBroken() || s_Intake.cubeBeamBroken())) {
                 s_Intake.setSpeed(0.7);
             } else if (!(s_Intake.coneBeamBroken() || s_Intake.cubeBeamBroken())) {
@@ -50,7 +57,6 @@ public class AutoIntake extends CommandBase {
                 s_Intake.pulseIntake(-0.1);
             }
         }
-        s_Intake.setSpeed(0);
     }
 
     // Called once the command ends or is interrupted.
@@ -62,5 +68,13 @@ public class AutoIntake extends CommandBase {
 
     // Returns true when the command should end.
     @Override
-    public boolean isFinished() { return !s_Intake.cubeBeamBroken(); }
+    public boolean isFinished() {
+        if (cone) {
+            if (in) { return s_Intake.coneBeamBroken(); }
+            return !s_Intake.coneBeamBroken();
+        } else {
+            if (in) { return s_Intake.cubeBeamBroken(); }
+            return !s_Intake.cubeBeamBroken();
+        }
+    }
 }
