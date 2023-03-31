@@ -26,7 +26,6 @@ public class Swerve extends SubsystemBase {
 
     public Swerve() {
         
-        Subsystems.initSubsystems();
         gyro = new Pigeon2(Constants.Swerve.pigeonID);
         gyro.configFactoryDefault();
         zeroGyro();
@@ -135,6 +134,14 @@ public class Swerve extends SubsystemBase {
         }
     }
 
+    public void rotateToDegree(double target){
+        PIDController balanceController = new PIDController(.033,0.01,0.00000000000001);
+
+        target = balanceController.calculate(gyro.getRoll(), Constants.gyroOffset);
+
+        drive(new Translation2d(0, 0), -.25*target, false, true);        
+    }
+
     // public void setXMode(){
         // Constants.Mod0.setAngle(new SwerveModuleState(0.0, Rotation2d.fromDegrees(45)));
         // .setAngle(new SwerveModuleState(0.0, Rotation2d.fromDegrees(45+90)));
@@ -152,11 +159,39 @@ public class Swerve extends SubsystemBase {
         while(timer.get() < 8){
 
             PIDController balanceController = new PIDController(.033,0.01 ,0.00000000000001);
-            balanceController.setTolerance(2.5);
+            balanceController.setTolerance(1.5); //was 2.5
 
             target = balanceController.calculate(gyro.getPitch(), Constants.gyroOffset);
+            System.out.println("Transation target: " + -1*target);
             drive(new Translation2d(-1*target, 0), 0, false, true);        
         } 
         System.out.println("stopped balancing");
+    }
+    
+    //worse version(?) that pauses to let the platform settle.
+    public void alternateAutoBalance(){
+        double target = 0;
+        System.out.println("Autobalance Start");
+        Timer timer = new Timer();
+        timer.reset();
+        timer.start();
+        Timer timer2 = new Timer();
+        timer2.reset();
+        timer2.start();
+        while(timer2.get() < 8){
+            while(timer.get() < 1){
+
+                PIDController balanceController = new PIDController(.033,0.01 ,0.00000000000001);
+                balanceController.setTolerance(1.5); //was 2.5
+
+                target = balanceController.calculate(gyro.getPitch(), Constants.gyroOffset);
+                System.out.println("Transation target: " + -1*target);
+                drive(new Translation2d(-1*target, 0), 0, false, true);        
+            } 
+            for(int i = 0; i < 7000; i++){
+                
+
+            }
+        }
     }
 }

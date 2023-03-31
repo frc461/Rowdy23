@@ -45,7 +45,7 @@ public final class Constants {
     public static final double wristMidCubeScore = 0.715;
     public static final double wristConePickup = 0.485;
     public static final double wristConePickup2 = 0.732;
-    public static final double wristCubePickup = 0.598;
+    public static final double wristCubePickup = 0.62; //was .598 (low) .648 )high)
 
     public static final class Swerve {
         public static final int pigeonID = 35;
@@ -137,7 +137,7 @@ public final class Constants {
             public static final int driveMotorID = 1;
             public static final int angleMotorID = 11;
             public static final int canCoderID = 21;
-            public static final Rotation2d angleOffset = Rotation2d.fromDegrees(127.3); //127.3 original value
+            public static final Rotation2d angleOffset = Rotation2d.fromDegrees(117.7); //127.3 original value
             public static final SwerveModuleConstants constants = 
                 new SwerveModuleConstants(driveMotorID, angleMotorID, canCoderID, angleOffset);
         }

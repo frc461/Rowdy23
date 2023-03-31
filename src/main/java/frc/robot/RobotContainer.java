@@ -10,7 +10,6 @@ import edu.wpi.first.wpilibj2.command.*;
 import com.pathplanner.lib.auto.PIDConstants;
 import com.pathplanner.lib.auto.SwerveAutoBuilder;
 
-import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
@@ -33,6 +32,7 @@ public class RobotContainer {
     private final Elevator s_Elevator = new Elevator();
     private final Intake s_Intake = new Intake();
     private final Wrist s_Wrist = new Wrist(s_Elevator.getEncoder());
+    private final Limelight s_Limelight = new Limelight();
 
     private String pPlan = null;
     public double intakeVec = 0;
@@ -212,6 +212,10 @@ public class RobotContainer {
         SmartDashboard.putNumber("yaw", s_Swerve.gyro.getYaw());
         SmartDashboard.putNumber("pitch", s_Swerve.gyro.getPitch());
         SmartDashboard.putNumber("roll", s_Swerve.gyro.getRoll());
+
+        SmartDashboard.putNumber("RX", s_Limelight.getRX());
+        SmartDashboard.putNumber("RY", s_Limelight.getRY());
+        SmartDashboard.putNumber("RZ", s_Limelight.getRZ());
     }
 
     /**
@@ -293,9 +297,6 @@ public class RobotContainer {
       new PathConstraints(2, 2)
       );
 
-      List<PathPlannerTrajectory> rotate = PathPlanner.loadPathGroup("New Path",
-      new PathConstraints(2, 1)
-      );
       
       // Run a command when markers are passed. If you add a "balance" marker in Path Planner, this will cause the robot to run s_Swerve.autoBalance()
       HashMap<String, Command> eventMap = new HashMap<>();
@@ -406,7 +407,7 @@ public class RobotContainer {
       //autoCode = swerveControllerCommand.fullAuto(rotate.get(0));
       
 
-      new InstantCommand(() -> s_Swerve.resetOdometry( rotate.get(0).getInitialHolonomicPose()));
+      //new InstantCommand(() -> s_Swerve.resetOdometry( rotate.get(0).getInitialHolonomicPose()));
 
     return autoCode;
   }
