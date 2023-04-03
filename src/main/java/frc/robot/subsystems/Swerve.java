@@ -135,9 +135,9 @@ public class Swerve extends SubsystemBase {
     }
 
     public void rotateToDegree(double target){
-        PIDController balanceController = new PIDController(.033,0.01,0.00000000000001);
-        target = balanceController.calculate(gyro.getRoll(), Constants.gyroOffset);
-        drive(new Translation2d(0, 0), -.25*target, false, true);
+        PIDController rotController = new PIDController(.5,0.0,0.05);
+        double rotate = rotController.calculate(gyro.getYaw(), target);
+        drive(new Translation2d(0, 0), -.25*rotate, false, true);
     }
 
     // public void setXMode(){
@@ -154,13 +154,41 @@ public class Swerve extends SubsystemBase {
         timer.reset();
         timer.start();
 
-        PIDController balanceController = new PIDController(.033,0.01 ,0.00000000000001);
-        balanceController.setTolerance(2.5);
-
         while(timer.get() < 8) {
+            PIDController balanceController = new PIDController(.03,0.01 ,0.00000000000001);
+            balanceController.setTolerance(2.5);
+
             target = balanceController.calculate(gyro.getPitch(), Constants.gyroOffset);
+            System.out.println("Translation target: " + -1*target);
             drive(new Translation2d(-1*target, 0), 0, false, true);        
         } 
         System.out.println("stopped balancing");
+    }
+    //worse version(?) that pauses to let the platform settle.
+    public void alternateAutoBalance(){
+        double target = 0;
+        System.out.println("Autobalance Start");
+        Timer timer = new Timer();
+        timer.reset();
+        timer.start();
+        Timer timer2 = new Timer();
+        timer2.reset();
+        timer2.start();
+        while(timer2.get() < 8){
+            while(timer.get() < 1){
+
+                PIDController balanceController = new PIDController(.033,0.01 ,0.00000000000001);
+                balanceController.setTolerance(1.5); //was 2.5
+
+                target = balanceController.calculate(gyro.getPitch(), Constants.gyroOffset);
+                System.out.println("Transation target: " + -1*target);
+                drive(new Translation2d(-1*target, 0), 0, false, true);
+            }
+            while(timer2.get() > .5){
+
+            }
+            timer2.reset();
+            timer2.start();
+        }
     }
 }

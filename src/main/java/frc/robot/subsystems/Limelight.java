@@ -13,22 +13,27 @@ public class Limelight extends SubsystemBase{
     }
 
     public double getRX(){
+        refreshValues();
         return botpose[0];
     }
 
     public double getRY(){
+        refreshValues();
         return botpose[1];
     }
 
     public double getRZ(){
+        refreshValues();
         return botpose[2];
     }
 
     public double getRot(){
+        refreshValues();
         return botpose[3];
     }
 
     public double getWhoKnowsWHat(){
+        refreshValues();
         return botpose[4];
     }
 }

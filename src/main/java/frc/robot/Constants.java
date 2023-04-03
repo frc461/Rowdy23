@@ -20,10 +20,10 @@ public final class Constants {
     public static final double ELEVATOR_I = 0.0;
     public static final double ELEVATOR_D = 0.002;//0.001;
     // public static final double ELEVATOR_FF = 0.0010000000474974513; // no usages
-    public static final double ELEVATOR_UPPER_LIMIT = 124;
+    public static final double ELEVATOR_UPPER_LIMIT = 130;
 
-    public static final double elevatorHighScore = 120.738;
-    public static final double elevatorMidScore = 79.193;
+    public static final double elevatorHighScore = 130;
+    public static final double elevatorMidScore = 79.336;
     public static final double elevatorConePickup = 6.52;
     public static final double elevatorBot = 0;
 
@@ -37,13 +37,13 @@ public final class Constants {
     public static final double WRIST_MID_LIMIT = 0.63;
     public static final double WRIST_UPPER_LIMIT = 0.86;
 
-    public static final double wristHighConeScore = 0.605;
-    public static final double wristHighCubeScore = 0.768;
+    public static final double wristHighConeScore = 0.57; // 0.605
+    public static final double wristHighCubeScore = 0.737; // 0.768
     public static final double wristMidConeScore = 0.607;
     public static final double wristMidCubeScore = 0.715;
-    public static final double wristConePickup = 0.485;
-    public static final double wristConePickup2 = 0.732;
-    public static final double wristCubePickup = 0.598;
+    public static final double wristConePickup = 0.468; // 0.485
+    public static final double wristConePickup2 = 0.8; // 0.732
+    public static final double wristCubePickup = 0.59; // 0.598
 
     public static final class Swerve {
         public static final int pigeonID = 35;

@@ -242,6 +242,8 @@ public class RobotContainer {
             case "scoremobilityengagepickup":
                 pPlan = "scoremobilityengagepickup";
                 break;
+            case "scoremobilitycollectcablecarrier":
+                pPlan = "scoremobilitycollectcablecarrier";
         }
 
 
