@@ -353,7 +353,7 @@ public class RobotContainer {
         Commands.sequence(
           new InstantCommand(() -> s_Elevator.setHeight(Constants.elevatorHighScore)),
           new InstantCommand(() -> s_Wrist.setRotation(Constants.wristHighCubeScore)),
-         // new WaitCommand(1.2), //TODO could be slower
+          new WaitCommand(1.2), //TODO could be slower
           new PrintCommand("setting intake"),
           new AutoIntakeCommand(s_Intake, -1, false),
           new WaitCommand(0.5),

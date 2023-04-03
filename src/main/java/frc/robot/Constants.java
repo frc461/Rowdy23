@@ -39,7 +39,7 @@ public final class Constants {
     public static final double WRIST_MID_LIMIT = 0.63;
     public static final double WRIST_UPPER_LIMIT = 0.86;
 
-    public static final double wristHighConeScore = 0.57; //.605
+    public static final double wristHighConeScore = 0.613; //.605
     public static final double wristHighCubeScore = 0.737;
     public static final double wristMidConeScore = 0.607;
     public static final double wristMidCubeScore = 0.715;
