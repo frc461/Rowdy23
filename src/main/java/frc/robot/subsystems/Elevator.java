@@ -41,6 +41,7 @@ public class Elevator extends SubsystemBase{
     }
 
     public void setHeight(double height) {
+        System.out.print("setting height");
         if (height < m_encoder.getPosition() && elevatorSwitchTriggered()) {
             m_encoder.setPosition(0);
             height = 0;
