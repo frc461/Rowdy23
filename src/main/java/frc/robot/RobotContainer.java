@@ -68,6 +68,7 @@ public class RobotContainer {
     private final JoystickButton zeroGyro = new JoystickButton(driver, XboxController.Button.kY.value);
     private final JoystickButton robotCentric = new JoystickButton(driver, XboxController.Button.kLeftBumper.value);
     private final JoystickButton driver_stowButton = new JoystickButton(driver, XboxController.Button.kRightBumper.value);
+    private final JoystickButton driver_AutoBalance = new JoystickButton(driver, XboxController.Button.kB.value);
 
     private final POVButton driver_stowButton2 = new POVButton(operator, 270);
     // private final JoystickButton xModeButton = new JoystickButton(driver, XboxController.Button.kX.value);
@@ -185,6 +186,8 @@ public class RobotContainer {
 
         driver_stowButton.onTrue(new InstantCommand(() -> s_Elevator.setHeight(Constants.elevatorBot)));
         driver_stowButton.onTrue(new InstantCommand(() -> s_Wrist.setRotation(Constants.WRIST_UPPER_LIMIT)));
+
+        driver_AutoBalance.onTrue(new InstantCommand(() -> s_Swerve.autoBalance()));
 
         zeroGyro.onTrue(new InstantCommand(s_Swerve::zeroGyro));
 
@@ -348,6 +351,7 @@ public class RobotContainer {
                 new InstantCommand(() -> s_Elevator.setHeight(Constants.elevatorHighScore)),
                 new InstantCommand(() -> s_Wrist.setRotation(Constants.wristHighCubeScore)),
                 new WaitCommand(1.2), //TODO could be slower
+                new PrintCommand("setting intake"),
                 new AutoIntake(s_Intake, false, false),
                 new WaitCommand(0.5),
                 new InstantCommand(() -> s_Elevator.setHeight(Constants.elevatorBot)),

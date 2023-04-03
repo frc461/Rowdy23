@@ -49,8 +49,8 @@ public class Robot extends TimedRobot {
         m_chooser.addOption("Collect And Balance Scoring Table Side", kCollectBalanceScore);
         m_chooser.addOption("Score Mobility Engage", kScoreMobilityEngage);
         m_chooser.addOption("Score Mobility Engage Pickup", kScoremobilityengagepickup);
-        m_chooser.addOption("Side score mobility collect", kScoremobilitycollect);
-        m_chooser.addOption("cable carrier side score mobility collect", kScoremobilitycollectcablecarrier);
+        m_chooser.addOption("No CC side score mobility collect", kScoremobilitycollect);
+        m_chooser.addOption("CC side score mobility collect", kScoremobilitycollectcablecarrier);
 
         SmartDashboard.putData("Auto Choices", m_chooser);
 
