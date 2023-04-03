@@ -322,7 +322,8 @@ public class RobotContainer {
         Commands.sequence(
           new InstantCommand(() -> s_Elevator.setHeight(Constants.elevatorConePickup)),
           new InstantCommand(() -> s_Wrist.setRotation(Constants.wristConePickup)),
-          new AutoIntakeCommand(s_Intake, -1, true)
+          new AutoIntakeCommand(s_Intake, -1, true),
+          new WaitCommand(3)
         )
       );
 
