@@ -135,7 +135,7 @@ public class Swerve extends SubsystemBase {
     }
 
     public void rotateToDegree(double target){
-        PIDController rotController = new PIDController(.1,0.0,0.001);
+        PIDController rotController = new PIDController(.1,0.02,0.001);
         double rotate = rotController.calculate(gyro.getYaw(), target);
         drive(new Translation2d(0, 0), -.25*rotate, false, true);
     }
