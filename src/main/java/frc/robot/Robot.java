@@ -9,6 +9,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import frc.robot.subsystems.Lights;
 
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
@@ -22,6 +23,8 @@ public class Robot extends TimedRobot {
   private Command m_autonomousCommand;
 
   private RobotContainer m_robotContainer;
+
+  //public Lights lights = new Lights();
 
   private static final String kDefaultAuto = "no auto";
   private static final String kAudienceAuto = "audience";
@@ -43,7 +46,6 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void robotInit() {
-   
     m_chooser.setDefaultOption("No Auto Selected", kDefaultAuto);
     m_chooser.addOption("CenterAuto", kCenterAuto);
     m_chooser.addOption("Audience Side (1 cycle)", kAudienceAuto);
@@ -66,6 +68,7 @@ public class Robot extends TimedRobot {
     
   }
 
+
   /**
    * This function is called every robot packet, no matter the mode. Use this for items like
    * diagnostics that you want ran during disabled, autonomous, teleoperated and test.
@@ -85,7 +88,9 @@ public class Robot extends TimedRobot {
 
   /** This function is called once each time the robot enters Disabled mode. */
   @Override
-  public void disabledInit() {}
+  public void disabledInit() {
+    //Lights.showLights("green");
+  }
 
   @Override
   public void disabledPeriodic() {}

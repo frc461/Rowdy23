@@ -135,11 +135,11 @@ public class Swerve extends SubsystemBase {
     }
 
     public void rotateToDegree(double target){
-        PIDController balanceController = new PIDController(.033,0.01,0.00000000000001);
+        PIDController rotController = new PIDController(.5,0.0,0.05);
 
-        target = balanceController.calculate(gyro.getRoll(), Constants.gyroOffset);
+        double rotate = rotController.calculate(gyro.getYaw(), target);
 
-        drive(new Translation2d(0, 0), -.25*target, false, true);        
+        drive(new Translation2d(0, 0), -.25*rotate, false, true);        
     }
 
     // public void setXMode(){
@@ -156,10 +156,10 @@ public class Swerve extends SubsystemBase {
         timer.reset();
         timer.start();
 
-        while(timer.get() < 8){
+        while(timer.get() < 15){
 
-            PIDController balanceController = new PIDController(.033,0.01 ,0.00000000000001);
-            balanceController.setTolerance(1.5); //was 2.5
+            PIDController balanceController = new PIDController(.03,0.01 ,0.00000000000001); // p was .033
+            balanceController.setTolerance(2.5); //was 2.5
 
             target = balanceController.calculate(gyro.getPitch(), Constants.gyroOffset);
             System.out.println("Transation target: " + -1*target);
@@ -188,10 +188,11 @@ public class Swerve extends SubsystemBase {
                 System.out.println("Transation target: " + -1*target);
                 drive(new Translation2d(-1*target, 0), 0, false, true);        
             } 
-            for(int i = 0; i < 7000; i++){
-                
+            while(timer2.get() > .5){
 
             }
+            timer2.reset();
+            timer2.start();
         }
     }
 }

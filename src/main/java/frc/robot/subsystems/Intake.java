@@ -14,11 +14,12 @@ public class Intake extends SubsystemBase {
     DigitalInput cubeBeam = new DigitalInput(0);
     DigitalInput coneBeam = new DigitalInput(1);
     private int counter = 0;
+    public Lights lights = new Lights();
     
-    private AddressableLED led = new AddressableLED(4);
+    // private AddressableLED led = new AddressableLED(4);
     private DigitalOutput intakeIndicator = new DigitalOutput(4);
 
-    private AddressableLEDBuffer ledData = new AddressableLEDBuffer(13);
+    // private AddressableLEDBuffer ledData = new AddressableLEDBuffer(13);
 
     public boolean intakeCube = false;
 
@@ -26,8 +27,8 @@ public class Intake extends SubsystemBase {
         intake = new CANSparkMax(33, MotorType.kBrushed);
         intake.restoreFactoryDefaults();
         intake.setInverted(true);
-        led.setLength(ledData.getLength());
-        showLights(255, 0, 0);
+        // led.setLength(ledData.getLength());
+        lights.showLights("blue");
     }
 
     public void turnOnIndicator() { intakeIndicator.set(true); }
@@ -44,12 +45,12 @@ public class Intake extends SubsystemBase {
 
     public void runIntake(Joystick joystick){
         if (joystick.getRawButton(XboxController.Button.kRightBumper.value)) {
-            showLights(255, 0, 255);
+            lights.showLights("yellow");
             intake.set(-1);
             intakeCube = false;
         } else if (joystick.getRawButton(XboxController.Button.kLeftBumper.value)) {
             intake.set(0.7);
-            showLights(255, 255, 0);
+            lights.showLights("purple");
             intakeCube = true;
         } else if (joystick.getRawAxis(XboxController.Axis.kRightTrigger.value) > 0.2) {
             intake.set(0.7);
@@ -63,7 +64,7 @@ public class Intake extends SubsystemBase {
             System.out.println("coneBeam:" + intakeCube);
         } else {
             intake.set(0);
-            showLights(255, 0, 0);
+            lights.showLights("red");
         }
 
         // beam brake indicator
@@ -75,20 +76,20 @@ public class Intake extends SubsystemBase {
         if(counter++ < 5000) { intake.set(speed); }
     }
 
-    public void showLights(int r, int g, int b) {
-        for (int i = 0; i < ledData.getLength(); i++) {
-            ledData.setRGB(i, r, g, b);
-            //ledData2.setRGB(i, r, g, b);
-        }
-        led.setData(ledData);
-        led.start();
-    }
+    // public void showLights(int r, int g, int b) {
+    //     for (int i = 0; i < ledData.getLength(); i++) {
+    //         ledData.setRGB(i, r, g, b);
+    //         //ledData2.setRGB(i, r, g, b);
+    //     }
+    //     led.setData(ledData);
+    //     led.start();
+    // }
 
-    public void stopLights() {
-        for (int i = 0; i < ledData.getLength(); i++) {
-            ledData.setRGB(i, 0, 0, 0);
-        }
-        led.setData(ledData);
-        led.start();
-    }
+    // public void stopLights() {
+    //     for (int i = 0; i < ledData.getLength(); i++) {
+    //         ledData.setRGB(i, 0, 0, 0);
+    //     }
+    //     led.setData(ledData);
+    //     led.start();
+    // }
 }

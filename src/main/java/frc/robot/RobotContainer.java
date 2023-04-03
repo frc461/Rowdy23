@@ -213,9 +213,9 @@ public class RobotContainer {
         SmartDashboard.putNumber("pitch", s_Swerve.gyro.getPitch());
         SmartDashboard.putNumber("roll", s_Swerve.gyro.getRoll());
 
-        SmartDashboard.putNumber("RX", s_Limelight.getRX());
-        SmartDashboard.putNumber("RY", s_Limelight.getRY());
-        SmartDashboard.putNumber("RZ", s_Limelight.getRZ());
+        // SmartDashboard.putNumber("RX", s_Limelight.getRX());
+        // SmartDashboard.putNumber("RY", s_Limelight.getRY());
+        // SmartDashboard.putNumber("RZ", s_Limelight.getRZ());
     }
 
     /**
@@ -302,8 +302,9 @@ public class RobotContainer {
       HashMap<String, Command> eventMap = new HashMap<>();
       
       eventMap.put("intakeOff", new AutoIntakeCommand(s_Intake,0, false)); // usually used after pickup cone/cube
-      eventMap.put("balance", new InstantCommand(() -> s_Swerve.autoBalance())); // balance on charge station
+      eventMap.put("balance", new InstantCommand(() -> s_Swerve.autoBalance())); //  was just autoBalance *** balance on charge station
       eventMap.put("elevatorUp", new InstantCommand(() -> s_Elevator.setHeight(Constants.elevatorHighScore)));
+      eventMap.put("autoCorrect", new InstantCommand(() -> s_Swerve.rotateToDegree(180)));
 
       eventMap.put(
         "stow",
@@ -400,7 +401,10 @@ public class RobotContainer {
       } else if (pPlan == "scoremobilitycollect"){
         autoCode = swerveControllerCommand.fullAuto(scoremobilitycollect.get(0));
       } else if (pPlan == "scoremobilitycollectcablecarrier"){
-        autoCode = swerveControllerCommand.fullAuto(scoremobilitycollectcablecarrier.get(0)); 
+        autoCode = Commands.sequence(
+          swerveControllerCommand.fullAuto(scoremobilitycollectcablecarrier.get(0)),
+          swerveControllerCommand.fullAuto(scoremobilitycollectcablecarrier.get(1))
+          ); 
       } else {
         autoCode = new PrintCommand(pPlan);
       }
