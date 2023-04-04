@@ -27,15 +27,15 @@
     {
       "anchorPoint": {
         "x": 5.388534524141649,
-        "y": 4.6
+        "y": 5.0
       },
       "prevControl": {
         "x": 4.33722225758269,
-        "y": 4.628160149997115
+        "y": 5.028160149997115
       },
       "nextControl": {
         "x": 6.853419591824204,
-        "y": 4.560762007115645
+        "y": 4.960762007115646
       },
       "holonomicAngle": 180.0,
       "isReversal": false,
@@ -44,7 +44,8 @@
       "isStopPoint": true,
       "stopEvent": {
         "names": [
-          "autoCorrect"
+          "autoCorrect",
+          "intakeCone"
         ],
         "executionBehavior": "parallel",
         "waitBehavior": "deadline",
