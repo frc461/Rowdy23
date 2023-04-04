@@ -308,6 +308,7 @@ public class RobotContainer {
         eventMap.put("intakeOff", new AutoIntake(s_Intake, true)); // usually used after pickup cone/cube
         eventMap.put("balance", new InstantCommand(s_Swerve::autoBalance)); // balance on charge station
         eventMap.put("elevatorUp", new InstantCommand(() -> s_Elevator.setHeight(Constants.elevatorHighScore)));
+        eventMap.put("autoCorrect", new InstantCommand(() -> s_Swerve.rotateToDegree(180)));
 
         eventMap.put(
             "stow",
@@ -408,13 +409,23 @@ public class RobotContainer {
                 autoCode = swerveControllerCommand.fullAuto(scoreMobilityEngage.get(0));
                 break;
             case "scoremobilityengagepickup":
-                autoCode = swerveControllerCommand.fullAuto(scoreMobilityEngagePickup.get(0));
+                autoCode = Commands.sequence(
+                    swerveControllerCommand.fullAuto(scoreMobilityEngagePickup.get(0)),
+                    swerveControllerCommand.fullAuto(scoreMobilityEngagePickup.get(1))
+                );
                 break;
             case "scoremobilitycollect":
-                autoCode = swerveControllerCommand.fullAuto(scoreMobilityCollect.get(0));
+                autoCode = Commands.sequence(
+                        swerveControllerCommand.fullAuto(scoreMobilityCollect.get(0)),
+                        swerveControllerCommand.fullAuto(scoreMobilityCollect.get(1))
+                );
                 break;
             case "scoremobilitycollectcablecarrier":
-                autoCode = swerveControllerCommand.fullAuto(scoreMobilityCollectCableCarrier.get(0));
+                autoCode = Commands.sequence(
+                        swerveControllerCommand.fullAuto(scoreMobilityCollectCableCarrier.get(0)),
+                        swerveControllerCommand.fullAuto(scoreMobilityCollectCableCarrier.get(1))
+                );
+                break;
             default:
                 autoCode = new PrintCommand(pPlan);
                 break;
