@@ -403,7 +403,10 @@ public class RobotContainer {
       } else if (pPlan == "scoremobilityengage") {
         autoCode = swerveControllerCommand.fullAuto(scoreMobilityEngage.get(0));
       } else if (pPlan == "scoremobilityengagepickup") {
-        autoCode = swerveControllerCommand.fullAuto(scoreMobilityEngagePickup.get(0));
+        autoCode = Commands.sequence(
+            swerveControllerCommand.fullAuto(scoreMobilityEngagePickup.get(0)),
+            swerveControllerCommand.fullAuto(scoreMobilityEngagePickup.get(1))                
+        );
       } else if (pPlan == "scoremobilitycollect"){
         autoCode = Commands.sequence(
           swerveControllerCommand.fullAuto(scoremobilitycollect.get(0)),
