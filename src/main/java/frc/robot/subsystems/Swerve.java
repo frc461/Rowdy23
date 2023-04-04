@@ -27,6 +27,7 @@ public class Swerve extends SubsystemBase {
     public Swerve() {
         
         gyro = new Pigeon2(Constants.Swerve.pigeonID);
+        
         gyro.configFactoryDefault();
         zeroGyro();
 
@@ -135,7 +136,8 @@ public class Swerve extends SubsystemBase {
     }
 
     public void rotateToDegree(double target){
-        PIDController rotController = new PIDController(.1,0.02,0.001);
+        PIDController rotController = new PIDController(.1,0.0008,0.001);
+        rotController.enableContinuousInput(-180, 180);
 
         double rotate = rotController.calculate(gyro.getYaw(), target);
 

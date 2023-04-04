@@ -230,6 +230,7 @@ public class RobotContainer {
     public Command getAutonomousCommand(String autoPicked) {
 
       Constants.gyroOffset = s_Swerve.gyro.getPitch();
+      s_Swerve.zeroGyro();
 
       // Code that defines which autonomous to run from the selection in Shuffle Board
       String autoSelect = autoPicked.toLowerCase();
