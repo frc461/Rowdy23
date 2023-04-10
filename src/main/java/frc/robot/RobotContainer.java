@@ -9,6 +9,7 @@ import com.pathplanner.lib.PathPlannerTrajectory;
 import edu.wpi.first.wpilibj2.command.*;
 import com.pathplanner.lib.auto.PIDConstants;
 import com.pathplanner.lib.auto.SwerveAutoBuilder;
+import com.pathplanner.lib.commands.PPSwerveControllerCommand;
 
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
@@ -263,44 +264,44 @@ public class RobotContainer {
 
       // This will load the path selected in Smart Dashboard and generate it with a max acceleration and velocity as defined for each section of path
 
-      List<PathPlannerTrajectory> oneCycle = PathPlanner.loadPathGroup("1 cycle",
-      new PathConstraints(2.5, 2),
-      new PathConstraints(1.5, 1),
-      new PathConstraints(0.5, 1),
-      new PathConstraints(1.5, 1),
-      new PathConstraints(1.5, 1),
-      new PathConstraints(2.5, 2),
-      new PathConstraints(1.5, 1)
-      );
+      // List<PathPlannerTrajectory> oneCycle = PathPlanner.loadPathGroup("1 cycle",
+      // new PathConstraints(2.5, 2),
+      // new PathConstraints(1.5, 1),
+      // new PathConstraints(0.5, 1),
+      // new PathConstraints(1.5, 1),
+      // new PathConstraints(1.5, 1),
+      // new PathConstraints(2.5, 2),
+      // new PathConstraints(1.5, 1)
+      // );
       
-      List<PathPlannerTrajectory> grabConeMobility = PathPlanner.loadPathGroup("GrabConeMobility",
-      new PathConstraints(1, 1)
-      );
+      // List<PathPlannerTrajectory> grabConeMobility = PathPlanner.loadPathGroup("GrabConeMobility",
+      // new PathConstraints(1, 1)
+      // );
 
-      List<PathPlannerTrajectory> foo = PathPlanner.loadPathGroup("TwoGameP",
-      new PathConstraints(2.5, 2)
-      );
+      // List<PathPlannerTrajectory> foo = PathPlanner.loadPathGroup("TwoGameP",
+      // new PathConstraints(2.5, 2)
+      // );
 
-      List<PathPlannerTrajectory> collectBalanceAudience = PathPlanner.loadPathGroup("collectbalanceaud",
-      new PathConstraints(2.5, 2)
-      );
+      // List<PathPlannerTrajectory> collectBalanceAudience = PathPlanner.loadPathGroup("collectbalanceaud",
+      // new PathConstraints(2.5, 2)
+      // );
 
-      List<PathPlannerTrajectory> scoreMobilityEngage = PathPlanner.loadPathGroup("scoremobilityengage",
-      new PathConstraints(1, 1)
-      );
+      // List<PathPlannerTrajectory> scoreMobilityEngage = PathPlanner.loadPathGroup("scoremobilityengage",
+      // new PathConstraints(1, 1)
+      // );
 
-      List<PathPlannerTrajectory> collectBalanceScore = PathPlanner.loadPathGroup("collectbalancescore",
-      new PathConstraints(1.3, 2),
-      new PathConstraints(2.5, 2)
-      );
+      // List<PathPlannerTrajectory> collectBalanceScore = PathPlanner.loadPathGroup("collectbalancescore",
+      // new PathConstraints(1.3, 2),
+      // new PathConstraints(2.5, 2)
+      // );
 
-      List<PathPlannerTrajectory> scoreMobilityEngagePickup = PathPlanner.loadPathGroup("scoremobilityengagepickup",
-      new PathConstraints(1.5, 1.5)
-      );
+      // List<PathPlannerTrajectory> scoreMobilityEngagePickup = PathPlanner.loadPathGroup("scoremobilityengagepickup",
+      // new PathConstraints(1.5, 1.5)
+      // );
 
-      List<PathPlannerTrajectory> scoremobilitycollect = PathPlanner.loadPathGroup("newscoremobilitycollect",
-      new PathConstraints(2, 2)
-      );
+      // List<PathPlannerTrajectory> scoremobilitycollect = PathPlanner.loadPathGroup("newscoremobilitycollect",
+      // new PathConstraints(2, 2)
+      // );
 
       List<PathPlannerTrajectory> scoremobilitycollectcablecarrier = PathPlanner.loadPathGroup("scoremobilitycollectcablecarrier",
       new PathConstraints(2, 2)
@@ -371,6 +372,7 @@ public class RobotContainer {
 
       // This defines swerve drive for autonomous path following
       // TODO: TUNE PID Constants
+
       SwerveAutoBuilder swerveControllerCommand = new SwerveAutoBuilder(
         s_Swerve::getPose,
         s_Swerve::resetOdometry,
@@ -382,42 +384,44 @@ public class RobotContainer {
         true,
         s_Swerve
       );
+
+      //PPSwerveControllerCommand swerveControllerCommand = new PPSwerveControllerCommand(null, null, null, null, null, null, null);
       //Pose2d initPose = null;
 
-      if (pPlan == "OneCycle") {
-        autoCode = Commands.sequence(
-          swerveControllerCommand.fullAuto(oneCycle.get(0)),
-          swerveControllerCommand.fullAuto(oneCycle.get(1)),
-          swerveControllerCommand.fullAuto(oneCycle.get(2)),
-          swerveControllerCommand.fullAuto(oneCycle.get(3)),
-          swerveControllerCommand.fullAuto(oneCycle.get(4)),
-          swerveControllerCommand.fullAuto(oneCycle.get(5)),
-          swerveControllerCommand.fullAuto(oneCycle.get(6))
-        );
-      } else if (pPlan == "GrabConeMobility") {
-        autoCode = swerveControllerCommand.fullAuto(grabConeMobility.get(0));
-      } else if (pPlan == "TwoGameP") {
-        autoCode = swerveControllerCommand.fullAuto(foo.get(0));
-      } else if (pPlan == "collectbalanceaud") {
-        autoCode = swerveControllerCommand.fullAuto(collectBalanceAudience.get(0));
-      } else if (pPlan == "collectbalancescore") {
-        autoCode = Commands.sequence(
-          swerveControllerCommand.fullAuto(collectBalanceScore.get(0)),
-          swerveControllerCommand.fullAuto(collectBalanceScore.get(1))
-        );
-      } else if (pPlan == "scoremobilityengage") {
-        autoCode = swerveControllerCommand.fullAuto(scoreMobilityEngage.get(0));
-      } else if (pPlan == "scoremobilityengagepickup") {
-        autoCode = Commands.sequence(
-            swerveControllerCommand.fullAuto(scoreMobilityEngagePickup.get(0)),
-            swerveControllerCommand.fullAuto(scoreMobilityEngagePickup.get(1))                
-        );
-      } else if (pPlan == "newscoremobilitycollect"){
-        autoCode = Commands.sequence(
-          swerveControllerCommand.fullAuto(scoremobilitycollect.get(0)),
-          swerveControllerCommand.fullAuto(scoremobilitycollect.get(1))
-        );
-      } else if (pPlan == "scoremobilitycollectcablecarrier"){
+      // if (pPlan == "OneCycle") {
+      //   autoCode = Commands.sequence(
+      //     swerveControllerCommand.fullAuto(oneCycle.get(0)),
+      //     swerveControllerCommand.fullAuto(oneCycle.get(1)),
+      //     swerveControllerCommand.fullAuto(oneCycle.get(2)),
+      //     swerveControllerCommand.fullAuto(oneCycle.get(3)),
+      //     swerveControllerCommand.fullAuto(oneCycle.get(4)),
+      //     swerveControllerCommand.fullAuto(oneCycle.get(5)),
+      //     swerveControllerCommand.fullAuto(oneCycle.get(6))
+      //   );
+      // } else if (pPlan == "GrabConeMobility") {
+      //   autoCode = swerveControllerCommand.fullAuto(grabConeMobility.get(0));
+      // } else if (pPlan == "TwoGameP") {
+      //   autoCode = swerveControllerCommand.fullAuto(foo.get(0));
+      // } else if (pPlan == "collectbalanceaud") {
+      //   autoCode = swerveControllerCommand.fullAuto(collectBalanceAudience.get(0));
+      // } else if (pPlan == "collectbalancescore") {
+      //   autoCode = Commands.sequence(
+      //     swerveControllerCommand.fullAuto(collectBalanceScore.get(0)),
+      //     swerveControllerCommand.fullAuto(collectBalanceScore.get(1))
+      //   );
+      // } else if (pPlan == "scoremobilityengage") {
+      //   autoCode = swerveControllerCommand.fullAuto(scoreMobilityEngage.get(0));
+      // } else if (pPlan == "scoremobilityengagepickup") {
+      //   autoCode = Commands.sequence(
+      //       swerveControllerCommand.fullAuto(scoreMobilityEngagePickup.get(0)),
+      //       swerveControllerCommand.fullAuto(scoreMobilityEngagePickup.get(1))                
+      //   );
+      // } else if (pPlan == "newscoremobilitycollect"){
+      //   autoCode = Commands.sequence(
+      //     swerveControllerCommand.fullAuto(scoremobilitycollect.get(0)),
+      //     swerveControllerCommand.fullAuto(scoremobilitycollect.get(1))
+      //   );
+      if (pPlan == "scoremobilitycollectcablecarrier"){
         // autoCode = Commands.sequence(
         //   swerveControllerCommand.fullAuto(scoremobilitycollectcablecarrier.get(0)),
         //   swerveControllerCommand.fullAuto(scoremobilitycollectcablecarrier.get(1))
