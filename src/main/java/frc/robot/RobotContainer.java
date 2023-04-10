@@ -224,7 +224,7 @@ public class RobotContainer {
         // Code that defines which autonomous to run from the selection in Shuffle Board
         String autoSelect = autoPicked.toLowerCase();
 
-        switch (autoSelect) {
+        switch (autoSelect) { // TODO: MORE PATHS
             case "audience":
                 pPlan = "1 cycle";
                 break;
@@ -366,6 +366,7 @@ public class RobotContainer {
 
         // This defines swerve drive for autonomous path following
         // TODO: TUNE PID Constants
+        // TODO: CLOSED LOOP
         SwerveAutoBuilder swerveControllerCommand = new SwerveAutoBuilder(
             s_Swerve::getPose,
             s_Swerve::resetOdometry,

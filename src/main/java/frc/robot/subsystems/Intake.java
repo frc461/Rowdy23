@@ -75,6 +75,7 @@ public class Intake extends SubsystemBase {
         if(counter++ < 5000) { intake.set(speed); }
     }
 
+    // TODO: NEW LIGHTS SYSTEM?
     public void showLights(int r, int g, int b) {
         for (int i = 0; i < ledData.getLength(); i++) { ledData.setRGB(i, r, g, b); }
         led.setData(ledData);
