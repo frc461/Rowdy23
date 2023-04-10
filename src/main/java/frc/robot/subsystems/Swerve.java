@@ -158,9 +158,9 @@ public class Swerve extends SubsystemBase {
         timer.reset();
         timer.start();
 
-        while(timer.get() < 15){
+        while(timer.get() < 8){
 
-            PIDController balanceController = new PIDController(.03,0.01 ,0.00000000000001); // p was .033
+            PIDController balanceController = new PIDController(SmartDashboard.getNumber("balanceP", 0.03),0.01 ,0.00000000000001); // p was .033
             balanceController.setTolerance(2.5); //was 2.5
 
             target = balanceController.calculate(gyro.getPitch(), Constants.gyroOffset);

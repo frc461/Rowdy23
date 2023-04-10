@@ -32,7 +32,6 @@ public class RobotContainer {
     private final Elevator s_Elevator = new Elevator();
     private final Intake s_Intake = new Intake();
     private final Wrist s_Wrist = new Wrist(s_Elevator.getEncoder());
-    private final Limelight s_Limelight = new Limelight();
 
     private String pPlan = null;
     public double intakeVec = 0;
@@ -82,7 +81,6 @@ public class RobotContainer {
 
     /** The container for the robot. Contains subsystems, OI devices, and commands. */
     public RobotContainer() {
-
       s_Swerve.setDefaultCommand(
         new TeleopSwerve(
           s_Swerve, 
@@ -116,6 +114,7 @@ public class RobotContainer {
         
       // Configure the button bindings
       configureButtonBindings();
+      
     }
 
     /**
@@ -124,6 +123,7 @@ public class RobotContainer {
      * edu.wpi.first.wpilibj.Joystick} or {@link XboxController}), and then passing it to a {@link
      * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
      */
+
     private void configureButtonBindings() {
         /* Driver Buttons (and op buttons) */
 
@@ -164,7 +164,7 @@ public class RobotContainer {
 
         w_preset_0.onTrue( // Preset to score high cube
           Commands.sequence(
-            new InstantCommand(() -> s_Elevator.setHeight(Constants.elevatorHighScore)),
+            new InstantCommand(() -> s_Elevator.setHeight(Constants.elevatorHighCubeScore)),
             new WaitCommand(.75),
             new InstantCommand(() -> s_Wrist.setRotation(Constants.wristHighCubeScore))
           )
@@ -194,7 +194,7 @@ public class RobotContainer {
         driver_stowButton.onTrue(new InstantCommand(() -> s_Elevator.setHeight(Constants.elevatorBot)));
         driver_stowButton.onTrue(new InstantCommand(() -> s_Wrist.setRotation(Constants.WRIST_UPPER_LIMIT)));
 
-        driver_AutoBalance.onTrue(new InstantCommand(() -> s_Swerve.autoBalance()));
+        //driver_AutoBalance.onTrue(new InstantCommand(() -> s_Swerve.autoBalance()));
         
         zeroGyro.onTrue(new InstantCommand(() -> s_Swerve.zeroGyro()));
 
@@ -203,6 +203,11 @@ public class RobotContainer {
     }
     
     public void printValues(){
+        SmartDashboard.putNumber("balanceP", 0.03);
+        // SmartDashboard.getNumber("balanceI", elevatorAxis);
+        // SmartDashboard.getNumber("balanceD", elevatorAxis);
+
+
         SmartDashboard.putBoolean("Pov pressed", e_presButton_0.getAsBoolean());
         SmartDashboard.putNumber("Elevator Position", s_Elevator.getEncoder().getPosition());
         SmartDashboard.putNumber("Elevator Target", s_Elevator.getTarget());
@@ -240,7 +245,7 @@ public class RobotContainer {
       } else if (autoSelect.equals("center")){
         pPlan = "GrabConeMobility";
       } else if (autoSelect.equals("scoremobilitycollect")){
-        pPlan = "scoremobilitycollect";
+        pPlan = "newscoremobilitycollect";
       }else if (autoSelect.equals("twogamep")){
         pPlan = "TwoGameP";
       } else if (autoSelect.equals("collectbalanceaud")){
@@ -293,7 +298,7 @@ public class RobotContainer {
       new PathConstraints(1.5, 1.5)
       );
 
-      List<PathPlannerTrajectory> scoremobilitycollect = PathPlanner.loadPathGroup("scoremobilitycollect",
+      List<PathPlannerTrajectory> scoremobilitycollect = PathPlanner.loadPathGroup("newscoremobilitycollect",
       new PathConstraints(2, 2)
       );
 
@@ -407,16 +412,18 @@ public class RobotContainer {
             swerveControllerCommand.fullAuto(scoreMobilityEngagePickup.get(0)),
             swerveControllerCommand.fullAuto(scoreMobilityEngagePickup.get(1))                
         );
-      } else if (pPlan == "scoremobilitycollect"){
+      } else if (pPlan == "newscoremobilitycollect"){
         autoCode = Commands.sequence(
           swerveControllerCommand.fullAuto(scoremobilitycollect.get(0)),
           swerveControllerCommand.fullAuto(scoremobilitycollect.get(1))
         );
       } else if (pPlan == "scoremobilitycollectcablecarrier"){
-        autoCode = Commands.sequence(
-          swerveControllerCommand.fullAuto(scoremobilitycollectcablecarrier.get(0)),
-          swerveControllerCommand.fullAuto(scoremobilitycollectcablecarrier.get(1))
-          ); 
+        // autoCode = Commands.sequence(
+        //   swerveControllerCommand.fullAuto(scoremobilitycollectcablecarrier.get(0)),
+        //   swerveControllerCommand.fullAuto(scoremobilitycollectcablecarrier.get(1))
+        //   ); 
+        autoCode = swerveControllerCommand.fullAuto(scoremobilitycollectcablecarrier.get(0));
+
       } else {
         autoCode = new PrintCommand(pPlan);
       }

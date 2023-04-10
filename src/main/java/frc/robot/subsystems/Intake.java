@@ -14,12 +14,12 @@ public class Intake extends SubsystemBase {
     DigitalInput cubeBeam = new DigitalInput(0);
     DigitalInput coneBeam = new DigitalInput(1);
     private int counter = 0;
-    //public Lights lights = new Lights();
+    // public Lights lights = new Lights();
     
-    private AddressableLED led = new AddressableLED(4);
-    private DigitalOutput intakeIndicator = new DigitalOutput(4);
+    private AddressableLED led = new AddressableLED(5);
+    private AddressableLEDBuffer ledData = new AddressableLEDBuffer(2);
 
-    private AddressableLEDBuffer ledData = new AddressableLEDBuffer(13);
+    private DigitalOutput intakeIndicator = new DigitalOutput(4);
 
     public boolean intakeCube = false;
 
@@ -32,6 +32,7 @@ public class Intake extends SubsystemBase {
         showLights(255, 0, 0);
         
     }
+    //3553 pepvlldrv
 
     public void turnOnIndicator() { intakeIndicator.set(true); }
 
@@ -57,7 +58,7 @@ public class Intake extends SubsystemBase {
             showLights(255, 255, 0);
             intakeCube = true;
         } else if (joystick.getRawAxis(XboxController.Axis.kRightTrigger.value) > 0.2) {
-            intake.set(0.7);
+            intake.set(0.65);
         } else if (joystick.getRawAxis(XboxController.Axis.kLeftTrigger.value) > 0.2) {
             intake.set(-0.7);
         } else if ((intakeCube && cubeBeamBroken()) && (!joystick.getRawButton(XboxController.Button.kLeftBumper.value) && !joystick.getRawButton(XboxController.Button.kRightBumper.value))) {
@@ -69,10 +70,10 @@ public class Intake extends SubsystemBase {
         } else {
             intake.set(0);
             //lights.showLights("red");
-            showLights(255, 0, 0);
+            // stopLights();
         }
 
-        // beam brake indicator
+        // beam brake indicator. beam brake lmao
         if (cubeBeamBroken() || coneBeamBroken()) { turnOnIndicator(); } else { turnOffIndicator(); }
     }
 
@@ -84,10 +85,10 @@ public class Intake extends SubsystemBase {
     public void showLights(int r, int g, int b) {
         for (int i = 0; i < ledData.getLength(); i++) {
             ledData.setRGB(i, r, g, b);
-            //ledData2.setRGB(i, r, g, b);
         }
         led.setData(ledData);
         led.start();
+
     }
 
     public void stopLights() {
