@@ -26,8 +26,9 @@ public final class Constants {
 
     public static final double elevatorHighScore = 132;
     public static final double elevatorHighCubeScore = 129.6;
-    public static final double elevatorMidScore = 79.336;
-    public static final double elevatorConePickup = 6.52;
+    public static final double elevatorMidScore = 132; //79.336;
+    public static final double elevatorMidCubeScore = 79.336; //79.336;
+    public static final double elevatorConePickup = 0; //6.52;
     public static final double elevatorBot = 0;
 
     //public static final double wristStowPos = 0.9;
@@ -42,11 +43,11 @@ public final class Constants {
 
     public static final double wristHighConeScore = 0.602; //.613
     public static final double wristHighCubeScore = 0.737;
-    public static final double wristMidConeScore = 0.607;
+    public static final double wristMidConeScore = 0.484; //0.607;
     public static final double wristMidCubeScore = 0.715;
     public static final double wristConePickup = 0.468;
     public static final double wristConePickup2 = 0.8;
-    public static final double wristCubePickup = 0.590; //was .598 (low) .648 )high)
+    public static final double wristCubePickup = 0.628; //was .590 (low) .648 )high)
 
     public static final class Swerve {
         public static final int pigeonID = 35;
@@ -125,6 +126,8 @@ public final class Constants {
         /* Swerve Profiling Values */
         /** Meters per Second */
         public static final double maxSpeed = 4.1; //TODO: This must be tuned to specific robot
+        public static final double maxAccel = 4.1; //TODO: This must be tuned to specific robot
+
         /** Radians per Second */
         public static final double maxAngularVelocity = 10.0; //TODO: This must be tuned to specific robot
 
@@ -175,8 +178,8 @@ public final class Constants {
     }
 
     public static final class AutoConstants { //TODO: The below constants are used in the example auto, and must be tuned to specific robot
-        public static final double kMaxSpeedMetersPerSecond = 1.5;
-        public static final double kMaxAccelerationMetersPerSecondSquared = 2;
+        public static final double slowVel = 1.5;
+        public static final double slowAccel = 2;
         public static final double kMaxAngularSpeedRadiansPerSecond = Math.PI;
         public static final double kMaxAngularSpeedRadiansPerSecondSquared = Math.PI;
     

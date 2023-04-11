@@ -24,39 +24,12 @@ public class Robot extends TimedRobot {
 
   private RobotContainer m_robotContainer;
 
-  private static final String kDefaultAuto = "no auto";
-  private static final String kAudienceAuto = "audience";
-  private static final String kCenterAuto = "center";
-  private static final String kTwoGameP = "TwoGameP";
-  private static final String kCollectBalanceAud = "collectbalanceaud";
-  private static final String kCollectBalanceScore = "collectbalancescore";
-  private static final String kScoreMobilityEngage = "scoremobilityengage";
-  private static final String kScoremobilityengagepickup = "scoremobilityengagepickup";
-  private static final String kScoremobilitycollect = "scoremobilitycollect";
-  private static final String kScoremobilitycollectcablecarrier = "scoremobilitycollectcablecarrier";
-
-
-  private final SendableChooser<String> m_chooser = new SendableChooser<>();
-
   /**
    * This function is run when the robot is first started up and should be used for any
    * initialization code.
    */
   @Override
   public void robotInit() {
-    m_chooser.setDefaultOption("No Auto Selected", kDefaultAuto);
-    m_chooser.addOption("CenterAuto", kCenterAuto);
-    m_chooser.addOption("Audience Side (1 cycle)", kAudienceAuto);
-    m_chooser.addOption("Two Game P", kTwoGameP);
-    m_chooser.addOption("Collect And Balance Audience Side", kCollectBalanceAud);
-    m_chooser.addOption("Collect And Balance Scoring Table Side", kCollectBalanceScore);
-    m_chooser.addOption("Score Mobility Engage", kScoreMobilityEngage);
-    m_chooser.addOption("score mobility engage pickup", kScoremobilityengagepickup);
-    m_chooser.addOption("non cc score mobility collect", kScoremobilitycollect);
-    m_chooser.addOption("cc side score mobility collect", kScoremobilitycollectcablecarrier);
-    
-    SmartDashboard.putData("Auto Choices", m_chooser);
-
     ctreConfigs = new CTREConfigs();
     
     // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
@@ -96,7 +69,7 @@ public class Robot extends TimedRobot {
   /** This autonomous runs the autonomous command selected by your {@link RobotContainer} class. */
   @Override
   public void autonomousInit() {
-    m_autonomousCommand = m_robotContainer.getAutonomousCommand(m_chooser.getSelected());
+    m_autonomousCommand = m_robotContainer.getAutonomousCommand();
 
     // schedule the autonomous command (example)
     if (m_autonomousCommand != null) {

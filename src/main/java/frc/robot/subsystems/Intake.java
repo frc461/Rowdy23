@@ -16,7 +16,7 @@ public class Intake extends SubsystemBase {
     private int counter = 0;
     // public Lights lights = new Lights();
     
-    private AddressableLED led = new AddressableLED(5);
+    private AddressableLED led = new AddressableLED(0);
     private AddressableLEDBuffer ledData = new AddressableLEDBuffer(2);
 
     private DigitalOutput intakeIndicator = new DigitalOutput(4);

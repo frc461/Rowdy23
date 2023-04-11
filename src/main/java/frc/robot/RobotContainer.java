@@ -17,6 +17,9 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
+import frc.robot.autos.AutoChooser;
+import frc.robot.autos.AutoTrajectories;
+import frc.robot.autos.eventMap;
 import frc.robot.commands.*;
 import frc.robot.subsystems.*;
 
@@ -33,6 +36,9 @@ public class RobotContainer {
     private final Elevator s_Elevator = new Elevator();
     private final Intake s_Intake = new Intake();
     private final Wrist s_Wrist = new Wrist(s_Elevator.getEncoder());
+    private final eventMap map = new eventMap(s_Swerve, s_Intake, s_Wrist, s_Elevator);
+    private final AutoTrajectories trajectories = new AutoTrajectories();
+    private final AutoChooser chooser = new AutoChooser(trajectories, map.getMap(), s_Swerve, s_Intake, s_Wrist, s_Elevator);
 
     private String pPlan = null;
     public double intakeVec = 0;
@@ -115,6 +121,8 @@ public class RobotContainer {
         
       // Configure the button bindings
       configureButtonBindings();
+
+      SmartDashboard.putData("Auto Choices", chooser.getAutoChooser());
       
     }
 
@@ -180,7 +188,7 @@ public class RobotContainer {
 
         w_preset_2.onTrue( // Preset to score mid cube
           Commands.sequence(
-            new InstantCommand(() -> s_Elevator.setHeight(Constants.elevatorMidScore)),
+            new InstantCommand(() -> s_Elevator.setHeight(Constants.elevatorMidCubeScore)),
             new WaitCommand(.25),
             new InstantCommand(() -> s_Wrist.setRotation(Constants.wristMidCubeScore))
           )
@@ -233,209 +241,10 @@ public class RobotContainer {
      * @return the command to run in autonomous
      */
 
-    public Command getAutonomousCommand(String autoPicked) {
+    public Command getAutonomousCommand() {
 
       Constants.gyroOffset = s_Swerve.gyro.getPitch();
       s_Swerve.zeroGyro();
-
-      // Code that defines which autonomous to run from the selection in Shuffle Board
-      String autoSelect = autoPicked.toLowerCase();
-
-      if(autoSelect.equals("audience")){
-        pPlan = "1 cycle";
-      } else if (autoSelect.equals("center")){
-        pPlan = "GrabConeMobility";
-      } else if (autoSelect.equals("scoremobilitycollect")){
-        pPlan = "newscoremobilitycollect";
-      }else if (autoSelect.equals("twogamep")){
-        pPlan = "TwoGameP";
-      } else if (autoSelect.equals("collectbalanceaud")){
-        pPlan = "collectbalanceaud";
-      } else if (autoSelect.equals("collectbalancescore")){
-        pPlan = "collectbalancescore";
-      } else if (autoSelect.equals("scoremobilityengage")){
-        pPlan = "scoremobilityengage";
-      } else if (autoSelect.equals("scoremobilityengagepickup")) {
-        pPlan = "scoremobilityengagepickup";
-      } else if (autoSelect.equals("scoremobilitycollectcablecarrier")){
-        pPlan = "scoremobilitycollectcablecarrier";
-      }
-      
-
-      // This will load the path selected in Smart Dashboard and generate it with a max acceleration and velocity as defined for each section of path
-
-      // List<PathPlannerTrajectory> oneCycle = PathPlanner.loadPathGroup("1 cycle",
-      // new PathConstraints(2.5, 2),
-      // new PathConstraints(1.5, 1),
-      // new PathConstraints(0.5, 1),
-      // new PathConstraints(1.5, 1),
-      // new PathConstraints(1.5, 1),
-      // new PathConstraints(2.5, 2),
-      // new PathConstraints(1.5, 1)
-      // );
-      
-      // List<PathPlannerTrajectory> grabConeMobility = PathPlanner.loadPathGroup("GrabConeMobility",
-      // new PathConstraints(1, 1)
-      // );
-
-      // List<PathPlannerTrajectory> foo = PathPlanner.loadPathGroup("TwoGameP",
-      // new PathConstraints(2.5, 2)
-      // );
-
-      // List<PathPlannerTrajectory> collectBalanceAudience = PathPlanner.loadPathGroup("collectbalanceaud",
-      // new PathConstraints(2.5, 2)
-      // );
-
-      // List<PathPlannerTrajectory> scoreMobilityEngage = PathPlanner.loadPathGroup("scoremobilityengage",
-      // new PathConstraints(1, 1)
-      // );
-
-      // List<PathPlannerTrajectory> collectBalanceScore = PathPlanner.loadPathGroup("collectbalancescore",
-      // new PathConstraints(1.3, 2),
-      // new PathConstraints(2.5, 2)
-      // );
-
-      // List<PathPlannerTrajectory> scoreMobilityEngagePickup = PathPlanner.loadPathGroup("scoremobilityengagepickup",
-      // new PathConstraints(1.5, 1.5)
-      // );
-
-      // List<PathPlannerTrajectory> scoremobilitycollect = PathPlanner.loadPathGroup("newscoremobilitycollect",
-      // new PathConstraints(2, 2)
-      // );
-
-      List<PathPlannerTrajectory> scoremobilitycollectcablecarrier = PathPlanner.loadPathGroup("scoremobilitycollectcablecarrier",
-      new PathConstraints(2, 2)
-      );
-
-      
-      // Run a command when markers are passed. If you add a "balance" marker in Path Planner, this will cause the robot to run s_Swerve.autoBalance()
-      HashMap<String, Command> eventMap = new HashMap<>();
-      
-      eventMap.put("intakeOff", new AutoIntakeCommand(s_Intake,0, false)); // usually used after pickup cone/cube
-      eventMap.put("balance", new InstantCommand(() -> s_Swerve.autoBalance())); //  was just autoBalance *** balance on charge station
-      eventMap.put("elevatorUp", new InstantCommand(() -> s_Elevator.setHeight(Constants.elevatorHighScore)));
-      eventMap.put("autoCorrect", new InstantCommand(() -> s_Swerve.rotateToDegree(180)));
-
-      eventMap.put(
-        "stow",
-        Commands.sequence(
-          new InstantCommand(() -> s_Elevator.setHeight(Constants.elevatorBot)),
-          new InstantCommand(() -> s_Wrist.setRotation(Constants.WRIST_UPPER_LIMIT))
-        )
-      );
-
-      eventMap.put( // picks up cone but does NOT stow automatically
-        "intakeCone", 
-        Commands.sequence(
-          new InstantCommand(() -> s_Elevator.setHeight(Constants.elevatorConePickup)),
-          new InstantCommand(() -> s_Wrist.setRotation(Constants.wristConePickup)),
-          new AutoIntakeCommand(s_Intake, -1, true),
-          new WaitCommand(3)
-        )
-      );
-
-      eventMap.put( // picks up cube but does NOT stow automatically
-        "intakeCube",
-        Commands.sequence(
-          new InstantCommand(() -> s_Elevator.setHeight(Constants.elevatorBot)),
-          new InstantCommand(() -> s_Wrist.setRotation(Constants.wristCubePickup)),
-          new AutoIntakeCommand(s_Intake, 1, false)
-        )
-      );
-
-      eventMap.put( // scores cone and stows automatically
-        "scoreConeHigh",
-        Commands.sequence(
-          new InstantCommand(() -> s_Elevator.setHeight(Constants.elevatorHighScore)),
-          new InstantCommand(() -> s_Wrist.setRotation(Constants.wristHighConeScore)),
-          new WaitCommand(1.2),
-          new AutoIntakeCommand(s_Intake, 1, true),
-          new WaitCommand(0.5),
-          new InstantCommand(() -> s_Elevator.setHeight(Constants.elevatorBot)),
-          new InstantCommand(() -> s_Wrist.setRotation(Constants.WRIST_UPPER_LIMIT))
-        )
-      );
-
-      eventMap.put( // scores cube and stows automatically
-        "scoreCubeHigh", 
-        Commands.sequence(
-          new InstantCommand(() -> s_Elevator.setHeight(Constants.elevatorHighScore)),
-          new InstantCommand(() -> s_Wrist.setRotation(Constants.wristHighCubeScore)),
-          new WaitCommand(1.2), //TODO could be slower
-          new PrintCommand("setting intake"),
-          new AutoIntakeCommand(s_Intake, -1, false),
-          new WaitCommand(0.5),
-          new InstantCommand(() -> s_Elevator.setHeight(Constants.elevatorBot)),
-          new InstantCommand(() -> s_Wrist.setRotation(Constants.WRIST_UPPER_LIMIT))
-        )
-      );
-
-      // This defines swerve drive for autonomous path following
-      // TODO: TUNE PID Constants
-
-      SwerveAutoBuilder swerveControllerCommand = new SwerveAutoBuilder(
-        s_Swerve::getPose,
-        s_Swerve::resetOdometry,
-        Constants.Swerve.swerveKinematics,
-        new PIDConstants(1.6, 0.0, 0.0022), //translation Default: P: 1.5 I: 0.015 D: 0.01
-        new PIDConstants(0.05, 0.03, 0.01),//new PIDConstants(0.15, 0.075, 0.0001), //rotation Default: P: 0.2 I: 0.04 D: 0.02
-        s_Swerve::setModuleStates,
-        eventMap,
-        true,
-        s_Swerve
-      );
-
-      //PPSwerveControllerCommand swerveControllerCommand = new PPSwerveControllerCommand(null, null, null, null, null, null, null);
-      //Pose2d initPose = null;
-
-      // if (pPlan == "OneCycle") {
-      //   autoCode = Commands.sequence(
-      //     swerveControllerCommand.fullAuto(oneCycle.get(0)),
-      //     swerveControllerCommand.fullAuto(oneCycle.get(1)),
-      //     swerveControllerCommand.fullAuto(oneCycle.get(2)),
-      //     swerveControllerCommand.fullAuto(oneCycle.get(3)),
-      //     swerveControllerCommand.fullAuto(oneCycle.get(4)),
-      //     swerveControllerCommand.fullAuto(oneCycle.get(5)),
-      //     swerveControllerCommand.fullAuto(oneCycle.get(6))
-      //   );
-      // } else if (pPlan == "GrabConeMobility") {
-      //   autoCode = swerveControllerCommand.fullAuto(grabConeMobility.get(0));
-      // } else if (pPlan == "TwoGameP") {
-      //   autoCode = swerveControllerCommand.fullAuto(foo.get(0));
-      // } else if (pPlan == "collectbalanceaud") {
-      //   autoCode = swerveControllerCommand.fullAuto(collectBalanceAudience.get(0));
-      // } else if (pPlan == "collectbalancescore") {
-      //   autoCode = Commands.sequence(
-      //     swerveControllerCommand.fullAuto(collectBalanceScore.get(0)),
-      //     swerveControllerCommand.fullAuto(collectBalanceScore.get(1))
-      //   );
-      // } else if (pPlan == "scoremobilityengage") {
-      //   autoCode = swerveControllerCommand.fullAuto(scoreMobilityEngage.get(0));
-      // } else if (pPlan == "scoremobilityengagepickup") {
-      //   autoCode = Commands.sequence(
-      //       swerveControllerCommand.fullAuto(scoreMobilityEngagePickup.get(0)),
-      //       swerveControllerCommand.fullAuto(scoreMobilityEngagePickup.get(1))                
-      //   );
-      // } else if (pPlan == "newscoremobilitycollect"){
-      //   autoCode = Commands.sequence(
-      //     swerveControllerCommand.fullAuto(scoremobilitycollect.get(0)),
-      //     swerveControllerCommand.fullAuto(scoremobilitycollect.get(1))
-      //   );
-      if (pPlan == "scoremobilitycollectcablecarrier"){
-        // autoCode = Commands.sequence(
-        //   swerveControllerCommand.fullAuto(scoremobilitycollectcablecarrier.get(0)),
-        //   swerveControllerCommand.fullAuto(scoremobilitycollectcablecarrier.get(1))
-        //   ); 
-        autoCode = swerveControllerCommand.fullAuto(scoremobilitycollectcablecarrier.get(0));
-
-      } else {
-        autoCode = new PrintCommand(pPlan);
-      }
-      //autoCode = swerveControllerCommand.fullAuto(rotate.get(0));
-      
-
-      //new InstantCommand(() -> s_Swerve.resetOdometry( rotate.get(0).getInitialHolonomicPose()));
-
-    return autoCode;
-  }
+      return chooser.getCommand();
+    }
 }
