@@ -69,7 +69,7 @@
       "isReversal": false,
       "velOverride": null,
       "isLocked": false,
-      "isStopPoint": true,
+      "isStopPoint": false,
       "stopEvent": {
         "names": [
           "autoCorrect",
@@ -121,9 +121,7 @@
       "isLocked": false,
       "isStopPoint": false,
       "stopEvent": {
-        "names": [
-          "balance"
-        ],
+        "names": [],
         "executionBehavior": "parallel",
         "waitBehavior": "none",
         "waitTime": 0
@@ -132,7 +130,7 @@
   ],
   "markers": [
     {
-      "position": 2.036363636363572,
+      "position": 1.3381818181818483,
       "names": [
         "intakeCone"
       ]

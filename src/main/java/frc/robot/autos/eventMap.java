@@ -31,8 +31,9 @@ public class eventMap {
         eventMap.put("balance", new InstantCommand(() -> s_Swerve.autoBalance())); //  was just autoBalance *** balance on charge station
         eventMap.put("elevatorUp", new InstantCommand(() -> s_Elevator.setHeight(Constants.elevatorHighScore)));
         eventMap.put("autoCorrect", new InstantCommand(() -> s_Swerve.rotateToDegree(180)));
-        eventMap.put("coneOut", new AutoIntakeCommand(_s_Intake, 1, true));
+        eventMap.put("autoConeOut", new AutoIntakeCommand(_s_Intake, 0.57, true));
         eventMap.put("cubeOut", new AutoIntakeCommand(_s_Intake, -1, false));
+        eventMap.put("wristDown", new InstantCommand(() -> s_Wrist.setRotation(.55)));
 
 
         eventMap.put(
@@ -40,6 +41,14 @@ public class eventMap {
             Commands.sequence(
             new InstantCommand(() -> s_Elevator.setHeight(Constants.elevatorBot)),
             new InstantCommand(() -> s_Wrist.setRotation(Constants.WRIST_UPPER_LIMIT))
+            )
+        );
+
+        eventMap.put(
+            "shootCone",
+            Commands.sequence(
+            new InstantCommand(() -> s_Elevator.setHeight(130)),
+            new InstantCommand(() -> s_Wrist.setRotation(0.73))
             )
         );
 
@@ -81,7 +90,21 @@ public class eventMap {
             new InstantCommand(() -> s_Elevator.setHeight(Constants.elevatorHighScore)),
             new InstantCommand(() -> s_Wrist.setRotation(Constants.wristHighCubeScore)),
             new WaitCommand(1.2), //TODO could be slower
-            new PrintCommand("setting intake"),
+            //new PrintCommand("setting intake"),
+            new AutoIntakeCommand(s_Intake, -1, false),
+            new WaitCommand(0.5),
+            new InstantCommand(() -> s_Elevator.setHeight(Constants.elevatorBot)),
+            new InstantCommand(() -> s_Wrist.setRotation(Constants.WRIST_UPPER_LIMIT))
+            )
+        );
+
+        eventMap.put( // scores cube and stows automatically
+            "scoreCubeMid", 
+            Commands.sequence(
+            new InstantCommand(() -> s_Elevator.setHeight(Constants.elevatorMidCubeScore)),
+            new InstantCommand(() -> s_Wrist.setRotation(Constants.wristMidCubeScore)),
+            new WaitCommand(1.2), //TODO could be slower
+            //new PrintCommand("setting intake"),
             new AutoIntakeCommand(s_Intake, -1, false),
             new WaitCommand(0.5),
             new InstantCommand(() -> s_Elevator.setHeight(Constants.elevatorBot)),

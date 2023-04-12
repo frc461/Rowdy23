@@ -68,7 +68,7 @@ public class Elevator extends SubsystemBase{
         }
         if(elevatorSwitchTriggered())
         {
-            m_encoder.setPosition(0);
+            m_encoder.setPosition(0); //was zero (don't worry about it);
         }
         elevator.set(movementVector);
         target = m_encoder.getPosition();

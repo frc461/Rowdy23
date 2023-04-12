@@ -11,6 +11,7 @@ import com.pathplanner.lib.auto.PIDConstants;
 import com.pathplanner.lib.auto.SwerveAutoBuilder;
 import com.pathplanner.lib.commands.PPSwerveControllerCommand;
 
+import edu.wpi.first.wpilibj.DigitalOutput;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
@@ -81,11 +82,13 @@ public class RobotContainer {
     private final POVButton driver_stowButton2 = new POVButton(operator, 270);
     // private final JoystickButton xModeButton = new JoystickButton(driver, XboxController.Button.kX.value);
 
+    /* LED Initialization Code */
+    private DigitalOutput LEDzero = new DigitalOutput(8);
+    private DigitalOutput LEDone = new DigitalOutput(9);
 
     /* Variables */
     boolean driveStatus = false;
     
-
     /** The container for the robot. Contains subsystems, OI devices, and commands. */
     public RobotContainer() {
       s_Swerve.setDefaultCommand(
@@ -142,6 +145,8 @@ public class RobotContainer {
 
         e_presButton_0.onTrue( // Preset to score high cone
           Commands.sequence(
+            new InstantCommand(() -> LEDzero.set(true)),
+            new InstantCommand(() -> LEDone.set(true)),
             new InstantCommand(() -> s_Elevator.setHeight(Constants.elevatorHighScore)),
             new WaitCommand(.75),
             new InstantCommand(() -> s_Wrist.setRotation(Constants.wristHighConeScore))
@@ -151,6 +156,8 @@ public class RobotContainer {
 
         e_presButton_1.onTrue( // Preset to score mid cone
           Commands.sequence(
+            new InstantCommand(() -> LEDzero.set(true)),
+            new InstantCommand(() -> LEDone.set(true)),
             new InstantCommand(() -> s_Elevator.setHeight(Constants.elevatorMidScore)),
             new WaitCommand(.25),
             new InstantCommand(() -> s_Wrist.setRotation(Constants.wristMidConeScore))
@@ -159,6 +166,8 @@ public class RobotContainer {
 
         e_presButton_2.onTrue( // Preset to pick up fallen cone
           Commands.sequence(
+            new InstantCommand(() -> LEDzero.set(false)),
+            new InstantCommand(() -> LEDone.set(true)),
             new InstantCommand(() -> s_Elevator.setHeight(Constants.elevatorConePickup)),
             new InstantCommand(() -> s_Wrist.setRotation(Constants.wristConePickup))
           )
@@ -166,6 +175,8 @@ public class RobotContainer {
 
         e_presButton_3.onTrue( // Preset to pick up cone from single substation
           Commands.sequence(
+            new InstantCommand(() -> LEDzero.set(false)),
+            new InstantCommand(() -> LEDone.set(true)),
             new InstantCommand(() -> s_Elevator.setHeight(Constants.elevatorBot)),
             new InstantCommand(() -> s_Wrist.setRotation(Constants.wristConePickup2))
           )
@@ -173,6 +184,8 @@ public class RobotContainer {
 
         w_preset_0.onTrue( // Preset to score high cube
           Commands.sequence(
+            new InstantCommand(() -> LEDzero.set(true)),
+            new InstantCommand(() -> LEDone.set(true)),
             new InstantCommand(() -> s_Elevator.setHeight(Constants.elevatorHighCubeScore)),
             new WaitCommand(.75),
             new InstantCommand(() -> s_Wrist.setRotation(Constants.wristHighCubeScore))
@@ -181,27 +194,50 @@ public class RobotContainer {
 
         w_preset_1.onTrue( // Preset to pick up cube
           Commands.sequence(
+            new InstantCommand(() -> LEDzero.set(true)),
+            new InstantCommand(() -> LEDone.set(false)),
             new InstantCommand(() -> s_Elevator.setHeight(Constants.elevatorBot)),
             new InstantCommand(() -> s_Wrist.setRotation(Constants.wristCubePickup))
+            // Set lights Purple
           )
         );
 
         w_preset_2.onTrue( // Preset to score mid cube
           Commands.sequence(
+            new InstantCommand(() -> LEDzero.set(true)),
+            new InstantCommand(() -> LEDone.set(true)),
             new InstantCommand(() -> s_Elevator.setHeight(Constants.elevatorMidCubeScore)),
             new WaitCommand(.25),
             new InstantCommand(() -> s_Wrist.setRotation(Constants.wristMidCubeScore))
           )
         );
 
-        operator_stowButton.onTrue(new InstantCommand(() -> s_Elevator.setHeight(Constants.elevatorBot)));
-        operator_stowButton.onTrue(new InstantCommand(() -> s_Wrist.setRotation(Constants.WRIST_UPPER_LIMIT)));
+        operator_stowButton.onTrue(
+          Commands.sequence(
+            new InstantCommand(() -> LEDzero.set(false)),
+            new InstantCommand(() -> LEDone.set(false)),
+            new InstantCommand(() -> s_Elevator.setHeight(Constants.elevatorBot)),
+            new InstantCommand(() -> s_Wrist.setRotation(Constants.WRIST_UPPER_LIMIT))
+            )
+        );
 
-        driver_stowButton2.onTrue(new InstantCommand(() -> s_Elevator.setHeight(Constants.elevatorBot)));
-        driver_stowButton2.onTrue(new InstantCommand(() -> s_Wrist.setRotation(Constants.WRIST_UPPER_LIMIT)));
+        driver_stowButton2.onTrue(
+          Commands.sequence(
+            new InstantCommand(() -> LEDzero.set(false)),
+            new InstantCommand(() -> LEDone.set(false)),
+            new InstantCommand(() -> s_Elevator.setHeight(Constants.elevatorBot)),
+            new InstantCommand(() -> s_Wrist.setRotation(Constants.WRIST_UPPER_LIMIT))
+            )
+        );
 
-        driver_stowButton.onTrue(new InstantCommand(() -> s_Elevator.setHeight(Constants.elevatorBot)));
-        driver_stowButton.onTrue(new InstantCommand(() -> s_Wrist.setRotation(Constants.WRIST_UPPER_LIMIT)));
+        driver_stowButton.onTrue(
+          Commands.sequence(
+            new InstantCommand(() -> LEDzero.set(false)),
+            new InstantCommand(() -> LEDone.set(false)),
+            new InstantCommand(() -> s_Elevator.setHeight(Constants.elevatorBot)),
+            new InstantCommand(() -> s_Wrist.setRotation(Constants.WRIST_UPPER_LIMIT))
+            )
+        );
 
         //driver_AutoBalance.onTrue(new InstantCommand(() -> s_Swerve.autoBalance()));
         

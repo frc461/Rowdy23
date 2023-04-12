@@ -50,8 +50,6 @@ public class AutoChooser {
 
         m_chooser.setDefaultOption("Default Auto", AutonomousMode.kDefaultAuto);
         m_chooser.addOption("CenterAuto", AutonomousMode.kCenterAuto);
-        m_chooser.addOption("Audience Side (1 cycle)", AutonomousMode.kAudienceAuto);
-        m_chooser.addOption("Two Game P", AutonomousMode.kTwoGameP);
         m_chooser.addOption("Collect And Balance Audience Side", AutonomousMode.kCollectBalanceAud);
         m_chooser.addOption("Collect And Balance Scoring Table Side", AutonomousMode.kCollectBalanceScore);
         m_chooser.addOption("Score Mobility Engage", AutonomousMode.kScoreMobilityEngage);
@@ -59,7 +57,11 @@ public class AutoChooser {
         m_chooser.addOption("non cc score mobility collect", AutonomousMode.kScoremobilitycollect);
         m_chooser.addOption("cc side score mobility collect", AutonomousMode.kScoremobilitycollectcablecarrier);
         m_chooser.addOption("two piece", AutonomousMode.kTwoPiece);
-        m_chooser.addOption("three low", AutonomousMode.kThreePiece);
+        m_chooser.addOption("three low", AutonomousMode.kThreeLow);
+        m_chooser.addOption("two cube", AutonomousMode.kTwoCube);
+        m_chooser.addOption("cable carrier two cube", AutonomousMode.kTwoCubeCC);
+        m_chooser.addOption("alt pickup", AutonomousMode.alternatePickup);
+
 
     }
 
@@ -99,14 +101,6 @@ public class AutoChooser {
 
         SequentialCommandGroup command = new SequentialCommandGroup();
         command.addCommands(
-            // new InstantCommand(() -> s_Elevator.setHeight(Constants.elevatorHighScore)),
-            // new InstantCommand(() -> s_Wrist.setRotation(Constants.wristHighCubeScore)),
-            // new WaitCommand(1.2), //TODO could be slower
-            // new PrintCommand("setting intake"),
-            // new AutoIntakeCommand(s_Intake, -1, false),
-            // new WaitCommand(0.5),
-            // new InstantCommand(() -> s_Elevator.setHeight(Constants.elevatorBot)),
-            // new InstantCommand(() -> s_Wrist.setRotation(Constants.WRIST_UPPER_LIMIT)),
             new SequentialCommandGroup(eventMap.get("scoreCubeHigh")),
             new InstantCommand(() -> s_Swerve.resetOdometry(trajectories.scoreMobilityCollect().getInitialHolonomicPose())),
             new SequentialCommandGroup(followCommand)
@@ -132,23 +126,119 @@ public class AutoChooser {
         return command;
     }
 
-    public Command threePiece() {
-        var swerveCommand = createControllerCommand(trajectories.threePiece());
+    public Command twoCube() {
+        var swerveCommand = createControllerCommand(trajectories.twoCube());
         
         FollowPathWithEvents followCommand = new FollowPathWithEvents(
         swerveCommand, 
-        trajectories.threePiece().getMarkers(), 
+        trajectories.twoCube().getMarkers(), 
         eventMap);
 
         SequentialCommandGroup command = new SequentialCommandGroup();
         command.addCommands(
-           // new SequentialCommandGroup(eventMap.get("scoreCubeHigh")),
-            new InstantCommand(() -> s_Swerve.resetOdometry(trajectories.threePiece().getInitialHolonomicPose())),
+            new SequentialCommandGroup(eventMap.get("scoreCubeHigh")),
+            new InstantCommand(() -> s_Swerve.resetOdometry(trajectories.twoCube().getInitialHolonomicPose())),
             new SequentialCommandGroup(followCommand),
-            new SequentialCommandGroup(eventMap.get("coneOut"))
+            new SequentialCommandGroup(eventMap.get("scoreCubeMid"))
         );
         return command;
     }
+
+    public Command threeLow() {
+        var swerveCommand = createControllerCommand(trajectories.threeLow());
+        
+        FollowPathWithEvents followCommand = new FollowPathWithEvents(
+        swerveCommand, 
+        trajectories.threeLow().getMarkers(), 
+        eventMap);
+
+        SequentialCommandGroup command = new SequentialCommandGroup();
+        command.addCommands(
+            new SequentialCommandGroup(eventMap.get("autoConeOut")),
+            new InstantCommand(() -> s_Swerve.resetOdometry(trajectories.threeLow().getInitialHolonomicPose())),
+            new SequentialCommandGroup(followCommand)
+            //new SequentialCommandGroup(eventMap.get("scoreCubeMid"))
+        );
+        return command;
+    }
+
+    public Command twoCubeCC() {
+        var swerveCommand = createControllerCommand(trajectories.twoCubeCC());
+        
+        FollowPathWithEvents followCommand = new FollowPathWithEvents(
+        swerveCommand, 
+        trajectories.twoCubeCC().getMarkers(), 
+        eventMap);
+
+        SequentialCommandGroup command = new SequentialCommandGroup();
+        command.addCommands(
+            new SequentialCommandGroup(eventMap.get("scoreCubeHigh")),
+            new InstantCommand(() -> s_Swerve.resetOdometry(trajectories.twoCubeCC().getInitialHolonomicPose())),
+            new SequentialCommandGroup(followCommand),
+            new SequentialCommandGroup(eventMap.get("scoreCubeMid"))
+        );
+        return command;
+    }
+
+
+    public Command scoreMobilityEngage() {
+        var swerveCommand = createControllerCommand(trajectories.scoreMobilityEngage());
+        
+        FollowPathWithEvents followCommand = new FollowPathWithEvents(
+        swerveCommand, 
+        trajectories.scoreMobilityEngage().getMarkers(), 
+        eventMap);
+
+        SequentialCommandGroup command = new SequentialCommandGroup();
+        command.addCommands(
+           new SequentialCommandGroup(eventMap.get("scoreCubeHigh")),
+            new InstantCommand(() -> s_Swerve.resetOdometry(trajectories.scoreMobilityEngage().getInitialHolonomicPose())),
+            new SequentialCommandGroup(followCommand),
+            new SequentialCommandGroup(eventMap.get("balance"))
+
+        );
+        return command;
+    }
+
+    public Command scoreMobilityEngagePickup() {
+        var swerveCommand = createControllerCommand(trajectories.scoreMobilityEngagePickup());
+        
+        FollowPathWithEvents followCommand = new FollowPathWithEvents(
+        swerveCommand, 
+        trajectories.scoreMobilityEngagePickup().getMarkers(), 
+        eventMap);
+
+        SequentialCommandGroup command = new SequentialCommandGroup();
+        command.addCommands(
+            (eventMap.get("scoreCubeHigh")),
+            new InstantCommand(() -> s_Swerve.resetOdometry(trajectories.scoreMobilityEngagePickup().getInitialHolonomicPose())),
+            new SequentialCommandGroup(followCommand),
+            (eventMap.get("balance")),
+            eventMap.get("shootCone")
+
+        );
+        return command;
+    }
+
+    public Command alternatePickup() {
+        var swerveCommand = createControllerCommand(trajectories.alternatePickup());
+        
+        FollowPathWithEvents followCommand = new FollowPathWithEvents(
+        swerveCommand, 
+        trajectories.alternatePickup().getMarkers(), 
+        eventMap);
+
+        SequentialCommandGroup command = new SequentialCommandGroup();
+        command.addCommands(
+            //new SequentialCommandGroup(eventMap.get("scoreCubeHigh")),
+            new InstantCommand(() -> s_Swerve.resetOdometry(trajectories.alternatePickup().getInitialHolonomicPose())),
+            new SequentialCommandGroup(followCommand)
+            //new SequentialCommandGroup(eventMap.get("balance"))
+
+        );
+        return command;
+    }
+
 
     public PPSwerveControllerCommand createControllerCommand(PathPlannerTrajectory trajectory) {
         thetaController.enableContinuousInput(-Math.PI, Math.PI);
@@ -173,8 +263,18 @@ public class AutoChooser {
             return scoreMobilityCollect();
             case kTwoPiece:
             return twoPiece();
-            case kThreePiece:
-            return threePiece();
+            case kTwoCube:
+            return twoCube();
+            case kScoreMobilityEngage:
+            return scoreMobilityEngage();
+            case kTwoCubeCC:
+            return twoCubeCC();
+            case kScoremobilityengagepickup:
+            return scoreMobilityEngagePickup();
+            case alternatePickup:
+            return alternatePickup();
+            case kThreeLow:
+            return threeLow();
         }
         return defaultAuto();
     }
@@ -183,7 +283,8 @@ public class AutoChooser {
     private enum AutonomousMode {
         kDefaultAuto, kAudienceAuto, kCenterAuto, kTwoGameP, kCollectBalanceAud,
         kCollectBalanceScore, kScoreMobilityEngage, kScoremobilityengagepickup,
-        kScoremobilitycollect, kScoremobilitycollectcablecarrier, kTwoPiece, kThreePiece
+        kScoremobilitycollect, kScoremobilitycollectcablecarrier, kTwoPiece, kThreePiece,
+        kTwoCube, kTwoCubeCC, alternatePickup, kThreeLow
     }
 
     
