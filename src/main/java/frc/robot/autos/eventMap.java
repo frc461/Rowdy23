@@ -31,6 +31,9 @@ public class eventMap {
         eventMap.put("balance", new InstantCommand(() -> s_Swerve.autoBalance())); //  was just autoBalance *** balance on charge station
         eventMap.put("elevatorUp", new InstantCommand(() -> s_Elevator.setHeight(Constants.elevatorHighScore)));
         eventMap.put("autoCorrect", new InstantCommand(() -> s_Swerve.rotateToDegree(180)));
+        eventMap.put("coneOut", new AutoIntakeCommand(_s_Intake, 1, true));
+        eventMap.put("cubeOut", new AutoIntakeCommand(_s_Intake, -1, false));
+
 
         eventMap.put(
             "stow",

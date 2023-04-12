@@ -9,7 +9,8 @@ import frc.robot.Constants;
 public class AutoTrajectories {
 
     private PathPlannerTrajectory defaultAuto, grabConeMobility, collectBalanceAudience, scoreMobilityEngage, 
-    collectBalanceScore, scoreMobilityEngagePickup, scoremobilitycollect, scoremobilitycollectcablecarrier;
+    collectBalanceScore, scoreMobilityEngagePickup, scoremobilitycollect, scoremobilitycollectcablecarrier, twoPiece,
+    threePiece;
 
 
     private final PathConstraints constraints, slowConstraints;
@@ -60,4 +61,13 @@ public class AutoTrajectories {
         return scoremobilitycollectcablecarrier;
     }
 
+    public PathPlannerTrajectory twoPiece(){
+        twoPiece = PathPlanner.loadPath("TwoPiece", constraints);
+        return twoPiece;
+    }
+
+    public PathPlannerTrajectory threePiece(){
+        threePiece = PathPlanner.loadPath("ThreeLow", constraints);
+        return threePiece;
+    }
 }

@@ -230,6 +230,8 @@ public class RobotContainer {
         SmartDashboard.putNumber("pitch", s_Swerve.gyro.getPitch());
         SmartDashboard.putNumber("roll", s_Swerve.gyro.getRoll());
 
+        SmartDashboard.putNumber("Pid off", chooser.getPIDController().getPositionError());
+
         // SmartDashboard.putNumber("RX", s_Limelight.getRX());
         // SmartDashboard.putNumber("RY", s_Limelight.getRY());
         // SmartDashboard.putNumber("RZ", s_Limelight.getRZ());

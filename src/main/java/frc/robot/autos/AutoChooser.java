@@ -1,6 +1,7 @@
 
 package frc.robot.autos;
 
+import java.time.chrono.ThaiBuddhistEra;
 import java.util.HashMap;
 
 import com.pathplanner.lib.PathPlannerTrajectory;
@@ -8,6 +9,7 @@ import com.pathplanner.lib.commands.FollowPathWithEvents;
 import com.pathplanner.lib.commands.PPSwerveControllerCommand;
 
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
@@ -30,9 +32,12 @@ public class AutoChooser {
     private final Intake s_Intake;
     private final Wrist s_Wrist;
     private final Elevator s_Elevator;
+    
 
     private final SendableChooser<AutonomousMode> m_chooser= new SendableChooser<>();
     private HashMap<String, Command> eventMap;
+    private PIDController thetaController = new PIDController(0.05, 0.005, 0.009);
+
 
     public AutoChooser(AutoTrajectories trajectories, HashMap<String, Command> eventMap, Swerve s_Swerve, Intake s_Intake, Wrist s_Wrist, Elevator s_Elevator) {
         this.s_Swerve = s_Swerve;
@@ -41,6 +46,7 @@ public class AutoChooser {
         this.s_Wrist = s_Wrist;
         this.eventMap = eventMap;
         this.trajectories = trajectories;
+        
 
         m_chooser.setDefaultOption("Default Auto", AutonomousMode.kDefaultAuto);
         m_chooser.addOption("CenterAuto", AutonomousMode.kCenterAuto);
@@ -52,10 +58,17 @@ public class AutoChooser {
         m_chooser.addOption("score mobility engage pickup", AutonomousMode.kScoremobilityengagepickup);
         m_chooser.addOption("non cc score mobility collect", AutonomousMode.kScoremobilitycollect);
         m_chooser.addOption("cc side score mobility collect", AutonomousMode.kScoremobilitycollectcablecarrier);
+        m_chooser.addOption("two piece", AutonomousMode.kTwoPiece);
+        m_chooser.addOption("three low", AutonomousMode.kThreePiece);
+
     }
 
     public SendableChooser<AutonomousMode> getAutoChooser() {
         return m_chooser;
+    }
+
+    public PIDController getPIDController() {
+        return thetaController;
     }
 
     public Command defaultAuto() {
@@ -67,15 +80,9 @@ public class AutoChooser {
         eventMap);
 
         SequentialCommandGroup command = new SequentialCommandGroup();
+        //command.addCommands( eventMap.get("scoreCubeHigh"));
         command.addCommands(
-            // new InstantCommand(() -> s_Elevator.setHeight(Constants.elevatorHighScore)),
-            // new InstantCommand(() -> s_Wrist.setRotation(Constants.wristHighCubeScore)),
-            // new WaitCommand(1.2), //TODO could be slower
-            // new PrintCommand("setting intake"),
-            // new AutoIntakeCommand(s_Intake, -1, false),
-            // new WaitCommand(0.5),
-            // new InstantCommand(() -> s_Elevator.setHeight(Constants.elevatorBot)),
-            // new InstantCommand(() -> s_Wrist.setRotation(Constants.WRIST_UPPER_LIMIT)),
+            new SequentialCommandGroup(eventMap.get("scoreCubeHigh")),
             new InstantCommand(() -> s_Swerve.resetOdometry(trajectories.defaultAuto().getInitialHolonomicPose())),
             new SequentialCommandGroup(followCommand)
         );
@@ -100,19 +107,53 @@ public class AutoChooser {
             // new WaitCommand(0.5),
             // new InstantCommand(() -> s_Elevator.setHeight(Constants.elevatorBot)),
             // new InstantCommand(() -> s_Wrist.setRotation(Constants.WRIST_UPPER_LIMIT)),
+            new SequentialCommandGroup(eventMap.get("scoreCubeHigh")),
             new InstantCommand(() -> s_Swerve.resetOdometry(trajectories.scoreMobilityCollect().getInitialHolonomicPose())),
             new SequentialCommandGroup(followCommand)
         );
         return command;
     }
 
+    public Command twoPiece() {
+        var swerveCommand = createControllerCommand(trajectories.twoPiece());
+        
+        FollowPathWithEvents followCommand = new FollowPathWithEvents(
+        swerveCommand, 
+        trajectories.twoPiece().getMarkers(), 
+        eventMap);
 
+        SequentialCommandGroup command = new SequentialCommandGroup();
+        command.addCommands(
+            new SequentialCommandGroup(eventMap.get("scoreCubeHigh")),
+            new InstantCommand(() -> s_Swerve.resetOdometry(trajectories.twoPiece().getInitialHolonomicPose())),
+            new SequentialCommandGroup(followCommand),
+            new SequentialCommandGroup(eventMap.get("scoreConeHigh"))
+        );
+        return command;
+    }
+
+    public Command threePiece() {
+        var swerveCommand = createControllerCommand(trajectories.threePiece());
+        
+        FollowPathWithEvents followCommand = new FollowPathWithEvents(
+        swerveCommand, 
+        trajectories.threePiece().getMarkers(), 
+        eventMap);
+
+        SequentialCommandGroup command = new SequentialCommandGroup();
+        command.addCommands(
+           // new SequentialCommandGroup(eventMap.get("scoreCubeHigh")),
+            new InstantCommand(() -> s_Swerve.resetOdometry(trajectories.threePiece().getInitialHolonomicPose())),
+            new SequentialCommandGroup(followCommand),
+            new SequentialCommandGroup(eventMap.get("coneOut"))
+        );
+        return command;
+    }
 
     public PPSwerveControllerCommand createControllerCommand(PathPlannerTrajectory trajectory) {
-        var thetaController = new PIDController(1.2, 0.005, 0.08);
         thetaController.enableContinuousInput(-Math.PI, Math.PI);
-
-        return new PPSwerveControllerCommand(trajectory, 
+        return new PPSwerveControllerCommand
+        (trajectory, 
         s_Swerve::getPose,
         Constants.Swerve.swerveKinematics , 
         new PIDController(1, 0, 0), 
@@ -130,6 +171,10 @@ public class AutoChooser {
             return defaultAuto();
             case kScoremobilitycollect :
             return scoreMobilityCollect();
+            case kTwoPiece:
+            return twoPiece();
+            case kThreePiece:
+            return threePiece();
         }
         return defaultAuto();
     }
@@ -138,7 +183,7 @@ public class AutoChooser {
     private enum AutonomousMode {
         kDefaultAuto, kAudienceAuto, kCenterAuto, kTwoGameP, kCollectBalanceAud,
         kCollectBalanceScore, kScoreMobilityEngage, kScoremobilityengagepickup,
-        kScoremobilitycollect, kScoremobilitycollectcablecarrier
+        kScoremobilitycollect, kScoremobilitycollectcablecarrier, kTwoPiece, kThreePiece
     }
 
     
