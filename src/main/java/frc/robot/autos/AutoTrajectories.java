@@ -10,7 +10,7 @@ public class AutoTrajectories {
 
     private PathPlannerTrajectory defaultAuto, grabConeMobility, collectBalanceAudience, scoreMobilityEngage, 
     collectBalanceScore, scoreMobilityEngagePickup, scoremobilitycollect, scoremobilitycollectcablecarrier, twoPiece,
-    threePiece, twoCube, twoCubeCC, alternatePickup;
+    threePiece, twoCube, twoCubeCC, alternatePickup, threeLow;
 
 
     private final PathConstraints constraints, slowConstraints;
@@ -67,8 +67,8 @@ public class AutoTrajectories {
     }
 
     public PathPlannerTrajectory threeLow(){
-        threePiece = PathPlanner.loadPath("ThreeLow", constraints);
-        return threePiece;
+        threeLow = PathPlanner.loadPath("ThreeLow", constraints);
+        return threeLow;
     }
     public PathPlannerTrajectory twoCube(){
         twoCube = PathPlanner.loadPath("TwoCube", constraints);
@@ -83,5 +83,10 @@ public class AutoTrajectories {
     public PathPlannerTrajectory alternatePickup(){
         alternatePickup = PathPlanner.loadPath("alternatePickup", constraints);
         return alternatePickup;
+    }
+
+    public PathPlannerTrajectory threePiece(){
+        threePiece = PathPlanner.loadPath("ThreePiece", constraints);
+        return threePiece;
     }
 }

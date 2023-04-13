@@ -61,8 +61,7 @@ public class AutoChooser {
         m_chooser.addOption("two cube", AutonomousMode.kTwoCube);
         m_chooser.addOption("cable carrier two cube", AutonomousMode.kTwoCubeCC);
         m_chooser.addOption("alt pickup", AutonomousMode.alternatePickup);
-
-
+        m_chooser.addOption("three piece further back", AutonomousMode.kThreePiece);
     }
 
     public SendableChooser<AutonomousMode> getAutoChooser() {
@@ -154,6 +153,8 @@ public class AutoChooser {
 
         SequentialCommandGroup command = new SequentialCommandGroup();
         command.addCommands(
+            new SequentialCommandGroup(eventMap.get("wristDown")),
+            new InstantCommand(() -> s_Wrist.setRotation(.73)),
             new SequentialCommandGroup(eventMap.get("autoConeOut")),
             new InstantCommand(() -> s_Swerve.resetOdometry(trajectories.threeLow().getInitialHolonomicPose())),
             new SequentialCommandGroup(followCommand)
@@ -213,8 +214,8 @@ public class AutoChooser {
             (eventMap.get("scoreCubeHigh")),
             new InstantCommand(() -> s_Swerve.resetOdometry(trajectories.scoreMobilityEngagePickup().getInitialHolonomicPose())),
             new SequentialCommandGroup(followCommand),
-            (eventMap.get("balance")),
-            eventMap.get("shootCone")
+            (eventMap.get("balance"))
+            //eventMap.get("shootCone")
 
         );
         return command;
@@ -250,7 +251,7 @@ public class AutoChooser {
         new PIDController(1, 0, 0), 
         thetaController,
         s_Swerve::setModuleStates,
-        false,
+        true,
         s_Swerve
         );
     }

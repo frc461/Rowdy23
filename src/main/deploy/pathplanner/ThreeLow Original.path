@@ -2,13 +2,13 @@
   "waypoints": [
     {
       "anchorPoint": {
-        "x": 2.800475002659407,
-        "y": 4.4648947417552955
+        "x": 1.8,
+        "y": 4.46
       },
       "prevControl": null,
       "nextControl": {
-        "x": 3.9037225185561484,
-        "y": 4.435531979098147
+        "x": 2.9032475158967417,
+        "y": 4.430637237342851
       },
       "holonomicAngle": 0,
       "isReversal": false,
@@ -371,7 +371,7 @@
       ]
     },
     {
-      "position": 10.58909090909095,
+      "position": 11.156363636363647,
       "names": [
         "stow"
       ]
@@ -386,18 +386,6 @@
       "position": 3.7818181818181817,
       "names": [
         "stow"
-      ]
-    },
-    {
-      "position": 3.65,
-      "names": [
-        "wristDown"
-      ]
-    },
-    {
-      "position": 10.494545454544935,
-      "names": [
-        "wristDown"
       ]
     }
   ]
