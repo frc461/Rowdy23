@@ -52,12 +52,12 @@ public class AutoTrajectories {
     }
 
     public PathPlannerTrajectory scoreMobilityCollect(){
-        scoremobilitycollect = PathPlanner.loadPath("scoremobilitycollect", constraints);
+        scoremobilitycollect = PathPlanner.loadPath("scoremobilitycollect", slowConstraints);
         return scoremobilitycollect;
     }
 
     public PathPlannerTrajectory scoreMobilityCollectCableCarrier(){
-        scoremobilitycollectcablecarrier = PathPlanner.loadPath("scoremobilitycollectcablecarrier", constraints);
+        scoremobilitycollectcablecarrier = PathPlanner.loadPath("scoremobilitycollectcablecarrier", slowConstraints);
         return scoremobilitycollectcablecarrier;
     }
 

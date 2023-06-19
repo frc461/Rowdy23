@@ -28,7 +28,7 @@ public class eventMap {
         this.s_Wrist = _s_Wrist;
 
         eventMap.put("intakeOff", new AutoIntakeCommand(s_Intake,0, false)); // usually used after pickup cone/cube
-        eventMap.put("balance", new InstantCommand(() -> s_Swerve.autoBalance())); //  was just autoBalance *** balance on charge station
+        eventMap.put("balance", new InstantCommand(() -> s_Swerve.autoBalance())); //  was just autoBalance *** balance\ on charge station
         eventMap.put("elevatorUp", new InstantCommand(() -> s_Elevator.setHeight(Constants.elevatorHighScore)));
         eventMap.put("autoCorrect", new InstantCommand(() -> s_Swerve.rotateToDegree(180)));
         eventMap.put("autoConeOut", new AutoIntakeCommand(_s_Intake, 0.57, true));

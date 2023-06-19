@@ -10,6 +10,8 @@ import com.pathplanner.lib.commands.PPSwerveControllerCommand;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.ProfiledPIDController;
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
@@ -100,8 +102,18 @@ public class AutoChooser {
 
         SequentialCommandGroup command = new SequentialCommandGroup();
         command.addCommands(
-            new SequentialCommandGroup(eventMap.get("scoreCubeHigh")),
-            new InstantCommand(() -> s_Swerve.resetOdometry(trajectories.scoreMobilityCollect().getInitialHolonomicPose())),
+            //new SequentialCommandGroup(eventMap.get("scoreCubeHigh")),
+            // new InstantCommand(() -> s_Swerve.resetOdometry(trajectories.scoreMobilityCollect().getInitialHolonomicPose())),
+            new InstantCommand(() -> {
+                PathPlannerTrajectory.PathPlannerState initialState = trajectories.scoreMobilityCollect().getInitialState();
+                  initialState =
+                      PathPlannerTrajectory.transformStateForAlliance(
+                          initialState, DriverStation.getAlliance());
+    
+                s_Swerve.resetOdometry(
+                    new Pose2d(
+                        initialState.poseMeters.getTranslation(), initialState.holonomicRotation));
+              }),
             new SequentialCommandGroup(followCommand)
         );
         return command;
@@ -118,7 +130,17 @@ public class AutoChooser {
         SequentialCommandGroup command = new SequentialCommandGroup();
         command.addCommands(
             new SequentialCommandGroup(eventMap.get("scoreCubeHigh")),
-            new InstantCommand(() -> s_Swerve.resetOdometry(trajectories.twoPiece().getInitialHolonomicPose())),
+            //new InstantCommand(() -> s_Swerve.resetOdometry(trajectories.twoPiece().getInitialHolonomicPose())),
+            new InstantCommand(() -> {
+                PathPlannerTrajectory.PathPlannerState initialState = trajectories.twoPiece().getInitialState();
+                  initialState =
+                      PathPlannerTrajectory.transformStateForAlliance(
+                          initialState, DriverStation.getAlliance());
+    
+                s_Swerve.resetOdometry(
+                    new Pose2d(
+                        initialState.poseMeters.getTranslation(), initialState.holonomicRotation));
+              }),
             new SequentialCommandGroup(followCommand),
             new SequentialCommandGroup(eventMap.get("scoreConeHigh"))
         );
@@ -136,7 +158,17 @@ public class AutoChooser {
         SequentialCommandGroup command = new SequentialCommandGroup();
         command.addCommands(
             new SequentialCommandGroup(eventMap.get("scoreCubeHigh")),
-            new InstantCommand(() -> s_Swerve.resetOdometry(trajectories.twoCube().getInitialHolonomicPose())),
+            // new InstantCommand(() -> s_Swerve.resetOdometry(trajectories.twoCube().getInitialHolonomicPose())),
+            new InstantCommand(() -> {
+                PathPlannerTrajectory.PathPlannerState initialState = trajectories.twoCube().getInitialState();
+                  initialState =
+                      PathPlannerTrajectory.transformStateForAlliance(
+                          initialState, DriverStation.getAlliance());
+    
+                s_Swerve.resetOdometry(
+                    new Pose2d(
+                        initialState.poseMeters.getTranslation(), initialState.holonomicRotation));
+              }),
             new SequentialCommandGroup(followCommand),
             new SequentialCommandGroup(eventMap.get("scoreCubeMid"))
         );
@@ -156,7 +188,17 @@ public class AutoChooser {
             new SequentialCommandGroup(eventMap.get("wristDown")),
             new InstantCommand(() -> s_Wrist.setRotation(.73)),
             new SequentialCommandGroup(eventMap.get("autoConeOut")),
-            new InstantCommand(() -> s_Swerve.resetOdometry(trajectories.threeLow().getInitialHolonomicPose())),
+            // new InstantCommand(() -> s_Swerve.resetOdometry(trajectories.threeLow().getInitialHolonomicPose())),
+            new InstantCommand(() -> {
+                PathPlannerTrajectory.PathPlannerState initialState = trajectories.threeLow().getInitialState();
+                  initialState =
+                      PathPlannerTrajectory.transformStateForAlliance(
+                          initialState, DriverStation.getAlliance());
+    
+                s_Swerve.resetOdometry(
+                    new Pose2d(
+                        initialState.poseMeters.getTranslation(), initialState.holonomicRotation));
+              }),
             new SequentialCommandGroup(followCommand)
             //new SequentialCommandGroup(eventMap.get("scoreCubeMid"))
         );
@@ -174,7 +216,17 @@ public class AutoChooser {
         SequentialCommandGroup command = new SequentialCommandGroup();
         command.addCommands(
             new SequentialCommandGroup(eventMap.get("scoreCubeHigh")),
-            new InstantCommand(() -> s_Swerve.resetOdometry(trajectories.twoCubeCC().getInitialHolonomicPose())),
+            // new InstantCommand(() -> s_Swerve.resetOdometry(trajectories.twoCubeCC().getInitialHolonomicPose())),
+            new InstantCommand(() -> {
+                PathPlannerTrajectory.PathPlannerState initialState = trajectories.twoCubeCC().getInitialState();
+                  initialState =
+                      PathPlannerTrajectory.transformStateForAlliance(
+                          initialState, DriverStation.getAlliance());
+    
+                s_Swerve.resetOdometry(
+                    new Pose2d(
+                        initialState.poseMeters.getTranslation(), initialState.holonomicRotation));
+              }),
             new SequentialCommandGroup(followCommand),
             new SequentialCommandGroup(eventMap.get("scoreCubeMid"))
         );
@@ -193,7 +245,18 @@ public class AutoChooser {
         SequentialCommandGroup command = new SequentialCommandGroup();
         command.addCommands(
            new SequentialCommandGroup(eventMap.get("scoreCubeHigh")),
-            new InstantCommand(() -> s_Swerve.resetOdometry(trajectories.scoreMobilityEngage().getInitialHolonomicPose())),
+            // new InstantCommand(() -> s_Swerve.resetOdometry(trajectories.scoreMobilityEngage().getInitialHolonomicPose())),
+            new InstantCommand(() -> {
+                PathPlannerTrajectory.PathPlannerState initialState = trajectories.scoreMobilityEngage().getInitialState();
+                  initialState =
+                      PathPlannerTrajectory.transformStateForAlliance(
+                          initialState, DriverStation.getAlliance());
+    
+                s_Swerve.resetOdometry(
+                    new Pose2d(
+                        initialState.poseMeters.getTranslation(), initialState.holonomicRotation));
+              }),
+           
             new SequentialCommandGroup(followCommand),
             new SequentialCommandGroup(eventMap.get("balance"))
 
@@ -212,7 +275,17 @@ public class AutoChooser {
         SequentialCommandGroup command = new SequentialCommandGroup();
         command.addCommands(
             (eventMap.get("scoreCubeHigh")),
-            new InstantCommand(() -> s_Swerve.resetOdometry(trajectories.scoreMobilityEngagePickup().getInitialHolonomicPose())),
+            // new InstantCommand(() -> s_Swerve.resetOdometry(trajectories.scoreMobilityEngagePickup().getInitialHolonomicPose())),
+            new InstantCommand(() -> {
+                PathPlannerTrajectory.PathPlannerState initialState = trajectories.scoreMobilityEngagePickup().getInitialState();
+                  initialState =
+                      PathPlannerTrajectory.transformStateForAlliance(
+                          initialState, DriverStation.getAlliance());
+    
+                s_Swerve.resetOdometry(
+                    new Pose2d(
+                        initialState.poseMeters.getTranslation(), initialState.holonomicRotation));
+              }),
             new SequentialCommandGroup(followCommand),
             (eventMap.get("balance"))
             //eventMap.get("shootCone")
@@ -221,24 +294,24 @@ public class AutoChooser {
         return command;
     }
 
-    public Command alternatePickup() {
-        var swerveCommand = createControllerCommand(trajectories.alternatePickup());
+    // public Command alternatePickup() {
+    //     var swerveCommand = createControllerCommand(trajectories.alternatePickup());
         
-        FollowPathWithEvents followCommand = new FollowPathWithEvents(
-        swerveCommand, 
-        trajectories.alternatePickup().getMarkers(), 
-        eventMap);
+    //     FollowPathWithEvents followCommand = new FollowPathWithEvents(
+    //     swerveCommand, 
+    //     trajectories.alternatePickup().getMarkers(), 
+    //     eventMap);
 
-        SequentialCommandGroup command = new SequentialCommandGroup();
-        command.addCommands(
-            //new SequentialCommandGroup(eventMap.get("scoreCubeHigh")),
-            new InstantCommand(() -> s_Swerve.resetOdometry(trajectories.alternatePickup().getInitialHolonomicPose())),
-            new SequentialCommandGroup(followCommand)
-            //new SequentialCommandGroup(eventMap.get("balance"))
+    //     SequentialCommandGroup command = new SequentialCommandGroup();
+    //     command.addCommands(
+    //         //new SequentialCommandGroup(eventMap.get("scoreCubeHigh")),
+    //         new InstantCommand(() -> s_Swerve.resetOdometry(trajectories.alternatePickup().getInitialHolonomicPose())),
+    //         new SequentialCommandGroup(followCommand)
+    //         //new SequentialCommandGroup(eventMap.get("balance"))
 
-        );
-        return command;
-    }
+    //     );
+    //     return command;
+    // }
 
 
     public PPSwerveControllerCommand createControllerCommand(PathPlannerTrajectory trajectory) {
@@ -272,8 +345,6 @@ public class AutoChooser {
             return twoCubeCC();
             case kScoremobilityengagepickup:
             return scoreMobilityEngagePickup();
-            case alternatePickup:
-            return alternatePickup();
             case kThreeLow:
             return threeLow();
         }

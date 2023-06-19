@@ -265,6 +265,7 @@ public class RobotContainer {
         SmartDashboard.putNumber("yaw", s_Swerve.gyro.getYaw());
         SmartDashboard.putNumber("pitch", s_Swerve.gyro.getPitch());
         SmartDashboard.putNumber("roll", s_Swerve.gyro.getRoll());
+        SmartDashboard.putNumber("elevatorPower", s_Elevator.elevatorPower());
 
         SmartDashboard.putNumber("Pid off", chooser.getPIDController().getPositionError());
 
