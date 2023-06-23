@@ -7,6 +7,7 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class Elevator extends SubsystemBase{
@@ -21,7 +22,7 @@ public class Elevator extends SubsystemBase{
         elevator = new CANSparkMax(31, MotorType.kBrushless);
         m_encoder = elevator.getEncoder();
         elevator.restoreFactoryDefaults();
-        elevator.setSmartCurrentLimit(60);
+        elevator.setSmartCurrentLimit(70);
         elevator.setInverted(true);
 
     }
@@ -57,6 +58,7 @@ public class Elevator extends SubsystemBase{
 
     public void moveElevator(double movementVector)
     {
+        
         if(movementVector < 0 && elevatorSwitchTriggered())
         {
             target = 0;
