@@ -30,6 +30,7 @@ public class Swerve extends SubsystemBase {
         
         gyro.configFactoryDefault();
         zeroGyro();
+        
 
         mSwerveMods = new SwerveModule[] {
             new SwerveModule(0, Constants.Swerve.Mod0.constants),
@@ -164,8 +165,8 @@ public class Swerve extends SubsystemBase {
             balanceController.setTolerance(2.5); //was 2.5
 
             target = balanceController.calculate(gyro.getPitch(), Constants.gyroOffset);
-            System.out.println("Transation target: " + -1*target);
-            drive(new Translation2d(-1*target, 0), 0, false, true);        
+            System.out.println("Transation target: " + 1*target);
+            drive(new Translation2d(1*target, 0), 0, false, true);        
         } 
         System.out.println("stopped balancing");
     }

@@ -244,7 +244,7 @@ public class AutoChooser {
 
         SequentialCommandGroup command = new SequentialCommandGroup();
         command.addCommands(
-           new SequentialCommandGroup(eventMap.get("scoreCubeHigh")),
+            new SequentialCommandGroup(eventMap.get("scoreCubeHigh")),
             // new InstantCommand(() -> s_Swerve.resetOdometry(trajectories.scoreMobilityEngage().getInitialHolonomicPose())),
             new InstantCommand(() -> {
                 PathPlannerTrajectory.PathPlannerState initialState = trajectories.scoreMobilityEngage().getInitialState();
@@ -256,7 +256,6 @@ public class AutoChooser {
                     new Pose2d(
                         initialState.poseMeters.getTranslation(), initialState.holonomicRotation));
               }),
-           
             new SequentialCommandGroup(followCommand),
             new SequentialCommandGroup(eventMap.get("balance"))
 

@@ -148,7 +148,7 @@ public class RobotContainer {
             new InstantCommand(() -> LEDzero.set(true)),
             new InstantCommand(() -> LEDone.set(true)),
             new InstantCommand(() -> s_Elevator.setHeight(Constants.elevatorHighScore)),
-            new WaitCommand(.75),
+            new WaitCommand(.25),
             new InstantCommand(() -> s_Wrist.setRotation(Constants.wristHighConeScore))
           )
           
@@ -159,7 +159,7 @@ public class RobotContainer {
             new InstantCommand(() -> LEDzero.set(true)),
             new InstantCommand(() -> LEDone.set(true)),
             new InstantCommand(() -> s_Elevator.setHeight(Constants.elevatorMidScore)),
-            new WaitCommand(.25),
+            new WaitCommand(.1),
             new InstantCommand(() -> s_Wrist.setRotation(Constants.wristMidConeScore))
           )
         );
@@ -187,7 +187,7 @@ public class RobotContainer {
             new InstantCommand(() -> LEDzero.set(true)),
             new InstantCommand(() -> LEDone.set(true)),
             new InstantCommand(() -> s_Elevator.setHeight(Constants.elevatorHighCubeScore)),
-            new WaitCommand(.75),
+            new WaitCommand(.25),
             new InstantCommand(() -> s_Wrist.setRotation(Constants.wristHighCubeScore))
           )
         );
@@ -207,7 +207,7 @@ public class RobotContainer {
             new InstantCommand(() -> LEDzero.set(true)),
             new InstantCommand(() -> LEDone.set(true)),
             new InstantCommand(() -> s_Elevator.setHeight(Constants.elevatorMidCubeScore)),
-            new WaitCommand(.25),
+            new WaitCommand(.1),
             new InstantCommand(() -> s_Wrist.setRotation(Constants.wristMidCubeScore))
           )
         );
