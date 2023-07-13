@@ -41,17 +41,17 @@ public final class Constants {
     public static final double WRIST_MID_LIMIT = 0.63;
     public static final double WRIST_UPPER_LIMIT = 0.86;
 
-    public static final double wristHighConeScore = 0.593; //.613
+    public static final double wristHighConeScore = 0.565; //.613
     public static final double wristHighCubeScore = 0.795;
     public static final double wristMidConeScore = 0.456; //0.607;
     public static final double wristMidCubeScore = 0.755;
     public static final double wristConePickup = 0.468;
-    public static final double wristConePickup2 = 0.8;
+    public static final double wristConePickup2 = 0.786; //was 0.8
     public static final double wristCubePickup = 0.590; //was .590 (low) .648 )high)
 
     public static final class Swerve {
         public static final int pigeonID = 35;
-        public static final boolean invertGyro = false; // Always ensure Gyro is CCW+ CW-
+        public static final boolean invertGyro = false; // Always ensure Gyro is CCW+ CW- (DO NOT USE, ENABLES ROBOT-CENTRIC)
 
         public static final COTSFalconSwerveConstants chosenModule =  
             COTSFalconSwerveConstants.SDSMK4i(COTSFalconSwerveConstants.driveGearRatios.SDSMK4i_L2);

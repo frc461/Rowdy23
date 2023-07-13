@@ -16,7 +16,7 @@ public class Elevator extends SubsystemBase{
     private RelativeEncoder m_encoder;
     double position = 0;
     double target = 0;
-    DigitalInput elevatorSwitch = new DigitalInput(3);
+    DigitalInput elevatorSwitch = new DigitalInput(3); //limit switch that re-zeros the elevator encoder;
 
     public Elevator() {
         elevator = new CANSparkMax(31, MotorType.kBrushless);

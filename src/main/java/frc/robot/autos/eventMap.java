@@ -76,7 +76,7 @@ public class eventMap {
             Commands.sequence(
             new InstantCommand(() -> s_Elevator.setHeight(Constants.elevatorHighScore)),
             new InstantCommand(() -> s_Wrist.setRotation(Constants.wristHighConeScore)),
-            new WaitCommand(1.2),
+            new WaitCommand(0.75),
             new AutoIntakeCommand(s_Intake, 1, true),
             new WaitCommand(0.5),
             new InstantCommand(() -> s_Elevator.setHeight(Constants.elevatorBot)),

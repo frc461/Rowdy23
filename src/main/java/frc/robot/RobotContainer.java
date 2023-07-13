@@ -2,6 +2,8 @@ package frc.robot;
 
 import java.util.HashMap;
 import java.util.List;
+
+import com.ctre.phoenix.sensors.Pigeon2;
 import com.pathplanner.lib.PathConstraints;
 import com.pathplanner.lib.PathPlanner;
 import com.pathplanner.lib.PathPlannerTrajectory;
@@ -33,7 +35,7 @@ import frc.robot.subsystems.*;
 
 public class RobotContainer {
     /* Subsystems */
-    private final Swerve s_Swerve = new Swerve();
+    public final Swerve s_Swerve = new Swerve();
     private final Elevator s_Elevator = new Elevator();
     private final Intake s_Intake = new Intake();
     private final Wrist s_Wrist = new Wrist(s_Elevator.getEncoder());
@@ -88,6 +90,8 @@ public class RobotContainer {
 
     /* Variables */
     boolean driveStatus = false;
+
+    
     
     /** The container for the robot. Contains subsystems, OI devices, and commands. */
     public RobotContainer() {
@@ -283,7 +287,8 @@ public class RobotContainer {
     public Command getAutonomousCommand() {
 
       Constants.gyroOffset = s_Swerve.gyro.getPitch();
-      s_Swerve.zeroGyro();
+      //s_Swerve.zeroGyro();
+      s_Swerve.gyro.setYaw(180);
       return chooser.getCommand();
     }
 }
