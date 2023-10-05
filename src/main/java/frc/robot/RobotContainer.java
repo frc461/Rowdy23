@@ -39,6 +39,7 @@ public class RobotContainer {
     private final Elevator s_Elevator = new Elevator();
     private final Intake s_Intake = new Intake();
     private final Wrist s_Wrist = new Wrist(s_Elevator.getEncoder());
+    private final Limelight limelight = new Limelight();
     private final eventMap map = new eventMap(s_Swerve, s_Intake, s_Wrist, s_Elevator);
     private final AutoTrajectories trajectories = new AutoTrajectories();
     private final AutoChooser chooser = new AutoChooser(trajectories, map.getMap(), s_Swerve, s_Intake, s_Wrist, s_Elevator);
@@ -68,6 +69,8 @@ public class RobotContainer {
     private final JoystickButton e_presButton_2 = new JoystickButton(operator, XboxController.Button.kA.value);
     private final JoystickButton e_presButton_3 = new JoystickButton(operator, XboxController.Button.kB.value);
 
+    private final JoystickButton 
+    limelighButton = new JoystickButton(driver, XboxController.Button.kA.value);
 
     private final POVButton w_preset_0 = new POVButton(operator, 0);
     private final POVButton w_preset_1 = new POVButton(operator, 90);
@@ -241,6 +244,13 @@ public class RobotContainer {
             new InstantCommand(() -> s_Elevator.setHeight(Constants.elevatorBot)),
             new InstantCommand(() -> s_Wrist.setRotation(Constants.WRIST_UPPER_LIMIT))
             )
+        );
+
+        limelighButton.onTrue(
+          Commands.sequence(
+            new InstantCommand(() -> s_Swerve.limelightDrive(limelight)),
+            new PrintCommand(Double.toString(limelight.getTZ()))
+          )
         );
 
         //driver_AutoBalance.onTrue(new InstantCommand(() -> s_Swerve.autoBalance()));

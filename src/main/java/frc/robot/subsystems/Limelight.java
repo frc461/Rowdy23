@@ -5,11 +5,12 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class Limelight extends SubsystemBase{
 
-    NetworkTable table = NetworkTableInstance.getDefault().getTable("limelight");
+    NetworkTable table = NetworkTableInstance.getDefault().getTable("campose");
     private double botpose[];
 
     public void refreshValues(){
-        botpose = table.getEntry("botpose").getDoubleArray(new double[6]);
+        botpose = table.getEntry("campose").getDoubleArray(new double[6]);
+        System.out.println("refresh");
     }
 
     public double getRX(){
@@ -27,13 +28,13 @@ public class Limelight extends SubsystemBase{
         return botpose[2];
     }
 
+    public double getTZ(){
+        refreshValues();
+        return botpose[2];
+    }
+
     public double getRot(){
         refreshValues();
         return botpose[3];
-    }
-
-    public double getWhoKnowsWHat(){
-        refreshValues();
-        return botpose[4];
     }
 }

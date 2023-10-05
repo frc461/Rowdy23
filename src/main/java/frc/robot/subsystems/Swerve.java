@@ -152,6 +152,12 @@ public class Swerve extends SubsystemBase {
         // SwerveModule.setAngle(new SwerveModuleState(0.0, Rotation2d.fromDegrees(45+90+90+90)));
     // }
 
+    public void limelightDrive(Limelight limelight){
+        while (limelight.getRZ() > 0.65) {
+            drive(new Translation2d(.1,0),0,false,false);
+        }
+    }
+
     public void autoBalance(){
         double target = 0;
         System.out.println("Autobalance Start");
@@ -171,31 +177,4 @@ public class Swerve extends SubsystemBase {
         System.out.println("stopped balancing");
     }
     
-    //worse version(?) that pauses to let the platform settle.
-    public void alternateAutoBalance(){
-        double target = 0;
-        System.out.println("Autobalance Start");
-        Timer timer = new Timer();
-        timer.reset();
-        timer.start();
-        Timer timer2 = new Timer();
-        timer2.reset();
-        timer2.start();
-        while(timer2.get() < 8){
-            while(timer.get() < 1){
-
-                PIDController balanceController = new PIDController(.033,0.01 ,0.00000000000001);
-                balanceController.setTolerance(1.5); //was 2.5
-
-                target = balanceController.calculate(gyro.getPitch(), Constants.gyroOffset);
-                System.out.println("Transation target: " + -1*target);
-                drive(new Translation2d(-1*target, 0), 0, false, true);        
-            } 
-            while(timer2.get() > .5){
-
-            }
-            timer2.reset();
-            timer2.start();
-        }
-    }
 }
