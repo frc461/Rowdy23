@@ -13,6 +13,8 @@ import com.pathplanner.lib.auto.PIDConstants;
 import com.pathplanner.lib.auto.SwerveAutoBuilder;
 import com.pathplanner.lib.commands.PPSwerveControllerCommand;
 
+import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.DigitalOutput;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
@@ -247,10 +249,7 @@ public class RobotContainer {
         );
 
         limelighButton.onTrue(
-          Commands.sequence(
-            new InstantCommand(() -> s_Swerve.limelightDrive(limelight)),
-            new PrintCommand(Double.toString(limelight.getTZ()))
-          )
+          new InstantCommand(()->s_Swerve.drive(new Translation2d(limelight.getRX(), limelight.getRY()), 0, false, false))
         );
 
         //driver_AutoBalance.onTrue(new InstantCommand(() -> s_Swerve.autoBalance()));
