@@ -6,6 +6,7 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
+    import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
 import edu.wpi.first.math.util.Units;
 import frc.lib.util.COTSFalconSwerveConstants;
 import frc.lib.util.SwerveModuleConstants;
@@ -16,7 +17,7 @@ public final class Constants {
     public static double gyroOffset = 0;
 
     
-    public static final double ELEVATOR_P = 0.097;//0.015;
+    public static final double ELEVATOR_P = 0.097;//0.097;
     public static final double ELEVATOR_I = 0.0;
     public static final double ELEVATOR_D = 0.0;//0.001;
     public static final double ELEVATOR_FF = 0.0010000000474974513;
@@ -48,6 +49,8 @@ public final class Constants {
     public static final double wristConePickup = 0.468;
     public static final double wristConePickup2 = 0.786; //was 0.8
     public static final double wristCubePickup = 0.590; //was .590 (low) .648 )high)
+
+    public static final Constraints kThetaControllerConstraints = null;
 
     public static final class Swerve {
         public static final int pigeonID = 35;
