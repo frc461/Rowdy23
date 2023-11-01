@@ -1,8 +1,13 @@
 package frc.robot.subsystems;
+import java.util.ArrayList;
+import java.util.List;
+
 import com.pathplanner.lib.commands.FollowPathWithEvents;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation2d;
@@ -61,7 +66,10 @@ public class Limelight extends SubsystemBase{
 
     public Trajectory testTraj(){
         TrajectoryConfig config = new TrajectoryConfig(1, 1);
-        return TrajectoryGenerator.generateTrajectory(new Pose2d(0, 1, null), null, new Pose2d(3, 1, null), config);
+        var interiorWaypoints = new ArrayList<Translation2d>();
+        interiorWaypoints.add(new Translation2d(0, 2));
+        return TrajectoryGenerator.generateTrajectory(new Pose2d(0, 1, Rotation2d.fromDegrees(-160)), interiorWaypoints, new Pose2d(3, 1, Rotation2d.fromDegrees(-160)), config);
+        
     }
     
 
