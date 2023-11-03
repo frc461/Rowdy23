@@ -4,6 +4,10 @@ import java.util.List;
 
 import com.pathplanner.lib.commands.FollowPathWithEvents;
 
+
+//plenty of newlines here to piss off beck :)
+
+
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -24,6 +28,7 @@ public class Limelight extends SubsystemBase{
 
     NetworkTable table = NetworkTableInstance.getDefault().getTable("limelight");
     private double botpose[];
+    private double botposefromtag[];
 
     public void refreshValues(){
         botpose = table.getEntry("botpose").getDoubleArray(new double[6]);
@@ -65,11 +70,14 @@ public class Limelight extends SubsystemBase{
     }
 
     public Trajectory testTraj(){
+        botposefromtag = table.getEntry("botpose_targetspace").getDoubleArray(new double[6]);
+        double bpftX = botposefromtag[0]; //X+ is to the right if you are looking at the tag
+        double bpftZ = botposefromtag[2]; //Z+ is perpendicular to the plane of the tag (Z+ is away from tag on data side, Z- is away on non data side)
+
         TrajectoryConfig config = new TrajectoryConfig(1, 1);
         var interiorWaypoints = new ArrayList<Translation2d>();
-        interiorWaypoints.add(new Translation2d(0, 2));
-        return TrajectoryGenerator.generateTrajectory(new Pose2d(0, 1, Rotation2d.fromDegrees(-160)), interiorWaypoints, new Pose2d(3, 1, Rotation2d.fromDegrees(-160)), config);
-        
+        interiorWaypoints.add(new Translation2d(bpftX, bpftZ)); //apparently these need to be here for some reason, but it someone can find a way to not have interior waypoints please do...
+        return TrajectoryGenerator.generateTrajectory(new Pose2d(bpftX, bpftZ, Rotation2d.fromDegrees(0)), interiorWaypoints, new Pose2d(0, 0, Rotation2d.fromDegrees(0)), config); //theoretically this path goes to (0,0,0), the pos of the tag, from the robot's location
     }
 
     FollowPathWithEvents follower = new FollowPathWithEvents(null, null, null);    

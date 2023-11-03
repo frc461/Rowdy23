@@ -240,7 +240,6 @@ public class RobotContainer {
             )
         );
 
-
         limelighButton.whileTrue(
            new SwerveControllerCommand(
             limelight.testTraj(),
@@ -261,7 +260,7 @@ public class RobotContainer {
         
     }
     
-    public void printValues(){
+    public void printValues(){ //all of the smartdashboard prints:
         SmartDashboard.putNumber("balanceP", 0.03);
         // SmartDashboard.getNumber("balanceI", elevatorAxis);
         // SmartDashboard.getNumber("balanceD", elevatorAxis);

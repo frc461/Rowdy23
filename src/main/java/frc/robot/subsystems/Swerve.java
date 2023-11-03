@@ -152,12 +152,6 @@ public class Swerve extends SubsystemBase {
         // SwerveModule.setAngle(new SwerveModuleState(0.0, Rotation2d.fromDegrees(45+90+90+90)));
     // }
 
-    public void limelightDrive(Limelight limelight){
-        while (limelight.getRZ() > 0.65) {
-            drive(new Translation2d(.1,0),0,false,false);
-        }
-    }
-
     public void autoBalance(){
         double target = 0;
         System.out.println("Autobalance Start");
