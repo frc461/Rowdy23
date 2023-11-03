@@ -1,7 +1,15 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj2.command.*;
+import com.pathplanner.lib.auto.PIDConstants;
+import com.pathplanner.lib.auto.SwerveAutoBuilder;
+import com.pathplanner.lib.commands.PPSwerveControllerCommand;
+
+import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.controller.ProfiledPIDController;
+import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj.DigitalOutput;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
@@ -232,8 +240,17 @@ public class RobotContainer {
             )
         );
 
-        limelighButton.onTrue(
-          new InstantCommand(()->s_Swerve.drive(new Translation2d(limelight.getRX(), limelight.getRY()), 0, false, false))
+
+        limelighButton.whileTrue(
+           new SwerveControllerCommand(
+            limelight.testTraj(),
+            s_Swerve::getPose,
+            Constants.Swerve.swerveKinematics,
+            new PIDController(1, 0, 0),
+            new PIDController(1, 0, 0),
+            new ProfiledPIDController(1, 0, 0, Constants.AutoConstants.kThetaControllerConstraints),
+            s_Swerve::setModuleStates,
+            s_Swerve)
         );
 
         //driver_AutoBalance.onTrue(new InstantCommand(() -> s_Swerve.autoBalance()));
