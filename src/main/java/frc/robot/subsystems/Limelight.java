@@ -63,7 +63,8 @@ public class Limelight extends SubsystemBase{
         TrajectoryConfig config = new TrajectoryConfig(1, 1);
         return TrajectoryGenerator.generateTrajectory(new Pose2d(0, 1, null), null, new Pose2d(3, 1, null), config);
     }
-    
+
+    FollowPathWithEvents follower = new FollowPathWithEvents(null, null, null);    
 
     /* how to go to apriltag:
      * find tag (duh)
@@ -73,3 +74,4 @@ public class Limelight extends SubsystemBase{
     */
 
 }
+

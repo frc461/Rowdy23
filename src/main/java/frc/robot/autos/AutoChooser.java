@@ -25,6 +25,7 @@ import frc.robot.commands.AutoBalance;
 import frc.robot.commands.AutoIntakeCommand;
 import frc.robot.subsystems.Elevator;
 import frc.robot.subsystems.Intake;
+import frc.robot.subsystems.Limelight;
 import frc.robot.subsystems.Swerve;
 import frc.robot.subsystems.Wrist;
 
@@ -204,6 +205,16 @@ public class AutoChooser {
         );
         return command;
     }
+
+    // public Command goToTag(){
+    //     var swerveCommand = createControllerCommand();
+        
+    //     Command s_Limelight;
+    //     FollowPathWithEvents followCommand = new FollowPathWithEvents(
+    //     swerveCommand, 
+    //     trajectories.twoCubeCC().getMarkers(), 
+    //     eventMap);
+    // }
 
     public Command twoCubeCC() {
         var swerveCommand = createControllerCommand(trajectories.twoCubeCC());

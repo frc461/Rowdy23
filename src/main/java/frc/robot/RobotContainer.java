@@ -1,19 +1,6 @@
 package frc.robot;
 
-import java.util.HashMap;
-import java.util.List;
-
-import com.ctre.phoenix.sensors.Pigeon2;
-import com.pathplanner.lib.PathConstraints;
-import com.pathplanner.lib.PathPlanner;
-import com.pathplanner.lib.PathPlannerTrajectory;
-
 import edu.wpi.first.wpilibj2.command.*;
-import com.pathplanner.lib.auto.PIDConstants;
-import com.pathplanner.lib.auto.SwerveAutoBuilder;
-import com.pathplanner.lib.commands.PPSwerveControllerCommand;
-
-import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.DigitalOutput;
 import edu.wpi.first.wpilibj.GenericHID;
@@ -64,8 +51,6 @@ public class RobotContainer {
     private final int wristAxis = XboxController.Axis.kLeftY.value;
     private final int elevatorAxis = XboxController.Axis.kRightY.value;
 
-
-
     private final JoystickButton e_presButton_0 = new JoystickButton(operator, XboxController.Button.kY.value);
     private final JoystickButton e_presButton_1 = new JoystickButton(operator, XboxController.Button.kX.value);
     private final JoystickButton e_presButton_2 = new JoystickButton(operator, XboxController.Button.kA.value);
@@ -96,7 +81,6 @@ public class RobotContainer {
     /* Variables */
     boolean driveStatus = false;
 
-    
     
     /** The container for the robot. Contains subsystems, OI devices, and commands. */
     public RobotContainer() {
