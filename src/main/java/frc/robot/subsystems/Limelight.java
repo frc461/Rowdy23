@@ -4,6 +4,8 @@ import java.util.List;
 
 import com.pathplanner.lib.commands.FollowPathWithEvents;
 
+import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.controller.ProfiledPIDController;
 
 //plenty of newlines here to piss off beck :)
 
@@ -21,8 +23,10 @@ import edu.wpi.first.math.trajectory.TrajectoryConfig;
 import edu.wpi.first.math.trajectory.TrajectoryGenerator;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
+import frc.robot.Constants;
 
 public class Limelight extends SubsystemBase{
 
@@ -31,7 +35,7 @@ public class Limelight extends SubsystemBase{
     private double botposefromtag[];
 
     public void refreshValues(){
-        botpose = table.getEntry("botpose").getDoubleArray(new double[6]);
+        botpose = table.getEntry("botpose_targetspace").getDoubleArray(new double[6]);
         System.out.println("refresh");
     }
 
@@ -74,13 +78,15 @@ public class Limelight extends SubsystemBase{
         double bpftX = botposefromtag[0]; //X+ is to the right if you are looking at the tag
         double bpftZ = botposefromtag[2]; //Z+ is perpendicular to the plane of the tag (Z+ is away from tag on data side, Z- is away on non data side)
 
-        TrajectoryConfig config = new TrajectoryConfig(1, 1);
+        TrajectoryConfig config = new TrajectoryConfig(0.5, 0.5);
         var interiorWaypoints = new ArrayList<Translation2d>();
-        interiorWaypoints.add(new Translation2d(bpftX, bpftZ)); //apparently these need to be here for some reason, but it someone can find a way to not have interior waypoints please do...
-        return TrajectoryGenerator.generateTrajectory(new Pose2d(bpftX, bpftZ, Rotation2d.fromDegrees(0)), interiorWaypoints, new Pose2d(0, 0, Rotation2d.fromDegrees(0)), config); //theoretically this path goes to (0,0,0), the pos of the tag, from the robot's location
+        interiorWaypoints.add(new Translation2d(5,5)); //you can add waypoints like this
+        return TrajectoryGenerator.generateTrajectory(new Pose2d(10, 10, Rotation2d.fromDegrees(0)), interiorWaypoints, new Pose2d(0, 0, Rotation2d.fromDegrees(0)), config); //theoretically this path goes to (0,0,0), the pos of the tag, from the robot's location
     }
 
-    FollowPathWithEvents follower = new FollowPathWithEvents(null, null, null);    
+    
+
+    //FollowPathWithEvents follower = new FollowPathWithEvents(null, null, null);    
 
     /* how to go to apriltag:
      * find tag (duh)

@@ -109,14 +109,14 @@ public final class Constants {
         public static final double angleKF = chosenModule.angleKF;
 
         /* Drive Motor PID Values */
-        public static final double driveKP = 0.05; //TODO: This must be tuned to specific robot
+        public static final double driveKP = 0.05; 
         public static final double driveKI = 0.0;
         public static final double driveKD = 0.0;
         public static final double driveKF = 0.0;
 
         /* Drive Motor Characterization Values 
          * Divide SYSID values by 12 to convert from volts to percent output for CTRE */
-        public static final double driveKS = (0.16861 / 12); //TODO: This must be tuned to specific robot
+        public static final double driveKS = (0.16861 / 12);
         public static final double driveKV = (2.6686 / 12);
         public static final double driveKA = (0.34757 / 12);
 
@@ -128,11 +128,11 @@ public final class Constants {
 
         /* Swerve Profiling Values */
         /** Meters per Second */
-        public static final double maxSpeed = 4.1; //TODO: This must be tuned to specific robot
-        public static final double maxAccel = 4.1; //TODO: This must be tuned to specific robot
+        public static final double maxSpeed = 4.1; 
+        public static final double maxAccel = 4.1; 
 
         /** Radians per Second */
-        public static final double maxAngularVelocity = 10.0; //TODO: This must be tuned to specific robot
+        public static final double maxAngularVelocity = 10.0;
 
         /* Neutral Modes */
         public static final IdleMode angleNeutralMode = IdleMode.kCoast;

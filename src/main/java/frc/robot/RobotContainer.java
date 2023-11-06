@@ -8,6 +8,8 @@ import com.pathplanner.lib.commands.PPSwerveControllerCommand;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj.DigitalOutput;
@@ -90,7 +92,7 @@ public class RobotContainer {
     boolean driveStatus = false;
 
     
-    /** The container for the robot. Contains subsystems, OI devices, and commands. */
+    /** The container for the robot. Contains subsystems, IO devices, and commands. */
     public RobotContainer() {
       s_Swerve.setDefaultCommand(
         new TeleopSwerve(
@@ -240,17 +242,24 @@ public class RobotContainer {
             )
         );
 
-        limelighButton.whileTrue(
-           new SwerveControllerCommand(
-            limelight.testTraj(),
-            s_Swerve::getPose,
-            Constants.Swerve.swerveKinematics,
-            new PIDController(1, 0, 0),
-            new PIDController(1, 0, 0),
-            new ProfiledPIDController(1, 0, 0, Constants.AutoConstants.kThetaControllerConstraints),
-            s_Swerve::setModuleStates,
-            s_Swerve)
-        );
+        
+       
+      //     SwerveControllerCommand swerveControllerCommand =
+      //     new SwerveControllerCommand(
+      //      limelight.testTraj(),
+      //      s_Swerve::getPose,
+      //      Constants.Swerve.swerveKinematics,
+      //      new PIDController(1, 0, 0),
+      //      new PIDController(1, 0, 0),
+      //      new ProfiledPIDController(1, 0, 0, Constants.AutoConstants.kThetaControllerConstraints),
+      //      s_Swerve::setModuleStates,
+      //      s_Swerve);
+      // driver_limelightButton.onTrue(
+      //   swerveCon    
+      // );
+      
+
+        
 
         //driver_AutoBalance.onTrue(new InstantCommand(() -> s_Swerve.autoBalance()));
         
@@ -298,6 +307,25 @@ public class RobotContainer {
       Constants.gyroOffset = s_Swerve.gyro.getPitch();
       //s_Swerve.zeroGyro();
       s_Swerve.gyro.setYaw(180);
-      return chooser.getCommand();
+      // s_Swerve.resetOdometry(new Pose2d(
+      // limelight.getRX(), limelight.getRZ(), Rotation2d.fromDegrees(0))
+      // );
+      s_Swerve.resetOdometry(new Pose2d(
+        10, 10, Rotation2d.fromDegrees(0))
+        );
+      return(
+        new SwerveControllerCommand(
+         limelight.testTraj(),
+         s_Swerve::getPose,
+         Constants.Swerve.swerveKinematics,
+         new PIDController(1, 0.05, 0.01),
+         new PIDController(1, 0.05, 0.01),
+         new ProfiledPIDController(1, 0.05, 0, Constants.AutoConstants.kThetaControllerConstraints),
+         s_Swerve::setModuleStates,
+         s_Swerve)
+      );
+      
+      
+      //chooser.getCommand();
     }
 }
