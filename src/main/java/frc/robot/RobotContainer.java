@@ -79,7 +79,7 @@ public class RobotContainer {
     private final JoystickButton zeroGyro = new JoystickButton(driver, XboxController.Button.kY.value);
     private final JoystickButton robotCentric = new JoystickButton(driver, XboxController.Button.kLeftBumper.value);
     private final JoystickButton driver_stowButton = new JoystickButton(driver, XboxController.Button.kRightBumper.value);
-    private final JoystickButton driver_AutoBalance = new JoystickButton(driver, XboxController.Button.kB.value);
+    private final JoystickButton driver_limelightButton = new JoystickButton(driver, XboxController.Button.kB.value);
 
     private final POVButton driver_stowButton2 = new POVButton(operator, 270);
     // private final JoystickButton xModeButton = new JoystickButton(driver, XboxController.Button.kX.value);
@@ -243,23 +243,26 @@ public class RobotContainer {
         );
 
         
-       
-      //     SwerveControllerCommand swerveControllerCommand =
-      //     new SwerveControllerCommand(
-      //      limelight.testTraj(),
-      //      s_Swerve::getPose,
-      //      Constants.Swerve.swerveKinematics,
-      //      new PIDController(1, 0, 0),
-      //      new PIDController(1, 0, 0),
-      //      new ProfiledPIDController(1, 0, 0, Constants.AutoConstants.kThetaControllerConstraints),
-      //      s_Swerve::setModuleStates,
-      //      s_Swerve);
-      // driver_limelightButton.onTrue(
-      //   swerveCon    
-      // );
-      
+          driver_limelightButton.onTrue(
+            Commands.sequence(
+            new InstantCommand(() -> limelight.refreshValues()),
+            new InstantCommand(() -> s_Swerve.resetOdometry(
+            new Pose2d(
+                limelight.botPose2d[0], limelight.botPose2d[1], Rotation2d.fromDegrees(0)))),
+            
+            new SwerveControllerCommand (
+              limelight.testTraj(s_Swerve.getYaw()),
+              s_Swerve::getPose,
+              Constants.Swerve.swerveKinematics,
+              new PIDController(1, 0, 0),
+              new PIDController(1, 0, 0),
+              new ProfiledPIDController(1, 0, 0, Constants.AutoConstants.kThetaControllerConstraints),
+              s_Swerve::setModuleStates,
+              s_Swerve
+            )
+            )
+          );
 
-        
 
         //driver_AutoBalance.onTrue(new InstantCommand(() -> s_Swerve.autoBalance()));
         
@@ -273,8 +276,8 @@ public class RobotContainer {
         SmartDashboard.putNumber("balanceP", 0.03);
         // SmartDashboard.getNumber("balanceI", elevatorAxis);
         // SmartDashboard.getNumber("balanceD", elevatorAxis);
-
-
+        SmartDashboard.putNumber("bpftX", limelight.botPose2d[0]);
+        SmartDashboard.putNumber("bpftZ", limelight.botPose2d[1]);
         SmartDashboard.putBoolean("Pov pressed", e_presButton_0.getAsBoolean());
         SmartDashboard.putNumber("Elevator Position", s_Elevator.getEncoder().getPosition());
         SmartDashboard.putNumber("Elevator Target", s_Elevator.getTarget());
@@ -315,7 +318,7 @@ public class RobotContainer {
         );
       return(
         new SwerveControllerCommand(
-         limelight.testTraj(),
+         limelight.testTraj(s_Swerve.getYaw()),
          s_Swerve::getPose,
          Constants.Swerve.swerveKinematics,
          new PIDController(1, 0.05, 0.01),
