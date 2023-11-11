@@ -21,6 +21,7 @@ import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.math.trajectory.TrajectoryConfig;
 import edu.wpi.first.math.trajectory.TrajectoryGenerator;
+import edu.wpi.first.math.trajectory.TrajectoryGenerator.ControlVectorList;
 import edu.wpi.first.networktables.DoubleArraySubscriber;
 import edu.wpi.first.networktables.DoubleSubscriber;
 import edu.wpi.first.networktables.NetworkTable;
@@ -94,14 +95,14 @@ public class Limelight extends SubsystemBase{
 
     public Trajectory testTraj(Rotation2d yaw){
         TrajectoryConfig config = new TrajectoryConfig(0.5, 0.5);
-        var interiorWaypoints = new ArrayList<Translation2d>();
-        interiorWaypoints.add(new Translation2d(0.3, 0.3)); //you can add waypoints like this
         
         return TrajectoryGenerator.generateTrajectory(
-        new Pose2d(botPoseZ, botPoseX, yaw),
-        interiorWaypoints,
-        new Pose2d(0.1, 0.1, Rotation2d.fromDegrees(0)), 
-        config); //theoretically this path goes to (0,0,0), the pos of the tag, from the robot's location
+            List.of(
+                new Pose2d(botPoseZ, -botPoseX, yaw),
+                new Pose2d(0.65, 0, Rotation2d.fromDegrees(0))
+            ), 
+            config
+        ); //theoretically this path goes to (0,0,0), the pos of the tag, from the robot's location
     }
 
     

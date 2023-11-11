@@ -245,21 +245,23 @@ public class RobotContainer {
         
           driver_limelightButton.onTrue(
             Commands.sequence(
-            new InstantCommand(() -> limelight.refreshValues()),
-            new InstantCommand(() -> s_Swerve.resetOdometry(
-            new Pose2d(
-                limelight.botPose2d[0], limelight.botPose2d[1], Rotation2d.fromDegrees(0)))),
-            
-            new SwerveControllerCommand (
-              limelight.testTraj(s_Swerve.getYaw()),
-              s_Swerve::getPose,
-              Constants.Swerve.swerveKinematics,
-              new PIDController(1, 0, 0),
-              new PIDController(1, 0, 0),
-              new ProfiledPIDController(1, 0, 0, Constants.AutoConstants.kThetaControllerConstraints),
-              s_Swerve::setModuleStates,
-              s_Swerve
-            )
+              new InstantCommand(() -> limelight.refreshValues()),
+              new InstantCommand(() -> s_Swerve.resetOdometry(
+              new Pose2d(
+                  limelight.botPoseZ, -limelight.botPoseX, Rotation2d.fromDegrees(0)
+                  )
+                )
+              ),
+              new SwerveControllerCommand (
+                limelight.testTraj(s_Swerve.getYaw()),
+                s_Swerve::getPose,
+                Constants.Swerve.swerveKinematics,
+                new PIDController(1, 0, 0),
+                new PIDController(1, 0, 0),
+                new ProfiledPIDController(1, 0, 0, Constants.AutoConstants.kThetaControllerConstraints),
+                s_Swerve::setModuleStates,
+                s_Swerve
+              )
             )
           );
 
@@ -276,8 +278,9 @@ public class RobotContainer {
         SmartDashboard.putNumber("balanceP", 0.03);
         // SmartDashboard.getNumber("balanceI", elevatorAxis);
         // SmartDashboard.getNumber("balanceD", elevatorAxis);
-        SmartDashboard.putNumber("bpftX", limelight.botPose2d[0]);
-        SmartDashboard.putNumber("bpftZ", limelight.botPose2d[1]);
+        SmartDashboard.putNumber("bpftX", limelight.botPoseX);
+        SmartDashboard.putNumber("bpftZ", limelight.botPoseZ);
+        SmartDashboard.putNumber("Limelight updates", limelight.updates);
         SmartDashboard.putBoolean("Pov pressed", e_presButton_0.getAsBoolean());
         SmartDashboard.putNumber("Elevator Position", s_Elevator.getEncoder().getPosition());
         SmartDashboard.putNumber("Elevator Target", s_Elevator.getTarget());
