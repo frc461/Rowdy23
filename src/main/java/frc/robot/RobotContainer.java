@@ -256,8 +256,8 @@ public class RobotContainer {
                 limelight.testTraj(s_Swerve.getYaw()),
                 s_Swerve::getPose,
                 Constants.Swerve.swerveKinematics,
-                new PIDController(0.5, 0, 0),
-                new PIDController(0.5, 0, 0),
+                new PIDController(0.6, 0, 0),
+                new PIDController(0.7, 0, 0.1),
                 new ProfiledPIDController(0.2, 0, 0, Constants.AutoConstants.kThetaControllerConstraints),
                 s_Swerve::setModuleStates,
                 s_Swerve

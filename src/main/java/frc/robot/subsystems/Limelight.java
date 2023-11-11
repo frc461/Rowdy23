@@ -98,12 +98,26 @@ public class Limelight extends SubsystemBase{
         
         return TrajectoryGenerator.generateTrajectory(
             List.of(
-                new Pose2d(botPoseZ, -botPoseX, yaw),
-                new Pose2d(0.65, 0, Rotation2d.fromDegrees(0))
-            ), 
+                new Pose2d(botPoseZ, botPoseX, Rotation2d.fromDegrees(botPose[4])),
+                new Pose2d(.45, 0, Rotation2d.fromDegrees(0))
+            ),
             config
         ); //theoretically this path goes to (0,0,0), the pos of the tag, from the robot's location
     }
+
+    //Dont delete this eudard
+    // public Trajectory testTraj(Rotation2d yaw){
+    //     TrajectoryConfig config = new TrajectoryConfig(0.5, 0.5);
+    //     var interiorWaypoints = new ArrayList<Translation2d>();
+    //     interiorWaypoints.add(new Translation2d(-2,0));
+
+    //     return TrajectoryGenerator.generateTrajectory(
+    //     new Pose2d(botPoseZ, botPoseX, Rotation2d.fromDegrees(botPose[4])),
+    //     interiorWaypoints,
+    //     new Pose2d(0.65, 0, Rotation2d.fromDegrees(10)),
+    //     config
+    //     ); //theoretically this path goes to (0,0,0), the pos of the tag, from the robot's location
+    // }
 
     
 
