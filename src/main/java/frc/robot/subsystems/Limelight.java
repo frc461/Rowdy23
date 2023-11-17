@@ -128,7 +128,7 @@ public class Limelight extends SubsystemBase{
     public Command getTagCommand() {
         // Since we are using a holonomic drivetrain, the rotation component of this pose
         // represents the goal holonomic rotation
-        Pose2d targetPose = new Pose2d(0.2, 0, Rotation2d.fromDegrees(0));
+        Pose2d targetPose = new Pose2d(0.45, 0, Rotation2d.fromDegrees(0));
 
         // Create the constraints to use while pathfinding
         PathConstraints constraints = new PathConstraints(
@@ -136,14 +136,12 @@ public class Limelight extends SubsystemBase{
             Constants.Swerve.maxAngularVelocity, Units.degreesToRadians(720));
 
         // Since AutoBuilder is configured, we can use it to build pathfinding commands
-        Command pathfindingCommand = AutoBuilder.pathfindToPose(
+        return AutoBuilder.pathfindToPose(
             targetPose,
             constraints,
             0.0, // Goal end velocity in meters/sec
             0.0 // Rotation delay distance in meters. This is how far the robot should travel before attempting to rotate.
         );
-
-        return pathfindingCommand;
     }
     
     //FollowPathWithEvents follower = new FollowPathWithEvents(null, null, null);    
