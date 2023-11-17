@@ -2,7 +2,9 @@ package frc.robot.subsystems;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.commands.FollowPathWithEvents;
+import com.pathplanner.lib.path.PathConstraints;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.ProfiledPIDController;
@@ -22,6 +24,7 @@ import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.math.trajectory.TrajectoryConfig;
 import edu.wpi.first.math.trajectory.TrajectoryGenerator;
 import edu.wpi.first.math.trajectory.TrajectoryGenerator.ControlVectorList;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.networktables.DoubleArraySubscriber;
 import edu.wpi.first.networktables.DoubleSubscriber;
 import edu.wpi.first.networktables.NetworkTable;
@@ -37,7 +40,7 @@ public class Limelight extends SubsystemBase{
 
     NetworkTable table = NetworkTableInstance.getDefault().getTable("limelight");
     DoubleArraySubscriber ySub;
-    private double botPose[];
+    public double botPose[];
     public double botPoseX;
     public double botPoseZ;
     public int updates;
@@ -105,6 +108,7 @@ public class Limelight extends SubsystemBase{
         ); //theoretically this path goes to (0,0,0), the pos of the tag, from the robot's location
     }
 
+
     //Dont delete this eudard
     // public Trajectory testTraj(Rotation2d yaw){
     //     TrajectoryConfig config = new TrajectoryConfig(0.5, 0.5);
@@ -121,6 +125,27 @@ public class Limelight extends SubsystemBase{
 
     
 
+    public Command getTagCommand() {
+        // Since we are using a holonomic drivetrain, the rotation component of this pose
+        // represents the goal holonomic rotation
+        Pose2d targetPose = new Pose2d(0.2, 0, Rotation2d.fromDegrees(0));
+
+        // Create the constraints to use while pathfinding
+        PathConstraints constraints = new PathConstraints(
+            Constants.Swerve.maxSpeed, Constants.Swerve.maxAccel, 
+            Constants.Swerve.maxAngularVelocity, Units.degreesToRadians(720));
+
+        // Since AutoBuilder is configured, we can use it to build pathfinding commands
+        Command pathfindingCommand = AutoBuilder.pathfindToPose(
+            targetPose,
+            constraints,
+            0.0, // Goal end velocity in meters/sec
+            0.0 // Rotation delay distance in meters. This is how far the robot should travel before attempting to rotate.
+        );
+
+        return pathfindingCommand;
+    }
+    
     //FollowPathWithEvents follower = new FollowPathWithEvents(null, null, null);    
 
     /* how to go to apriltag:

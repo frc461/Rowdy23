@@ -1,9 +1,6 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj2.command.*;
-import com.pathplanner.lib.auto.PIDConstants;
-import com.pathplanner.lib.auto.SwerveAutoBuilder;
-import com.pathplanner.lib.commands.PPSwerveControllerCommand;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.ProfiledPIDController;
@@ -242,32 +239,42 @@ public class RobotContainer {
             )
         );
 
+
+        //driver_AutoBalance.onTrue(new InstantCommand(() -> s_Swerve.autoBalance()));
         
-          driver_limelightButton.onTrue(
+        driver_limelightButton.onTrue(
             Commands.sequence(
               new InstantCommand(() -> limelight.refreshValues()),
               new InstantCommand(() -> s_Swerve.resetOdometry(
               new Pose2d(
-                  limelight.botPoseZ, -limelight.botPoseX, Rotation2d.fromDegrees(0)
+                  limelight.botPoseZ, -limelight.botPoseX, Rotation2d.fromDegrees(limelight.botPose[4])
                   )
                 )
               ),
-              new SwerveControllerCommand (
-                limelight.testTraj(s_Swerve.getYaw()),
-                s_Swerve::getPose,
-                Constants.Swerve.swerveKinematics,
-                new PIDController(0.6, 0, 0),
-                new PIDController(0.7, 0, 0.1),
-                new ProfiledPIDController(0.2, 0, 0, Constants.AutoConstants.kThetaControllerConstraints),
-                s_Swerve::setModuleStates,
-                s_Swerve
-              )
+              limelight.getTagCommand()
             )
+            
+            // Commands.sequence(
+            //   new InstantCommand(() -> limelight.refreshValues()),
+            //   new InstantCommand(() -> s_Swerve.resetOdometry(
+            //   new Pose2d(
+            //       limelight.botPoseZ, -limelight.botPoseX, Rotation2d.fromDegrees(0)
+            //       )
+            //     )
+            //   ),
+            //   new SwerveControllerCommand (
+            //     limelight.testTraj(s_Swerve.getYaw()),
+            //     s_Swerve::getPose,
+            //     Constants.Swerve.swerveKinematics,
+            //     new PIDController(0.6, 0, 0),
+            //     new PIDController(0.7, 0, 0.1),
+            //     new ProfiledPIDController(0.2, 0, 0, Constants.AutoConstants.kThetaControllerConstraints),
+            //     s_Swerve::setModuleStates,
+            //     s_Swerve
+            //   )
+            // )
           );
-
-
-        //driver_AutoBalance.onTrue(new InstantCommand(() -> s_Swerve.autoBalance()));
-        
+          
         zeroGyro.onTrue(new InstantCommand(() -> s_Swerve.zeroGyro()));
 
         // xModeButton.whileTrue(new InstantCommand(()-> s_Swerve.setXMode()));
