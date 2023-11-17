@@ -4,11 +4,8 @@ import edu.wpi.first.wpilibj2.command.*;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.ProfiledPIDController;
-import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.geometry.Translation2d;
-import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj.DigitalOutput;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
@@ -40,7 +37,6 @@ public class RobotContainer {
     private final AutoTrajectories trajectories = new AutoTrajectories();
     private final AutoChooser chooser = new AutoChooser(trajectories, map.getMap(), s_Swerve, s_Intake, s_Wrist, s_Elevator);
 
-    private String pPlan = null;
     public double intakeVec = 0;
 
     public CommandBase autoCode = Commands.sequence(new PrintCommand("no auto selected"));
@@ -62,9 +58,6 @@ public class RobotContainer {
     private final JoystickButton e_presButton_1 = new JoystickButton(operator, XboxController.Button.kX.value);
     private final JoystickButton e_presButton_2 = new JoystickButton(operator, XboxController.Button.kA.value);
     private final JoystickButton e_presButton_3 = new JoystickButton(operator, XboxController.Button.kB.value);
-
-    private final JoystickButton 
-    limelighButton = new JoystickButton(driver, XboxController.Button.kA.value);
 
     private final POVButton w_preset_0 = new POVButton(operator, 0);
     private final POVButton w_preset_1 = new POVButton(operator, 90);

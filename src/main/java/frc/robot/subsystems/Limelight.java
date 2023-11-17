@@ -1,39 +1,24 @@
 package frc.robot.subsystems;
-import java.util.ArrayList;
 import java.util.List;
 
 import com.pathplanner.lib.auto.AutoBuilder;
-import com.pathplanner.lib.commands.FollowPathWithEvents;
 import com.pathplanner.lib.path.PathConstraints;
 
-import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.math.controller.ProfiledPIDController;
 
 //plenty of newlines here to piss off beck :)
 
 
 import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.geometry.Rotation3d;
-import edu.wpi.first.math.geometry.Transform3d;
-import edu.wpi.first.math.geometry.Translation2d;
-import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.math.trajectory.TrajectoryConfig;
 import edu.wpi.first.math.trajectory.TrajectoryGenerator;
-import edu.wpi.first.math.trajectory.TrajectoryGenerator.ControlVectorList;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.networktables.DoubleArraySubscriber;
-import edu.wpi.first.networktables.DoubleSubscriber;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
-import edu.wpi.first.networktables.Subscriber;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
 import frc.robot.Constants;
 
 public class Limelight extends SubsystemBase{
@@ -92,10 +77,6 @@ public class Limelight extends SubsystemBase{
         return botPose[5];
     }
 
-    public Pose3d getPose() {
-        return new Pose3d(new Translation3d(getRX(), getRY(), getRZ()), new Rotation3d(getRoll(), getPitch(), getYaw()));
-    }
-
     public Trajectory testTraj(Rotation2d yaw){
         TrajectoryConfig config = new TrajectoryConfig(0.5, 0.5);
         
@@ -143,7 +124,7 @@ public class Limelight extends SubsystemBase{
             0.0 // Rotation delay distance in meters. This is how far the robot should travel before attempting to rotate.
         );
     }
-    
+
     //FollowPathWithEvents follower = new FollowPathWithEvents(null, null, null);    
 
     /* how to go to apriltag:
