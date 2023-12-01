@@ -13,8 +13,8 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
-import frc.robot.autos.AutoChooser;
-import frc.robot.autos.AutoTrajectories;
+// import frc.robot.autos.AutoChooser;
+// import frc.robot.autos.AutoTrajectories;
 import frc.robot.autos.eventMap;
 import frc.robot.commands.*;
 import frc.robot.subsystems.*;
@@ -34,8 +34,8 @@ public class RobotContainer {
     private final Wrist s_Wrist = new Wrist(s_Elevator.getEncoder());
     private final Limelight limelight = new Limelight();
     private final eventMap map = new eventMap(s_Swerve, s_Intake, s_Wrist, s_Elevator);
-    private final AutoTrajectories trajectories = new AutoTrajectories();
-    private final AutoChooser chooser = new AutoChooser(trajectories, map.getMap(), s_Swerve, s_Intake, s_Wrist, s_Elevator);
+    // private final AutoTrajectories trajectories = new AutoTrajectories();
+    // private final AutoChooser chooser = new AutoChooser(trajectories, map.getMap(), s_Swerve, s_Intake, s_Wrist, s_Elevator);
 
     public double intakeVec = 0;
 
@@ -118,7 +118,7 @@ public class RobotContainer {
       // Configure the button bindings
       configureButtonBindings();
 
-      SmartDashboard.putData("Auto Choices", chooser.getAutoChooser());
+      // SmartDashboard.putData("Auto Choices", chooser.getAutoChooser());
       
     }
 
@@ -295,7 +295,7 @@ public class RobotContainer {
         SmartDashboard.putNumber("roll", s_Swerve.gyro.getRoll());
         SmartDashboard.putNumber("elevatorPower", s_Elevator.elevatorPower());
 
-        SmartDashboard.putNumber("Pid off", chooser.getPIDController().getPositionError());
+        // SmartDashboard.putNumber("Pid off", chooser.getPIDController().getPositionError());
 
         // SmartDashboard.putNumber("RX", s_Limelight.getRX());
         // SmartDashboard.putNumber("RY", s_Limelight.getRY());
